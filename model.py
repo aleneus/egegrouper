@@ -2,23 +2,22 @@ import sqlite3
 
 class GrouperModel:
     def __init__(self):
-        self.conn = None;
-        self.cur = None;
+        self.conn = None
+        self.cur = None
+        self.fname = None
 
-    def opened(self):
-        if self.conn == None:
-            res = False
-        else:
-            res = True
-        return res
+    def db_opened(self):
+        return self.conn != None
     
     def open_db(self, file_name):
         self.conn = sqlite3.connect(file_name)
         self.c = self.conn.cursor()
+        self.fname = file_name
 
     def close_db(self):
         self.conn.close()
         self.conn = None
+        self.fname = None
 
     def __select(self, query, args):
         res = list(self.c.execute(query, args))
