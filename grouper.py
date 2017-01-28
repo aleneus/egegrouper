@@ -2,19 +2,11 @@ import sys
 from model import *
 
 db_name = ''
-conn = None
-cur = None
+model = GrouperModel()
 
 if len(sys.argv) > 1:
     db_name = sys.argv[1]
-    conn = sqlite3.connect(db_name)
-    cur = conn.cursor()
-
-def check_db():
-    res = (db_name != '')
-    if res == False:
-        print('Fisrt open data base')
-    return res
+    model.open_db(db_name)
 
 while True:
     cparts = input('> ').split()
@@ -22,35 +14,31 @@ while True:
     """ Work with DB
     """
     if cparts[0] in ['o', 'open']:
-        if check_db:
-            conn.close()
+        if model.opened():
+            model.close_db()
         db_name = cparts[1]
-        conn = sqlite3.connect(db_name)
-        cur = conn.cursor()
+        model.open_db(db_name)
         print('Open data base {} ...'.format(cparts[1]))
         continue
 
     if cparts[0] in ['c', 'close']:
-        if db_name == '':
-            print('Fisrt open data base')
-            continue
-        conn.close()
-        db_name = ''
-        print('Close data base {}'.format(db_name))
+        if model.opened():
+            model.close_db()
+            print('Close data base {}'.format(db_name))
         continue
 
     if cparts[0] in ['q', 'quit']:
-        if db_name != '':
-            conn.close()
+        if model.opened():
+            model.close_db()
         break
 
 
     """ Data manipulations
     """
     if cparts[0] in ['gs', 'groups']:
-        if not check_db():
+        if not model.opened():
             continue
-        res = list(cur.execute('select * from egeg_group;'))
+        res = list(model.get_groups())
         for r in res:
             print(r)
         continue
