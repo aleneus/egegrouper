@@ -27,3 +27,11 @@ class GrouperModel:
         q = "select * from egeg_group;"
         res = self.__select(q, [])
         return res
+
+    def get_group(self, group_id):
+        q = "select E.exam_id, E.name, E.diagnosis, E.age, E.gender\
+             from examination as E, group_element as GE\
+             where GE.exam_id = E.exam_id and GE.group_id = ?\
+             order by E.name;"
+        res = self.__select(q, [group_id, ])
+        return res
