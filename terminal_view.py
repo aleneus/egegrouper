@@ -1,10 +1,9 @@
 class TerminalView:
-    def print_groups_info(self, number, groups_info, ungrouped_number):
-        print('=====================')        
-        print('Groups number: {}'.format(number))
-        print('---------------------')
-        for gi in groups_info:
-            print('{} | {} ({}): {}'.format(gi[0][0], gi[0][1], gi[0][2], gi[1]))
-        print('---------------------')
-        print('Ungrouped: {}'.format(ungrouped_number))
-        print('=====================')        
+    def print_groups_info(self, groups_info):
+        print()
+        print('Total examinations number: {}'.format(groups_info[0]))
+        print('Groups number: {}'.format(groups_info[1]))
+        for gi, gn in zip(groups_info[2],groups_info[3]):
+             print('{} {} ({}): {}'.format(gi[0], gi[1], gi[2], gn))
+        print('Ungrouped: {}'.format(groups_info[4]))
+        print()

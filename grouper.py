@@ -34,8 +34,8 @@ while True:
     if cargv[0] in ['gs', 'groups']:
         if not model.db_opened():
             continue
-        number, groups_info, ungrouped_number = model.get_groups_info()
-        term_view.print_groups_info(number, groups_info, ungrouped_number)
+        groups_info = model.get_groups_info()
+        term_view.print_groups_info(groups_info)
     
     if cargv[0] in ['sg', 'show_group']:
         if not model.db_opened():
