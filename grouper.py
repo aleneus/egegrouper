@@ -43,5 +43,12 @@ while True:
         for r in res:
             print(r)
 
+    if cargv[0] in ['se', 'show_exam']:
+        if not model.db_opened():
+            continue
+        res = list(model.get_exam(cargv[1]))
+        for r in res:
+            print(r)
+
     if cargv[0] in ['h', 'help']:
         print('EGEGrouper CLI')
