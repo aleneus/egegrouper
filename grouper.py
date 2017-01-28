@@ -1,5 +1,5 @@
-import sqlite3
 import sys
+from model import *
 
 db_name = ''
 conn = None
