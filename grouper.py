@@ -1,7 +1,9 @@
 import sys
 from model import *
+from terminal_view import *
 
 model = GrouperModel()
+term_view = TerminalView()
 
 if len(sys.argv) > 1:
     model.open_db(sys.argv[1])
@@ -32,9 +34,8 @@ while True:
     if cargv[0] in ['gs', 'groups']:
         if not model.db_opened():
             continue
-        res = list(model.get_groups())
-        for r in res:
-            print(r)
+        number, groups_info, ungrouped_number = model.get_groups_info()
+        term_view.print_groups_info(number, groups_info, ungrouped_number)
     
     if cargv[0] in ['sg', 'show_group']:
         if not model.db_opened():
