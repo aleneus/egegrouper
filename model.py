@@ -50,13 +50,18 @@ class GrouperModel:
         ungrouped_num = list(self.__select(q, []))[0][0]
         return [exams_total_num, groups_num, fields, num_in_groups, ungrouped_num]
 
-    def get_group(self, group_id):
+    def group_info(self, group_id):
+        if group_id == '0':
+            q = 'select exam_id, name, diagnosis, age, gender\
+                 from examination\
+                 where exam_id not in (select exam_id from group_element)'
+            return list(self.__select(q, []))
+            
         q = "select E.exam_id, E.name, E.diagnosis, E.age, E.gender\
              from examination as E, group_element as GE\
              where GE.exam_id = E.exam_id and GE.group_id = ?\
              order by E.name;"
-        res = self.__select(q, [group_id, ])
-        return res
+        return list(self.__select(q, [group_id, ]))
 
     def get_exam(self, exam_id):
         q = "select M.meas_id, M.time from measurement as M\

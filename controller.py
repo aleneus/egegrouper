@@ -6,3 +6,7 @@ class GrouperController:
     def db_info(self):
         info = self.model.db_info()
         self.term_view.db_info(info)
+
+    def group_info(self, group_id):
+        info = self.model.group_info(group_id)
+        self.term_view.group_info(info)

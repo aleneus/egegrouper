@@ -1,9 +1,13 @@
 class TerminalView:
-    def db_info(self, groups_info):
+    def db_info(self, db_info):
         print()
-        print('Total examinations number: {}'.format(groups_info[0]))
-        print('Groups number: {}'.format(groups_info[1]))
-        for gi, gn in zip(groups_info[2],groups_info[3]):
+        print('Total examinations number: {}'.format(db_info[0]))
+        print('Groups number: {}'.format(db_info[1]))
+        for gi, gn in zip(db_info[2],db_info[3]):
              print('{} {} ({}): {}'.format(gi[0], gi[1], gi[2], gn))
-        print('Ungrouped: {}'.format(groups_info[4]))
+        print('Ungrouped: {}'.format(db_info[4]))
         print()
+
+    def group_info(self, group_info):
+        for exam_info in group_info:
+            print(exam_info)
