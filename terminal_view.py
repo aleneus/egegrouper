@@ -1,5 +1,5 @@
 class TerminalView:
-    def print_groups_info(self, groups_info):
+    def db_info(self, groups_info):
         print()
         print('Total examinations number: {}'.format(groups_info[0]))
         print('Groups number: {}'.format(groups_info[1]))

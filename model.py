@@ -23,7 +23,7 @@ class GrouperModel:
         res = list(self.c.execute(query, args))
         return res
 
-    def get_groups_info(self):
+    def db_info(self):
         # number of groups
         q = "select count(*)\
              from egeg_group;"
