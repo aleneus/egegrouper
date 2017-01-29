@@ -110,14 +110,21 @@ class GrouperModel:
         return e
 
     def insert_group(self, name, description):
-        q = "insert into egeg_group\
-             (name, description)\
-             values (?, ?)"
+        q = "insert into egeg_group (name, description) values (?, ?)"
         self.c.execute(q, [name, description, ])
         self.conn.commit()
 
     def delete_group(self, group_id):
-        q = "delete from egeg_group\
-             where group_id = ?"
+        q = "delete from egeg_group where group_id = ?"
         self.c.execute(q, [group_id, ])
+        self.conn.commit()
+
+    def add_to_group(self, exam_id, group_id):
+        q = "insert or replace into group_element values (?, ?)"
+        self.c.execute(q, [exam_id, group_id, ])
+        self.conn.commit()
+
+    def delete_from_group(self, exam_id, group_id):
+        q = "delete from group_element where exam_id = ? and group_id = ?"
+        self.c.execute(q, [exam_id, group_id, ])
         self.conn.commit()

@@ -28,3 +28,9 @@ class GrouperController:
         if answer == 'yes':
             self.model.delete_group(group_id)
             self.db_info()
+
+    def add_to_group(self, exam_id, group_id):
+        self.model.add_to_group(exam_id, group_id)
+
+    def delete_from_group(self, exam_id, group_id):
+        self.model.delete_from_group(exam_id, group_id)
