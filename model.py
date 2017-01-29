@@ -38,6 +38,11 @@ class GrouperModel:
         self.conn = None
         self.fname = None
 
+    def create_db(self, fname):
+        if model.db_opened():
+            self.close_db()
+        print('Stub: create db')
+
     def __select(self, query, args):
         res = list(self.c.execute(query, args))
         return res
