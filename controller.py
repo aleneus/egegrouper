@@ -17,4 +17,4 @@ class GrouperController:
         self.term_view.exam_info(info)
         if ofile:
             e = self.model.get_examination(exam_id)
-            self.plot_view.plot_examination(e)
+            self.plot_view.plot_examination(e, ofile)
