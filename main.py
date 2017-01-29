@@ -41,3 +41,12 @@ while True:
             grouper.exam_info(cargv[1])
         if len(cargv) == 3:
             grouper.exam_info(cargv[1], cargv[2])
+
+    if cargv[0] in ['ag', 'add_group']:
+        name = input('Name: ')
+        descr = input('Description: ')
+        grouper.insert_group(name, descr)
+
+    if cargv[0] in ['dg', 'delete_group']:
+        grouper.delete_group(cargv[1])
+

@@ -108,3 +108,16 @@ class GrouperModel:
             ms.append(m)
         e.ms = ms
         return e
+
+    def insert_group(self, name, description):
+        q = "insert into egeg_group\
+             (name, description)\
+             values (?, ?)"
+        self.c.execute(q, [name, description, ])
+        self.conn.commit()
+
+    def delete_group(self, group_id):
+        q = "delete from egeg_group\
+             where group_id = ?"
+        self.c.execute(q, [group_id, ])
+        self.conn.commit()

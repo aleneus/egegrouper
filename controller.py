@@ -18,3 +18,13 @@ class GrouperController:
         if ofile:
             e = self.model.get_examination(exam_id)
             self.plot_view.plot_examination(e, ofile)
+
+    def insert_group(self, name, description):
+        self.model.insert_group(name, description)
+        self.db_info()
+
+    def delete_group(self, group_id):
+        answer = input('Are your shure? Type yes or no: ')
+        if answer == 'yes':
+            self.model.delete_group(group_id)
+            self.db_info()

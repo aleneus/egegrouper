@@ -27,6 +27,7 @@ class PlotView:
                 t = 'edited'
                 plt.plot(s.x)
                 plt.xlim(0,len(s.x))
+                plt.grid(True)
 
         plt.tight_layout()
         plt.savefig(ofile, dpi=200)
