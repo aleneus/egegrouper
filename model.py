@@ -30,6 +30,7 @@ class GrouperModel:
     def open_db(self, file_name):
         self.conn = sqlite3.connect(file_name)
         self.c = self.conn.cursor()
+        self.c.execute("pragma foreign_keys=on")
         self.fname = file_name
 
     def close_db(self):
@@ -120,6 +121,12 @@ class GrouperModel:
         self.conn.commit()
 
     def add_to_group(self, exam_id, group_id):
+        # q = "select * from examination where exam_id = ?"
+        # if len(list(self.c.execute(q, [exam_id, ]))) == 0:
+        #     return
+        # q = "select * from egeg_group where group_id = ?"
+        # if len(list(self.c.execute(q, [group_id, ]))) == 0:
+        #     return
         q = "insert or replace into group_element values (?, ?)"
         self.c.execute(q, [exam_id, group_id, ])
         self.conn.commit()
