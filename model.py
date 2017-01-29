@@ -1,4 +1,22 @@
 import sqlite3
+import numpy as np
+
+def blob2ndarray(signal_blob):
+    datatype = np.dtype(float)
+    datatype = datatype.newbyteorder('>')
+    return np.array(np.frombuffer(signal_blob))
+
+class Examination:
+    def __init__(self):
+        self.ms = []
+
+class Measurement:
+    def __init__(self):
+        self.ss = []
+
+class Signal:
+    def __init__(self):
+        self.x = []
 
 class GrouperModel:
     def __init__(self):
@@ -69,5 +87,24 @@ class GrouperModel:
         return list(self.__select(q, [exam_id, ]))
 
     def get_examination(self, exam_id):
-        e = None
+        e = Examination()
+        ms = []
+        q = "select * from measurement\
+             where exam_id = ?\
+             order by meas_id"
+        ms_sql = list(self.__select(q, [exam_id, ]))
+        for m_sql in ms_sql:
+            m = Measurement()
+            ss = []
+            q = "select * from signal\
+                 where meas_id = ?\
+                 order by edited"
+            ss_sql = list(self.__select(q, [m_sql[0], ]))
+            for s_sql in ss_sql:
+                s = Signal()
+                s.x = blob2ndarray(s_sql[1])
+                ss.append(s)
+            m.ss = ss
+            ms.append(m)
+        e.ms = ms
         return e
