@@ -63,8 +63,7 @@ class GrouperModel:
              order by E.name;"
         return list(self.__select(q, [group_id, ]))
 
-    def get_exam(self, exam_id):
+    def exam_info(self, exam_id):
         q = "select M.meas_id, M.time from measurement as M\
              where M.exam_id = ?;"
-        res = self.__select(q, [exam_id, ])
-        return res
+        return list(self.__select(q, [exam_id, ]))

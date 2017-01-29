@@ -10,3 +10,7 @@ class GrouperController:
     def group_info(self, group_id):
         info = self.model.group_info(group_id)
         self.term_view.group_info(info)
+
+    def exam_info(self, exam_id):
+        info = self.model.exam_info(exam_id)
+        self.term_view.exam_info(info)

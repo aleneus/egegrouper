@@ -8,6 +8,10 @@ class TerminalView:
         print('Ungrouped: {}'.format(db_info[4]))
         print()
 
-    def group_info(self, group_info):
-        for exam_info in group_info:
-            print(exam_info)
+    def group_info(self, g_info):
+        for e_info in g_info:
+            print(e_info)
+
+    def exam_info(self, e_info):
+        for m_info in e_info:
+            print(m_info)
