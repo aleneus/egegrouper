@@ -67,3 +67,7 @@ class GrouperModel:
         q = "select M.meas_id, M.time from measurement as M\
              where M.exam_id = ?;"
         return list(self.__select(q, [exam_id, ]))
+
+    def get_examination(self, exam_id):
+        e = None
+        return e
