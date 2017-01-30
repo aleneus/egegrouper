@@ -1,8 +1,21 @@
+import os.path
+
 class GrouperController:
     def __init__(self, model, term_view, plot_view):
         self.model = model
         self.term_view = term_view
         self.plot_view = plot_view
+
+    def open_or_create_db(self, fname):
+        if os.path.isfile(fname):
+            self.model.open_db(fname)
+            self.term_view.message('{} was opened'.format(fname))
+        else:
+            self.model.create_db(fname)
+            self.term_view.message('{} was created'.format(fname))
+
+    def close_db(self):
+        self.model.close_db()
 
     def db_info(self):
         info = self.model.db_info()

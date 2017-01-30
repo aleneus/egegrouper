@@ -1,4 +1,7 @@
 class TerminalView:
+    def message(self, text):
+        print(text)
+    
     def db_info(self, db_info):
         print()
         print('Total examinations number: {}'.format(db_info[0]))

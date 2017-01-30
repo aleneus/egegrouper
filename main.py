@@ -1,5 +1,4 @@
 import sys
-import os.path
 from model import *
 from terminal_view import *
 from plot_view import *
@@ -11,27 +10,13 @@ plot_view = PlotView()
 grouper = GrouperController(model, term_view, plot_view)
 
 if len(sys.argv) > 1:
-    if os.path.isfile(sys.argv[1]):
-        model.open_db(sys.argv[1])
-    else:
-        model.create_db(sys.argv[1])
+    grouper.open_or_create_db(sys.argv[1])
 
 while True:
     cargv = input('> ').split()
 
-    # if cargv[0] in ['o', 'open']:
-    #     if model.db_opened():
-    #         model.close_db()
-    #     model.open_db(cargv[1])
-    #     print('Open data base {} ...'.format(cargv[1]))
-
-    # if cargv[0] in ['c', 'close']:
-    #     if model.db_opened():
-    #         model.close_db()
-    #         print('Close data base')
-
     if cargv[0] in ['q', 'quit']:
-        model.close_db()
+        grouper.close_db()
         break
 
     if cargv[0] in ['d', 'di', 'db_info']:
