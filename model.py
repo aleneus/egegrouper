@@ -126,17 +126,17 @@ class GrouperModel:
         self.conn.commit()
 
     def add_to_group(self, exam_id, group_id):
-        # q = "select * from examination where exam_id = ?"
-        # if len(list(self.c.execute(q, [exam_id, ]))) == 0:
-        #     return
-        # q = "select * from egeg_group where group_id = ?"
-        # if len(list(self.c.execute(q, [group_id, ]))) == 0:
-        #     return
-        q = "insert or replace into group_element values (?, ?)"
-        self.c.execute(q, [exam_id, group_id, ])
-        self.conn.commit()
+        try:
+            q = "insert or replace into group_element values (?, ?)"
+            self.c.execute(q, [exam_id, group_id, ])
+            self.conn.commit()
+        except sqlite3.IntegrityError:
+            print('Error: no such examination or group')
 
     def delete_from_group(self, exam_id, group_id):
-        q = "delete from group_element where exam_id = ? and group_id = ?"
-        self.c.execute(q, [exam_id, group_id, ])
-        self.conn.commit()
+        try:        
+            q = "delete from group_element where exam_id = ? and group_id = ?"
+            self.c.execute(q, [exam_id, group_id, ])
+            self.conn.commit()
+        except sqlite3.IntegrityError:
+            print('Error: no such examination or group')
