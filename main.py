@@ -59,3 +59,6 @@ while True:
 
     if cargv[0] in ['df', 'delete_from_group']:
         grouper.delete_from_group(cargv[1], cargv[2])
+
+    if cargv[0] in ['add_sme', ]:
+        grouper.add_data_from_sme(cargv[1])

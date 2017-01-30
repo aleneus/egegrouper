@@ -34,3 +34,6 @@ class GrouperController:
 
     def delete_from_group(self, exam_id, group_id):
         self.model.delete_from_group(exam_id, group_id)
+
+    def add_data_from_sme(self, fname):
+        self.model.add_data_from_sme(fname)

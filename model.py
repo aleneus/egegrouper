@@ -24,6 +24,9 @@ class GrouperModel:
         self.cur = None
         self.fname = None
 
+    """ Work with DB
+    """
+
     def db_opened(self):
         return self.conn != None
     
@@ -46,6 +49,13 @@ class GrouperModel:
         script = open('Create_SME_DB.sql', 'r').read()
         self.c.executescript(script)
         self.conn.commit()
+
+    def add_data_from_sme(self, fname):
+        print('Stub: add data from {}'.format(fname))
+
+
+    """ Work with data
+    """
 
     def __select(self, query, args):
         res = list(self.c.execute(query, args))
