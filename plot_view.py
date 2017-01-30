@@ -1,5 +1,4 @@
 import matplotlib.pyplot as plt
-from subprocess import call
 
 from pylab import rcParams
 #from matplotlib import rc
@@ -31,4 +30,3 @@ class PlotView:
 
         plt.tight_layout()
         plt.savefig(ofile, dpi=200)
-        call(["feh", "-F", ofile])

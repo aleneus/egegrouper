@@ -14,6 +14,8 @@ if len(sys.argv) > 1:
 
 while True:
     cargv = input('> ').split()
+    if len(cargv) == 0:
+        continue
 
     """ Quit and help
     """
