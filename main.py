@@ -15,9 +15,15 @@ if len(sys.argv) > 1:
 while True:
     cargv = input('> ').split()
 
+    """ Quit and help
+    """
+
     if cargv[0] in ['q', 'quit']:
         grouper.close_db()
         break
+
+    """ Get info
+    """
 
     if cargv[0] in ['d', 'di', 'db_info']:
         grouper.db_info()
@@ -30,6 +36,9 @@ while True:
             grouper.exam_info(cargv[1])
         if len(cargv) == 3:
             grouper.exam_info(cargv[1], cargv[2])
+
+    """  Data manipulations
+    """
 
     if cargv[0] in ['ag', 'add_group']:
         name = input('Name: ')
@@ -44,6 +53,9 @@ while True:
 
     if cargv[0] in ['df', 'delete_from_group']:
         grouper.delete_from_group(cargv[1], cargv[2])
+
+    """ Import and export
+    """
 
     if cargv[0] in ['add_sme', ]:
         grouper.add_data_from_sme(cargv[1])

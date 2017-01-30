@@ -1,5 +1,6 @@
 import sqlite3
 import numpy as np
+from DBImport import *
 
 def blob2ndarray(signal_blob):
     datatype = np.dtype(float)
@@ -51,7 +52,12 @@ class GrouperModel:
         self.conn.commit()
 
     def add_data_from_sme(self, fname):
-        print('Stub: add data from {}'.format(fname))
+        source_name = fname
+        dest_name = self.fname
+        if self.db_opened():
+            self.close_db()
+        SMEDBImporter().DBimport(dest_name, source_name)
+        self.open_db(dest_name)
 
 
     """ Work with data
