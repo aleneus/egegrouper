@@ -39,7 +39,7 @@ class GrouperModel:
         self.fname = None
 
     def create_db(self, fname):
-        if model.db_opened():
+        if self.db_opened():
             self.close_db()
         print('Stub: create db')
 

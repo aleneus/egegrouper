@@ -1,4 +1,5 @@
 import sys
+import os.path
 from model import *
 from terminal_view import *
 from plot_view import *
@@ -10,7 +11,10 @@ plot_view = PlotView()
 grouper = GrouperController(model, term_view, plot_view)
 
 if len(sys.argv) > 1:
-    model.open_db(sys.argv[1])
+    if os.path.isfile(sys.argv[1]):
+        model.open_db(sys.argv[1])
+    else:
+        model.create_db(sys.argv[1])
 
 while True:
     cargv = input('> ').split()
