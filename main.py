@@ -56,6 +56,9 @@ while True:
     if cargv[0] in ['df', 'delete_from_group']:
         grouper.delete_from_group(cargv[1], cargv[2])
 
+    if cargv[0] in ['we', 'where_is']:
+        grouper.where_is_examination(cargv[1])
+
     """ Import and export
     """
 

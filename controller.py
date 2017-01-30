@@ -50,3 +50,7 @@ class GrouperController:
 
     def add_data_from_sme(self, fname):
         self.model.add_data_from_sme(fname)
+
+    def where_is_examination(self, exam_id):
+        data = self.model.where_is_examination(exam_id)
+        self.term_view.print_list(data)

@@ -22,3 +22,9 @@ class TerminalView:
         for m_info in e_info:
             print(m_info)
         print()
+
+    def print_list(self, data):
+        print()
+        for d in data:
+            print(d)
+        print()

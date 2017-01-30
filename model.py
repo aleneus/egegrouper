@@ -160,3 +160,10 @@ class GrouperModel:
             self.conn.commit()
         except sqlite3.IntegrityError:
             print('Error: no such examination or group')
+
+    def where_is_examination(self, exam_id):
+        q = "SELECT G.group_id, G.name\
+             FROM egeg_group as G, group_element\
+             WHERE G.group_id = group_element.group_id AND group_element.exam_id = ?"
+        data = list(self.c.execute(q, [exam_id]))
+        return data
