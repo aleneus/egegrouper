@@ -41,7 +41,11 @@ class GrouperModel:
     def create_db(self, fname):
         if self.db_opened():
             self.close_db()
-        print('Stub: create db')
+        self.conn = sqlite3.connect(fname)
+        self.c = self.conn.cursor()
+        script = open('Create_SME_DB.sql', 'r').read()
+        self.c.executescript(script)
+        self.conn.commit()
 
     def __select(self, query, args):
         res = list(self.c.execute(query, args))
