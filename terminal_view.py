@@ -26,9 +26,6 @@ class TerminalView:
         self.print_table(g_info)
 
     def exam_info(self, e_info):
-        self.print_table(e_info)
-
-    def exam_info_test(self, e_info):
         print()
         e = e_info
         print('E: ', end = '')
@@ -38,5 +35,10 @@ class TerminalView:
             self.print_row(m[0])
             for s in m[1]:
                 print('    S: ', end = '')
+                s = list(s)
+                if s[1] == 0:
+                    s[1] = 'Source'
+                else:
+                    s[1] = 'Edited'
                 self.print_row(s)
         print()

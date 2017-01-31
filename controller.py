@@ -32,10 +32,6 @@ class GrouperController:
             e = self.model.get_examination(exam_id)
             self.plot_view.plot_examination(e, ofile)
 
-    def exam_info_test(self, exam_id, ofile = None):
-        info = self.model.exam_info_test(exam_id)
-        self.term_view.exam_info_test(info)
-
     def insert_group(self, name, description):
         self.model.insert_group(name, description)
         self.db_info()

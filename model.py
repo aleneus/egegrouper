@@ -108,15 +108,24 @@ class GrouperModel:
         return list(self.__select(q, [group_id, ]))
 
     def exam_info(self, exam_id):
-        q = "select M.meas_id, M.time from measurement as M\
-             where M.exam_id = ?;"
-        return list(self.__select(q, [exam_id, ]))
-
-    def exam_info_test(self, exam_id):
-        m = ('123', '11-12-2013', '19.00.15')
+        q = "select * from examination\
+             where exam_id = ?"
+        e = list(self.__select(q, [exam_id, ]))[0]
         s = ('234', 'source', '40 m', '2 Hz', 'Q=0.56')
-        e = ('10', 'Ivanov', 'Normal', 'm', '78')
-        res = (e, [(m,[s,s]),(m,[s,s])])
+        ms = []
+        q = "select * from measurement\
+             where exam_id = ?\
+             order by meas_id"
+        ms_sql = list(self.__select(q, [exam_id, ]))
+        for m in ms_sql:
+            ss = []
+            q = "select signal_id, edited from signal\
+                 where meas_id = ?\
+                 order by edited"
+            ss = list(self.__select(q, [m[0], ]))
+            ms.append((m, ss))
+     
+        res = (e, ms)
         return res
 
     def get_examination(self, exam_id):
