@@ -113,7 +113,7 @@ class GrouperModel:
         e = list(self.__select(q, [exam_id, ]))[0]
         s = ('234', 'source', '40 m', '2 Hz', 'Q=0.56')
         ms = []
-        q = "select * from measurement\
+        q = "select meas_id, time from measurement\
              where exam_id = ?\
              order by meas_id"
         ms_sql = list(self.__select(q, [exam_id, ]))
