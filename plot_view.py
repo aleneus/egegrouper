@@ -13,9 +13,12 @@ class PlotView:
         n = 0
         for m in e.ms:
             for s in m.ss:
-                n = n + 1 
-        rcParams['figure.figsize'] = 8, 2.5*n
-        plt.figure()
+                n = n + 1
+                
+        #rcParams['figure.figsize'] = 8, 2.5*n        
+        #plt.cla()
+        #plt.clf()
+        #fig = plt.figure()
         i = 0
         for m in e.ms:
             t = 'source'
@@ -29,4 +32,6 @@ class PlotView:
                 plt.grid(True)
 
         plt.tight_layout()
-        plt.savefig(ofile, dpi=200)
+        #plt.savefig(ofile, dpi=200)
+        plt.show()
+        #plt.close(fig)
