@@ -31,9 +31,12 @@ class TerminalView:
     def exam_info_test(self, e_info):
         print()
         e = e_info
-        print('E: {}'.format(e[0]))
+        print('E: ', end = '')
+        self.print_row(e[0])
         for m in e[1]:
-            print('  M: {}'.format(m[0]))
+            print('  M: ', end = '')
+            self.print_row(m[0])
             for s in m[1]:
-                print('    S: {}'.format(s))
+                print('    S: ', end = '')
+                self.print_row(s)
         print()
