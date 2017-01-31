@@ -50,6 +50,7 @@ class GrouperModel:
         script = open('Create_SME_DB.sql', 'r').read()
         self.c.executescript(script)
         self.conn.commit()
+        self.fname = fname
 
     def add_data_from_sme(self, fname):
         source_name = fname
@@ -59,6 +60,13 @@ class GrouperModel:
         SMEDBImporter().DBimport(dest_name, source_name)
         self.open_db(dest_name)
 
+    def add_data_from_gs(self, fname):
+        source_name = fname
+        dest_name = self.fname
+        if self.db_opened():
+            self.close_db()
+        GSDBImporter().DBimport(dest_name, source_name)
+        self.open_db(dest_name)
 
     """ Work with data
     """

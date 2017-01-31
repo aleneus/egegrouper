@@ -64,3 +64,6 @@ while True:
 
     if cargv[0] in ['add_sme', ]:
         grouper.add_data_from_sme(cargv[1])
+
+    if cargv[0] in ['add_gs', ]:
+        grouper.add_data_from_gs(cargv[1])
