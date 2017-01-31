@@ -57,4 +57,4 @@ class GrouperController:
 
     def where_is_examination(self, exam_id):
         data = self.model.where_is_examination(exam_id)
-        self.term_view.print_list(data)
+        self.term_view.print_table(data)

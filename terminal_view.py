@@ -11,19 +11,22 @@ class TerminalView:
         print('Ungrouped: {}'.format(db_info[4]))
         print()
 
-    def print_list(self, data):
+    def print_row(self, data):
+        for d in data:
+            print(d, end=' ')
+        print()
+
+    def print_table(self, data):
         print()
         for d in data:
-            for item in d:
-                print(item, end=' ')
-            print()
+            self.print_row(d)
         print()
 
     def group_info(self, g_info):
-        self.print_list(g_info)
+        self.print_table(g_info)
 
     def exam_info(self, e_info):
-        self.print_list(e_info)
+        self.print_table(e_info)
 
     def exam_info_test(self, e_info):
         print()
