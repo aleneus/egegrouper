@@ -39,6 +39,13 @@ while True:
         if len(cargv) == 3:
             grouper.exam_info(cargv[1], cargv[2])
 
+
+    if cargv[0] in ['et', 'eit', 'exam_info_test']:
+        if len(cargv) == 2:
+            grouper.exam_info_test(cargv[1])
+        if len(cargv) == 3:
+            grouper.exam_info(cargv[1], cargv[2])
+
     """  Data manipulations
     """
 
