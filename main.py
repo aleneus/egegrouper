@@ -1,8 +1,13 @@
 import sys
+import argparse
 from model import *
 from terminal_view import *
 from plot_view import *
 from controller import *
+
+parser = argparse.ArgumentParser()
+parser.add_arguments("fname")
+parser.parse_args()
 
 model = GrouperModel()
 term_view = TerminalView()
