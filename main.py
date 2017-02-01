@@ -6,16 +6,15 @@ from plot_view import *
 from controller import *
 
 parser = argparse.ArgumentParser()
-parser.add_arguments("fname")
-parser.parse_args()
+parser.add_argument("fname", help="Name of data base")
+args = parser.parse_args()
 
 model = GrouperModel()
 term_view = TerminalView()
 plot_view = PlotView()
 grouper = GrouperController(model, term_view, plot_view)
 
-if len(sys.argv) > 1:
-    grouper.open_or_create_db(sys.argv[1])
+grouper.open_or_create_db(args.fname)
 
 while True:
     cargv = input('> ').split()

@@ -9,10 +9,10 @@ class GrouperController:
     def open_or_create_db(self, fname):
         if os.path.isfile(fname):
             self.model.open_db(fname)
-            self.term_view.message('{} was opened'.format(fname))
+            self.term_view.message('Open {}'.format(fname))
         else:
             self.model.create_db(fname)
-            self.term_view.message('{} was created'.format(fname))
+            self.term_view.message('Create {}'.format(fname))
 
     def close_db(self):
         self.model.close_db()
