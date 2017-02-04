@@ -187,7 +187,38 @@ class GrouperModel:
     def add_exam_from_json_folder(self, folder_name):
         e = Examination()
         e.get_from_json_file(folder_name)
-        e.print()
-        #q = "INSERT INTO examination "
-        #self.c.execute(q)
-        #self.conn.commit()
+
+        exam_id = list(self.c.execute("\
+        SELECT max(exam_id)\
+        FROM examination\
+        "))[0][0]
+        if not exam_id:
+            exam_id = 0
+            
+        meas_id = list(self.c.execute("\
+        SELECT max(meas_id)\
+        FROM measurement\
+        "))[0][0]
+        if not meas_id:
+            meas_id = 0
+
+        self.c.execute("\
+        INSERT INTO examination (name, diagnosis, age, gender)\
+        VALUES (?,?,?,?)\
+        ", (e.name, e.diagnosis, e.age, e.gender) )
+        exam_id += 1
+
+        for m in e.ms:
+            self.c.execute("\
+            INSERT INTO measurement (time, exam_id)\
+            VALUES (?,?)\
+            ", (m.time, exam_id) )
+            meas_id += 1
+
+            for s in m.ss:
+                self.c.execute("\
+                INSERT INTO signal (data, dt, edited, meas_id)\
+                VALUES (?,?,?,?)\
+                ", (ndarry2blob(s.x), s.dt, 0, meas_id) )
+            
+        self.conn.commit()
