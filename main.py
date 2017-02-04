@@ -55,7 +55,7 @@ while True:
         grouper.delete_group(cargv[1])
 
     if cargv[0] in ['at', 'add_to_group']:
-        grouper.add_to_group(cargv[1], cargv[2])
+        grouper.add_exam_to_group(cargv[1], cargv[2])
 
     if cargv[0] in ['df', 'delete_from_group']:
         grouper.delete_from_group(cargv[1], cargv[2])

@@ -153,7 +153,7 @@ class GrouperModel:
     
     def insert_group(self, name, description):
         self.c.execute("\
-        INSER INTO egeg_group (name, description)\
+        INSERT INTO egeg_group (name, description)\
         VALUES (?, ?)\
         ", [name, description, ])
         self.conn.commit()
@@ -166,7 +166,7 @@ class GrouperModel:
         ", [group_id, ])
         self.conn.commit()
 
-    def add_to_group(self, exam_id, group_id):
+    def add_exam_to_group(self, exam_id, group_id):
         try:
             self.c.execute("\
             INSERT OR REPLACE INTO group_element\
