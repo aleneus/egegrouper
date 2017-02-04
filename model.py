@@ -1,23 +1,13 @@
 import sqlite3
 import numpy as np
+
+from sme import *
 from DBImport import *
 
 def blob2ndarray(signal_blob):
     datatype = np.dtype(float)
     datatype = datatype.newbyteorder('>')
     return np.array(np.frombuffer(signal_blob))
-
-class Examination:
-    def __init__(self):
-        self.ms = []
-
-class Measurement:
-    def __init__(self):
-        self.ss = []
-
-class Signal:
-    def __init__(self):
-        self.x = []
 
 class GrouperModel:
     def __init__(self):
