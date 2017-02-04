@@ -58,3 +58,6 @@ class GrouperController:
     def where_is_examination(self, exam_id):
         data = self.model.where_is_examination(exam_id)
         self.term_view.print_table(data)
+
+    def add_exam_from_json_folder(self, folder_name):
+        self.model.add_exam_from_json_folder(folder_name)

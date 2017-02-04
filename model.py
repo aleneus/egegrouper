@@ -181,3 +181,11 @@ class GrouperModel:
              WHERE G.group_id = group_element.group_id AND group_element.exam_id = ?"
         data = list(self.c.execute(q, [exam_id]))
         return data
+
+    def add_exam_from_json_folder(self, folder_name):
+        e = Examination()
+        e.get_from_json_file(folder_name)
+        e.print()
+        #q = "INSERT INTO examination "
+        #self.c.execute(q)
+        #self.conn.commit()
