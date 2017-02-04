@@ -1,13 +1,15 @@
 import sqlite3
 import numpy as np
+import io
 
 from sme import *
 from DBImport import *
 
 def blob2ndarray(signal_blob):
-    datatype = np.dtype(float)
-    datatype = datatype.newbyteorder('>')
     return np.array(np.frombuffer(signal_blob))
+
+def ndarry2blob(signal_ndarray):
+    return signal_ndarray.tobytes()
 
 class GrouperModel:
     def __init__(self):
