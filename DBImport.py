@@ -96,11 +96,11 @@ class GSDBImporter(DBImporter):
             VALUES (?,?)',(t[ind.index(3)][4],exam_id))
             meas_id += 1
             self._dest_c.execute('\
-            INSERT INTO signal(data, dt, edited,meas_id)\
+            INSERT INTO signal(data, dt, edited, meas_id)\
             VALUES (?,?,?,?)',(t[ind.index(3)][5], dt, t[ind.index(3)][6],meas_id)) 
         if 4 in ind:
             self._dest_c.execute('\
-            INSERT INTO signal(data, dt, edited,meas_id)\
+            INSERT INTO signal(data, dt, edited, meas_id)\
             VALUES (?,?,?,?)',(t[ind.index(4)][5], dt, t[ind.index(4)][6],meas_id)) 
         return (exam_id, meas_id)
 

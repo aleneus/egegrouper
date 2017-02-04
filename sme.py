@@ -19,7 +19,7 @@ class Examination:
         self.diagnosis = None
         self.ms = []
 
-    def get_from_json_file(self, folder_name):
+    def get_from_json_folder(self, folder_name):
         with open('{}/info.json'.format(folder_name)) as f:
             data = json.load(f)
             

@@ -21,15 +21,9 @@ while True:
     if len(cargv) == 0:
         continue
 
-    """ Quit and help
-    """
-
     if cargv[0] in ['q', 'quit']:
         grouper.close_db()
         break
-
-    """ Get info
-    """
 
     if cargv[0] in ['d', 'di', 'db_info']:
         grouper.db_info()
@@ -42,9 +36,6 @@ while True:
             grouper.exam_info(cargv[1])
         if len(cargv) == 3:
             grouper.exam_info(cargv[1], cargv[2])
-
-    """  Data manipulations
-    """
 
     if cargv[0] in ['ag', 'add_group']:
         name = input('Name: ')
@@ -62,9 +53,6 @@ while True:
 
     if cargv[0] in ['we', 'where_is']:
         grouper.where_is_examination(cargv[1])
-
-    """ Import and export
-    """
 
     if cargv[0] in ['add_sme', ]:
         grouper.add_sme_db(cargv[1])

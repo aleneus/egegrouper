@@ -23,7 +23,7 @@ class GrouperController:
 
     def group_info(self, group_id):
         info = self.model.group_info(group_id)
-        self.term_view.group_info(info)
+        self.term_view.print_table(info)
 
     def exam_info(self, exam_id, ofile = None):
         if ofile:

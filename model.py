@@ -216,7 +216,7 @@ class GrouperModel:
 
     def add_exam_from_json_folder(self, folder_name):
         e = Examination()
-        e.get_from_json_file(folder_name)
+        e.get_from_json_folder(folder_name)
 
         exam_id = list(self.c.execute("\
         SELECT max(exam_id)\

@@ -22,9 +22,6 @@ class TerminalView:
             self.print_row(d)
         print()
 
-    def group_info(self, g_info):
-        self.print_table(g_info)
-
     def exam_info(self, e_info):
         print()
         e = e_info
