@@ -49,11 +49,11 @@ class GrouperController:
     def delete_from_group(self, exam_id, group_id):
         self.model.delete_from_group(exam_id, group_id)
 
-    def add_data_from_sme(self, fname):
-        self.model.add_data_from_sme(fname)
+    def add_sme_db(self, fname):
+        self.model.add_sme_db(fname)
 
-    def add_data_from_gs(self, fname):
-        self.model.add_data_from_gs(fname)
+    def add_gs_db(self, fname):
+        self.model.add_gs_db(fname)
 
     def where_is_examination(self, exam_id):
         data = self.model.where_is_examination(exam_id)

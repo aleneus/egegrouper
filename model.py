@@ -23,6 +23,16 @@ class GrouperModel:
     def db_opened(self):
         return self.conn != None
     
+    def create_db(self, fname):
+        if self.db_opened():
+            self.close_db()
+        self.conn = sqlite3.connect(fname)
+        self.c = self.conn.cursor()
+        script = open('Create_SME_DB.sql', 'r').read()
+        self.c.executescript(script)
+        self.conn.commit()
+        self.fname = fname
+
     def open_db(self, file_name):
         self.conn = sqlite3.connect(file_name)
         self.c = self.conn.cursor()
@@ -34,95 +44,80 @@ class GrouperModel:
         self.conn = None
         self.fname = None
 
-    def create_db(self, fname):
-        if self.db_opened():
-            self.close_db()
-        self.conn = sqlite3.connect(fname)
-        self.c = self.conn.cursor()
-        script = open('Create_SME_DB.sql', 'r').read()
-        self.c.executescript(script)
-        self.conn.commit()
-        self.fname = fname
-
-    def add_data_from_sme(self, fname):
-        source_name = fname
-        dest_name = self.fname
-        if self.db_opened():
-            self.close_db()
-        SMEDBImporter().DBimport(dest_name, source_name)
-        self.open_db(dest_name)
-
-    def add_data_from_gs(self, fname):
-        source_name = fname
-        dest_name = self.fname
-        if self.db_opened():
-            self.close_db()
-        GSDBImporter().DBimport(dest_name, source_name)
-        self.open_db(dest_name)
-
-    """ Work with data
+    """ Data Viewing
     """
-
-    def __select(self, query, args):
-        res = list(self.c.execute(query, args))
-        return res
 
     def db_info(self):
         # number of groups
-        q = "select count(*)\
-             from egeg_group;"
-        groups_num = list(self.__select(q, []))[0][0]
+        q = "\
+        SELECT count(*)\
+        FROM egeg_group\
+        "
+        groups_num = list(self.c.execute(q, []))[0][0]
         # total number of examinations
-        q = "select count(*)\
-             from examination"
-        exams_total_num = list(self.__select(q, []))[0][0]
+        q = "\
+        SELECT count(*)\
+        FROM examination\
+        "
+        exams_total_num = list(self.c.execute(q, []))[0][0]
         # fields from db
-        q = "select *\
-             from egeg_group;"
-        fields = list(self.__select(q, []))
+        q = "\
+        SELECT *\
+        FROM egeg_group\
+        "
+        fields = list(self.c.execute(q, []))
         # numbers of exams in groups
         num_in_groups = []
         for f in fields:
-            q = "select count(E.exam_id)\
-                 from examination as E, group_element as GE\
-                 where GE.exam_id = E.exam_id and GE.group_id = ?"
-            num_in_groups.append(list(self.__select(q, [f[0], ]))[0][0])
+            q = "\
+            SELECT COUNT(E.exam_id)\
+            FROM examination as E, group_element as GE\
+            WHERE GE.exam_id = E.exam_id AND GE.group_id = ?\
+            "
+            num_in_groups.append(list(self.c.execute(q, [f[0], ]))[0][0])
         # number of ungrouped examinations
-        q = 'select count(exam_id)\
-             from examination\
-             where exam_id not in (select exam_id from group_element)'
-        ungrouped_num = list(self.__select(q, []))[0][0]
+        q = "\
+        SELECT COUNT(exam_id)\
+        FROM examination\
+        WHERE exam_id NOT IN (SELECT exam_id FROM group_element)\
+        "
+        ungrouped_num = list(self.c.execute(q, []))[0][0]
         return [exams_total_num, groups_num, fields, num_in_groups, ungrouped_num]
 
     def group_info(self, group_id):
         if group_id == '0':
-            q = 'select exam_id, name, diagnosis, age, gender\
-                 from examination\
-                 where exam_id not in (select exam_id from group_element)'
-            return list(self.__select(q, []))
+            return list(self.c.execute("\
+            SELECT exam_id, name, diagnosis, age, gender\
+            FROM examination\
+            WHERE exam_id NOT IN (SELECT exam_id FROM group_element)\
+            ", []))
             
-        q = "select E.exam_id, E.name, E.diagnosis, E.age, E.gender\
-             from examination as E, group_element as GE\
-             where GE.exam_id = E.exam_id and GE.group_id = ?\
-             order by E.name;"
-        return list(self.__select(q, [group_id, ]))
+        return list(self.c.execute("\
+        SELECT E.exam_id, E.name, E.diagnosis, E.age, E.gender\
+        FROM examination AS E, group_element AS GE\
+        WHERE GE.exam_id = E.exam_id AND GE.group_id = ?\
+        ORDER BY E.name\
+        ", [group_id, ]))
 
     def exam_info(self, exam_id):
-        q = "select * from examination\
-             where exam_id = ?"
-        e = list(self.__select(q, [exam_id, ]))[0]
+        e = list(self.c.execute("\
+        SELECT * FROM examination\
+        WHERE exam_id = ?\
+        ", [exam_id, ]))[0]
         s = ('234', 'source', '40 m', '2 Hz', 'Q=0.56')
         ms = []
-        q = "select meas_id, time from measurement\
-             where exam_id = ?\
-             order by meas_id"
-        ms_sql = list(self.__select(q, [exam_id, ]))
+        ms_sql = list(self.c.execute("\
+        SELECT meas_id, time FROM measurement\
+        WHERE exam_id = ?\
+        ORDER BY meas_id\
+        ", [exam_id, ]))
         for m in ms_sql:
             ss = []
-            q = "select signal_id, edited from signal\
-                 where meas_id = ?\
-                 order by edited"
-            ss = list(self.__select(q, [m[0], ]))
+            ss = list(self.c.execute("\
+            SELECT signal_id, edited FROM signal\
+            WHERE meas_id = ?\
+            ORDER BY edited\
+            ", [m[0], ]))
             ms.append((m, ss))
      
         res = (e, ms)
@@ -131,17 +126,19 @@ class GrouperModel:
     def get_examination(self, exam_id):
         e = Examination()
         ms = []
-        q = "select * from measurement\
-             where exam_id = ?\
-             order by meas_id"
-        ms_sql = list(self.__select(q, [exam_id, ]))
+        ms_sql = list(self.c.execute("\
+        SELECT * FROM measurement\
+        WHERE exam_id = ?\
+        ORDER BY meas_id\
+        ", [exam_id, ]))
         for m_sql in ms_sql:
             m = Measurement()
             ss = []
-            q = "select * from signal\
-                 where meas_id = ?\
-                 order by edited"
-            ss_sql = list(self.__select(q, [m_sql[0], ]))
+            ss_sql = list(self.c.execute("\
+            SELECT * FROM signal\
+            WHERE meas_id = ?\
+            ORDER BY edited\
+            ", [m_sql[0], ]))
             for s_sql in ss_sql:
                 s = Signal()
                 s.x = blob2ndarray(s_sql[1])
@@ -151,38 +148,71 @@ class GrouperModel:
         e.ms = ms
         return e
 
+    """ Grouping
+    """
+    
     def insert_group(self, name, description):
-        q = "insert into egeg_group (name, description) values (?, ?)"
-        self.c.execute(q, [name, description, ])
+        self.c.execute("\
+        INSER INTO egeg_group (name, description)\
+        VALUES (?, ?)\
+        ", [name, description, ])
         self.conn.commit()
 
     def delete_group(self, group_id):
-        q = "delete from egeg_group where group_id = ?"
-        self.c.execute(q, [group_id, ])
+        q = ""
+        self.c.execute("\
+        DELETE FROM egeg_group\
+        WHERE group_id = ?\
+        ", [group_id, ])
         self.conn.commit()
 
     def add_to_group(self, exam_id, group_id):
         try:
-            q = "insert or replace into group_element values (?, ?)"
-            self.c.execute(q, [exam_id, group_id, ])
+            self.c.execute("\
+            INSERT OR REPLACE INTO group_element\
+            VALUES (?, ?)\
+            ", [exam_id, group_id, ])
             self.conn.commit()
         except sqlite3.IntegrityError:
             print('Error: no such examination or group')
 
     def delete_from_group(self, exam_id, group_id):
         try:        
-            q = "delete from group_element where exam_id = ? and group_id = ?"
-            self.c.execute(q, [exam_id, group_id, ])
+            self.c.execute("\
+            DELETE FROM group_element\
+            WHERE exam_id = ? AND group_id = ?\
+            ", [exam_id, group_id, ])
             self.conn.commit()
         except sqlite3.IntegrityError:
             print('Error: no such examination or group')
 
     def where_is_examination(self, exam_id):
-        q = "SELECT G.group_id, G.name\
-             FROM egeg_group as G, group_element\
-             WHERE G.group_id = group_element.group_id AND group_element.exam_id = ?"
-        data = list(self.c.execute(q, [exam_id]))
+        data = list(self.c.execute("\
+        SELECT G.group_id, G.name\
+        FROM egeg_group as G, group_element\
+        WHERE G.group_id = group_element.group_id AND group_element.exam_id = ?\
+        ", [exam_id]))
         return data
+
+
+    """ Import and export
+    """
+
+    def add_sme_db(self, fname):
+        source_name = fname
+        dest_name = self.fname
+        if self.db_opened():
+            self.close_db()
+        SMEDBImporter().DBimport(dest_name, source_name)
+        self.open_db(dest_name)
+
+    def add_gs_db(self, fname):
+        source_name = fname
+        dest_name = self.fname
+        if self.db_opened():
+            self.close_db()
+        GSDBImporter().DBimport(dest_name, source_name)
+        self.open_db(dest_name)
 
     def add_exam_from_json_folder(self, folder_name):
         e = Examination()

@@ -67,10 +67,10 @@ while True:
     """
 
     if cargv[0] in ['add_sme', ]:
-        grouper.add_data_from_sme(cargv[1])
+        grouper.add_sme_db(cargv[1])
 
     if cargv[0] in ['add_gs', ]:
-        grouper.add_data_from_gs(cargv[1])
+        grouper.add_gs_db(cargv[1])
 
     if cargv[0] in ['add_json', ]:
         grouper.add_exam_from_json_folder(cargv[1])
