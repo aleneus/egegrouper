@@ -28,7 +28,7 @@ class GrouperModel:
             self.close_db()
         self.conn = sqlite3.connect(fname)
         self.c = self.conn.cursor()
-        script = open('Create_SME_DB.sql', 'r').read()
+        script = open('sqlite_scripts/Create_SME_DB.sql', 'r').read()
         self.c.executescript(script)
         self.conn.commit()
         self.fname = fname

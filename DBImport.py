@@ -17,7 +17,7 @@ class SMEDBImporter(DBImporter):
         self._dest_c = self._dconn.cursor()
         self._src_c = self._sconn.cursor()
         self._dest_c.execute("attach database ? as 'source';", (self._source_filename,))
-        script = open('SMEDBImporter.sql', 'r').read()
+        script = open('sqlite_scripts\SMEDBImporter.sql', 'r').read()
         self._dest_c.executescript(script)
         self._dest_c.execute("detach database source;")
         self._dest_c.execute('drop table variable;')
