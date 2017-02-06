@@ -256,4 +256,21 @@ class GrouperModel:
 
     def export_as_json_folder(self, exam_id, folder_name):
         e = self.get_examination(exam_id)
-        print('stub')
+        file_name = "stub.txt"
+        to_json = {
+                   "name" : e.name,
+                   "diagnosis" : e.diagnosis,
+                   "age" : e.age,
+                   "gender" : e.gender,
+                   "measurements" : [
+                       {
+                        "time" : m.time,
+                        "signals" : [
+                            {"dt" : s.dt, "file" : "signal-{}{}.txt".format(mn, sn)}
+                            for s, sn in zip(m.ss, range(1, len(m.ss) + 1))
+                        ]
+                       } for m, mn in zip(e.ms, range(1, len(e.ms) + 1))
+                   ]
+        }
+        s = json.dumps(to_json, ensure_ascii=False, indent='    ')
+        print(s)
