@@ -63,5 +63,13 @@ while True:
     if cargv[0] in ['add_gs', ]:
         grouper.add_gs_db(cargv[1])
 
-    if cargv[0] in ['add_json', ]:
+    if cargv[0] in ['aj', 'add_json']:
         grouper.add_exam_from_json_folder(cargv[1])
+
+    if cargv[0] in ['ej', 'export_json']:
+        if len(cargv) < 3:
+            term_view.message('Not enouth arguments')
+            continue
+        exam_id = cargv[1]
+        folder_name = cargv[2]
+        grouper.export_as_json_folder(exam_id, folder_name)

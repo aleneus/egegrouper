@@ -4,6 +4,7 @@ import numpy as np
 class Signal:
     def __init__(self):
         self.dt = None
+        self.edited = None
         self.x = []
 
 class Measurement:
@@ -20,7 +21,7 @@ class Examination:
         self.ms = []
 
     def get_from_json_folder(self, folder_name):
-        with open('{}/info.json'.format(folder_name)) as f:
+        with open('{}/info.json'.format(folder_name), 'r') as f:
             data = json.load(f)
             
         self.name = data['name']
@@ -38,6 +39,13 @@ class Examination:
                 s.x = np.loadtxt('{}/{}'.format(folder_name, s_data['file']))
                 m.ss.append(s)
             self.ms.append(m)
+
+    def export_as_json_folder(self, folder_name):
+        stub = '{"f1" : "l1", "f2" : "l2"}'
+        print(json.dumps(stub))
+        # with open('{}/info.json'.format(folder_name), 'r') as f:
+        #     data = json.dump(f)
+        
              
     def print(self):
         print()

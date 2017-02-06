@@ -61,3 +61,6 @@ class GrouperController:
 
     def add_exam_from_json_folder(self, folder_name):
         self.model.add_exam_from_json_folder(folder_name)
+
+    def export_as_json_folder(self, exam_id, folder_name):
+        self.model.export_as_json_folder(exam_id, folder_name)

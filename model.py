@@ -125,29 +125,30 @@ class GrouperModel:
 
     def get_examination(self, exam_id):
         e = Examination()
-        ms = []
-        ms_sql = list(self.c.execute("\
-        SELECT * FROM measurement\
-        WHERE exam_id = ?\
-        ORDER BY meas_id\
-        ", [exam_id, ]))
+        e.name, e.diagnosis, e.age, e.gender = list(self.c.execute("""
+        SELECT E.name, E.diagnosis, E.age, E.gender FROM examination AS E
+        WHERE exam_id = ? """, [exam_id, ]))[0]
+        e.ms = []
+        ms_sql = list(self.c.execute("""
+        SELECT M.meas_id, M.time FROM measurement AS M
+        WHERE exam_id = ?
+        ORDER BY meas_id """, [exam_id, ]))
         for m_sql in ms_sql:
             m = Measurement()
-            ss = []
-            ss_sql = list(self.c.execute("\
-            SELECT * FROM signal\
-            WHERE meas_id = ?\
-            ORDER BY edited\
-            ", [m_sql[0], ]))
+            m_id, m.time = m_sql
+            m.ss = []
+            ss_sql = list(self.c.execute("""
+            SELECT S.dt, S.edited, S.data FROM signal AS S
+            WHERE meas_id = ?
+            ORDER BY edited """, [m_id, ]))
             for s_sql in ss_sql:
                 s = Signal()
-                s.x = blob2ndarray(s_sql[1])
-                ss.append(s)
-            m.ss = ss
-            ms.append(m)
-        e.ms = ms
+                s.dt, s.edited = s_sql[:-1]
+                s.x = blob2ndarray(s_sql[-1])
+                m.ss.append(s)
+            e.ms.append(m)
         return e
-
+        
     """ Grouping
     """
     
@@ -252,3 +253,7 @@ class GrouperModel:
                 ", (ndarry2blob(s.x), s.dt, 0, meas_id) )
             
         self.conn.commit()
+
+    def export_as_json_folder(self, exam_id, folder_name):
+        e = self.get_examination(exam_id)
+        print('stub')
