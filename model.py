@@ -1,10 +1,10 @@
 import sqlite3
 import numpy as np
-import io
 import os
 
 from sme import *
 from DBImport import *
+from sme_json_folders import *
 
 def blob2ndarray(signal_blob):
     return np.array(np.frombuffer(signal_blob))
@@ -217,49 +217,42 @@ class GrouperModel:
         self.open_db(dest_name)
 
     def add_exam_from_json_folder(self, folder_name):
-        e = Examination()
-        e.get_from_json_folder(folder_name)
-
-        exam_id = list(self.c.execute("\
-        SELECT max(exam_id)\
-        FROM examination\
-        "))[0][0]
+        e = get_exam_from_folder(folder_name)
+        exam_id = list(self.c.execute("""
+        SELECT max(exam_id)
+        FROM examination
+        """))[0][0]
         if not exam_id:
             exam_id = 0
             
-        meas_id = list(self.c.execute("\
-        SELECT max(meas_id)\
-        FROM measurement\
-        "))[0][0]
+        meas_id = list(self.c.execute("""
+        SELECT max(meas_id)
+        FROM measurement
+        """))[0][0]
         if not meas_id:
             meas_id = 0
 
-        self.c.execute("\
-        INSERT INTO examination (name, diagnosis, age, gender)\
-        VALUES (?,?,?,?)\
-        ", (e.name, e.diagnosis, e.age, e.gender) )
+        self.c.execute("""
+        INSERT INTO examination (name, diagnosis, age, gender)
+        VALUES (?,?,?,?)
+        """, (e.name, e.diagnosis, e.age, e.gender) )
         exam_id += 1
 
         for m in e.ms:
-            self.c.execute("\
-            INSERT INTO measurement (time, exam_id)\
-            VALUES (?,?)\
-            ", (m.time, exam_id) )
+            self.c.execute("""
+            INSERT INTO measurement (time, exam_id)
+            VALUES (?,?)
+            """, (m.time, exam_id) )
             meas_id += 1
 
             for s in m.ss:
-                self.c.execute("\
-                INSERT INTO signal (data, dt, edited, meas_id)\
-                VALUES (?,?,?,?)\
-                ", (ndarry2blob(s.x), s.dt, 0, meas_id) )
+                self.c.execute("""
+                INSERT INTO signal (data, dt, edited, meas_id)
+                VALUES (?,?,?,?)
+                """, (ndarry2blob(s.x), s.dt, 0, meas_id) )
             
         self.conn.commit()
 
     def export_as_json_folder(self, exam_id, folder_name):
-        # create folder
-        if os.path.exists(folder_name):
-            return 1 # folder exists
-        os.makedirs(folder_name)
         e = self.get_examination(exam_id)
-        e.put_to_json_folder(folder_name)
-        return 0
+        put_exam_to_folder(e, folder_name)
