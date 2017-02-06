@@ -256,7 +256,13 @@ class GrouperModel:
 
     def export_as_json_folder(self, exam_id, folder_name):
         e = self.get_examination(exam_id)
-        file_name = "stub.txt"
+        # create folder
+        pass
+    
+        # form signals
+        pass
+        
+        # form info.json
         to_json = {
                    "name" : e.name,
                    "diagnosis" : e.diagnosis,
