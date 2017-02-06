@@ -52,7 +52,7 @@ while True:
         grouper.add_exam_to_group(cargv[1], cargv[2])
 
     if cargv[0] in ['df', 'delete_from_group']:
-        grouper.delete_from_group(cargv[1], cargv[2])
+        grouper.delete_exam_from_group(cargv[1], cargv[2])
 
     if cargv[0] in ['we', 'where_is']:
         grouper.where_is_examination(cargv[1])
