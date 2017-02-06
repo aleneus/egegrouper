@@ -240,3 +240,10 @@ class GrouperModel:
     def export_as_json_folder(self, exam_id, folder_name):
         e = self.get_examination(exam_id)
         put_exam_to_folder(e, folder_name)
+
+    def delete_exam(self, exam_id):
+        self.c.execute("""
+        DELETE FROM Examination
+        WHERE exam_id = ?
+        """,(exam_id, ))
+        self.conn.commit()

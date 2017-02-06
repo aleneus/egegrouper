@@ -73,3 +73,7 @@ while True:
         exam_id = cargv[1]
         folder_name = cargv[2]
         grouper.export_as_json_folder(exam_id, folder_name)
+
+    if cargv[0] in ['de', 'delete_exam']:
+        exam_id = cargv[1]
+        grouper.delete_exam(exam_id)

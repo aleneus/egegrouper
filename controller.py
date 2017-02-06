@@ -64,3 +64,10 @@ class GrouperController:
 
     def export_as_json_folder(self, exam_id, folder_name):
         self.model.export_as_json_folder(exam_id, folder_name)
+
+    def delete_exam(self, exam_id):
+        answer = input('Are you sure? (yes/no): ')
+        if answer not in ['yes', 'y']:
+            return
+        self.model.delete_exam(exam_id)
+        
