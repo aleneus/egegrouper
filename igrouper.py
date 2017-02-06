@@ -1,3 +1,6 @@
+#! /usr/bin/env python3
+#
+
 import cmd, sys
 
 class GrouperShell(cmd.Cmd):
