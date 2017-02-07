@@ -12,14 +12,34 @@ class GrouperShell(cmd.Cmd):
     intro = 'Welcome to the Grouper shell.   Type help or ? to list commands.\n'
     prompt = 'igrouper> '
 
+    def __init__(self):
+        cmd.Cmd.__init__(self)
+        self.aliases = {
+            'd' : self.do_db_info,
+            'g' : self.do_group_info,
+            'e' : self.do_exam_info,
+            'ag' : self.do_add_group,
+            'dg' : self.do_delete_group,
+            'at' : self.do_add_to_group,
+            'df' : self.do_delete_from_group,
+            'we' : self.do_where_is,
+            'aj' : self.do_add_json,
+            'ej' : self.do_export_json,
+            'de' : self.do_delete_exam
+            }
+
+    def default(self, line):
+        cmd, arg, line = self.parseline(line)
+        if cmd in self.aliases:
+            self.aliases[cmd](arg)
+        else:
+            print("*** Unknown syntax: %s" % line)
+
     def do_quit(self, arg):
         """
         Close data base and exit igrouper.
-
-        Aliases: q
         """
         return True
-    do_q = do_quit
 
     def do_db_info(self, arg):
         """
@@ -28,11 +48,10 @@ class GrouperShell(cmd.Cmd):
         Aliases: d
         """
         grouper.db_info()
-    do_d = do_db_info
 
     def do_group_info(self, arg):
         """
-        Syntax: group_info group_id
+        group_info id
         
         Print information about group.
 
@@ -40,11 +59,10 @@ class GrouperShell(cmd.Cmd):
         """
         cargv = arg.split()
         grouper.group_info(cargv[0])
-    do_g = do_group_info
 
     def do_exam_info(self, arg):
         """
-        Syntax: exam_info exam_id
+        Syntax: exam_info id
         
         Print information about examination.
 
@@ -55,7 +73,6 @@ class GrouperShell(cmd.Cmd):
             grouper.exam_info(cargv[0])
         if len(cargv) == 2:
             grouper.exam_info(cargv[0], cargv[1])        
-    do_e = do_exam_info
 
     def do_add_group(self, arg):
         """
@@ -68,11 +85,10 @@ class GrouperShell(cmd.Cmd):
         name = input('Name: ')
         descr = input('Description: ')
         grouper.insert_group(name, descr)
-    do_ag = do_add_group
 
     def do_delete_group(self, arg):
         """
-        Syntax: delete_group group_id
+        Syntax: delete_group id
 
         Delete group
 
@@ -80,7 +96,6 @@ class GrouperShell(cmd.Cmd):
         """
         cargv = arg.split()
         grouper.delete_group(cargv[0])
-    do_dg = do_delete_group
         
     def do_add_to_group(self, arg):
         """
@@ -92,7 +107,6 @@ class GrouperShell(cmd.Cmd):
         """
         cargv = arg.split()        
         grouper.add_exam_to_group(cargv[0], cargv[1])
-    do_at = do_add_to_group
 
     def do_delete_from_group(self, arg):
         """
@@ -104,11 +118,10 @@ class GrouperShell(cmd.Cmd):
         """
         cargv = arg.split()        
         grouper.delete_exam_from_group(cargv[0], cargv[1])        
-    do_df = do_delete_from_group
 
     def do_where_is(self, arg):
         """
-        Syntax: where_is exam_id
+        Syntax: where_is id
 
         Show where is examination.
 
@@ -116,7 +129,6 @@ class GrouperShell(cmd.Cmd):
         """
         cargv = arg.split()        
         grouper.where_is_examination(cargv[0])
-    do_we = do_where_is
 
     def do_add_sme(self, arg):
         """
@@ -146,7 +158,6 @@ class GrouperShell(cmd.Cmd):
         """
         cargv = arg.split()
         grouper.add_exam_from_json_folder(cargv[0])
-    do_aj = do_add_json
 
     def do_export_json(self, arg):
         """
@@ -163,11 +174,10 @@ class GrouperShell(cmd.Cmd):
         exam_id = cargv[0]
         folder_name = cargv[1]
         grouper.export_as_json_folder(exam_id, folder_name)
-    do_ej = do_export_json
 
     def do_delete_exam(self, arg):
         """
-        Syntax delete_exam exam_id
+        Syntax delete_exam id
 
         Delete examination from data base.
 
@@ -176,11 +186,10 @@ class GrouperShell(cmd.Cmd):
         cargv = arg.split()
         exam_id = cargv[0]
         grouper.delete_exam(exam_id)
-    do_de = do_delete_exam
 
     def do_delete_edited(self, arg):
         """
-        Syntax: delete_edited exam_id
+        Syntax: delete_edited meas_id
 
         Delete edited signal
         """
@@ -188,6 +197,7 @@ class GrouperShell(cmd.Cmd):
         meas_id = cargv[0]
         grouper.delete_edited_signal(meas_id)
 
+        
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("fname", help="Name of data base")
