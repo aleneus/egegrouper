@@ -39,9 +39,10 @@ class GrouperController:
 
     def delete_group(self, group_id):
         answer = input('Are your shure? Type yes or no: ')
-        if answer == 'yes':
-            self.model.delete_group(group_id)
-            self.db_info()
+        if answer not in ['yes', 'y']:
+            return
+        self.model.delete_group(group_id)
+        self.db_info()
 
     def add_exam_to_group(self, exam_id, group_id):
         self.model.add_exam_to_group(exam_id, group_id)
