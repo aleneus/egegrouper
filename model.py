@@ -250,7 +250,18 @@ class GrouperModel:
 
     def delete_edited_signal(self, meas_id):
         self.c.execute("""
-        DELETE FROM signal
+        DELETE 
+        FROM signal
         WHERE meas_id = ? AND edited > 0
         """, (meas_id, ))
         self.conn.commit()
+
+    def crop_signal(self, signal_id, f, t):
+        buf = list(self.c.execute("""
+        SELECT data
+        FROM signal
+        WHERE signal_id = ?
+        """, (signal_id, )))[0][0]
+        x = blob2ndarray(buf)
+        x = x[f : t]
+        print(len(x))

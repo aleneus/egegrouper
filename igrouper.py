@@ -197,6 +197,21 @@ class GrouperShell(cmd.Cmd):
         meas_id = cargv[0]
         grouper.delete_edited_signal(meas_id)
 
+    def do_crop_signal(self, arg):
+        """
+        Syntax: crop_signal signal_id from to
+
+        Crop signal. From and to in samples.
+        """
+        cargv = arg.split()
+        if len(cargv) < 3:
+            print('Not enouth arguments')
+            return
+        signal_id = cargv[0]
+        f = int(cargv[1])
+        t = int(cargv[2])
+        grouper.crop_signal(signal_id, f, t)
+
         
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
