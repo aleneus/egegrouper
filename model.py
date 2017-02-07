@@ -247,3 +247,10 @@ class GrouperModel:
         WHERE exam_id = ?
         """,(exam_id, ))
         self.conn.commit()
+
+    def delete_edited_signal(self, meas_id):
+        self.c.execute("""
+        DELETE FROM signal
+        WHERE meas_id = ? AND edited > 0
+        """, (meas_id, ))
+        self.conn.commit()

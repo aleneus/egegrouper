@@ -72,3 +72,5 @@ class GrouperController:
             return
         self.model.delete_exam(exam_id)
         
+    def delete_edited_signal(self, meas_id):
+        self.model.delete_edited_signal(meas_id)

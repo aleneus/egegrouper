@@ -177,7 +177,17 @@ class GrouperShell(cmd.Cmd):
         exam_id = cargv[0]
         grouper.delete_exam(exam_id)
     do_de = do_delete_exam
-    
+
+    def do_delete_edited(self, arg):
+        """
+        Syntax: delete_edited exam_id
+
+        Delete edited signal
+        """
+        cargv = arg.split()
+        meas_id = cargv[0]
+        grouper.delete_edited_signal(meas_id)
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("fname", help="Name of data base")
