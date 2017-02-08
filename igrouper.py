@@ -39,6 +39,7 @@ class GrouperShell(cmd.Cmd):
         """
         Close data base and exit igrouper.
         """
+        grouper.close_db()
         return True
 
     def do_db_info(self, arg):
@@ -187,30 +188,30 @@ class GrouperShell(cmd.Cmd):
         exam_id = cargv[0]
         grouper.delete_exam(exam_id)
 
-    def do_delete_edited(self, arg):
-        """
-        Syntax: delete_edited meas_id
+    # def do_delete_edited(self, arg):
+    #     """
+    #     Syntax: delete_edited meas_id
 
-        Delete edited signal
-        """
-        cargv = arg.split()
-        meas_id = cargv[0]
-        grouper.delete_edited_signal(meas_id)
+    #     Delete edited signal
+    #     """
+    #     cargv = arg.split()
+    #     meas_id = cargv[0]
+    #     grouper.delete_edited_signal(meas_id)
 
-    def do_crop_signal(self, arg):
-        """
-        Syntax: crop_signal signal_id from to
+    # def do_crop_signal(self, arg):
+    #     """
+    #     Syntax: crop_signal signal_id from to
 
-        Crop signal. From and to in samples.
-        """
-        cargv = arg.split()
-        if len(cargv) < 3:
-            print('Not enouth arguments')
-            return
-        signal_id = cargv[0]
-        f = int(cargv[1])
-        t = int(cargv[2])
-        grouper.crop_signal(signal_id, f, t)
+    #     Crop signal. From and to in samples.
+    #     """
+    #     cargv = arg.split()
+    #     if len(cargv) < 3:
+    #         print('Not enouth arguments')
+    #         return
+    #     signal_id = cargv[0]
+    #     f = int(cargv[1])
+    #     t = int(cargv[2])
+    #     grouper.crop_signal(signal_id, f, t)
 
         
 if __name__ == '__main__':

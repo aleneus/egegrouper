@@ -32,10 +32,10 @@ class TerminalView:
             self.print_row(m[0])
             for s in m[1]:
                 print('    S: ', end = '')
-                s = list(s)
-                if s[1] == 0:
-                    s[1] = 'Source'
-                else:
-                    s[1] = 'Edited'
+                # s = list(s)
+                # if s[1] == 0:
+                #     s[1] = 'Source'
+                # else:
+                #     s[1] = 'Edited'
                 self.print_row(s)
         print()

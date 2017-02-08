@@ -62,14 +62,19 @@ class GrouperModel:
             m = Measurement()
             m_id, m.time = m_sql
             m.ss = []
+            # ss_sql = list(self.c.execute("""
+            # SELECT S.dt, S.edited, S.data FROM signal AS S
+            # WHERE meas_id = ?
+            # ORDER BY edited """, [m_id, ]))
             ss_sql = list(self.c.execute("""
-            SELECT S.dt, S.edited, S.data FROM signal AS S
-            WHERE meas_id = ?
-            ORDER BY edited """, [m_id, ]))
+            SELECT S.dt, S.data FROM signal AS S
+            WHERE meas_id = ? """, [m_id, ]))
             for s_sql in ss_sql:
                 s = Signal()
-                s.dt, s.edited = s_sql[:-1]
-                s.x = blob2ndarray(s_sql[-1])
+                # s.dt, s.edited = s_sql[:-1]
+                # s.x = blob2ndarray(s_sql[-1])
+                s.dt = s_sql[0]
+                s.x = blob2ndarray(s_sql[1])
                 m.ss.append(s)
             e.ms.append(m)
         return e
@@ -99,9 +104,12 @@ class GrouperModel:
             meas_id += 1
 
             for s in m.ss:
+                # self.c.execute("""
+                # INSERT INTO signal (data, dt, edited, meas_id)
+                # VALUES (?,?,?,?) """, (ndarry2blob(s.x), s.dt, 0, meas_id) )
                 self.c.execute("""
-                INSERT INTO signal (data, dt, edited, meas_id)
-                VALUES (?,?,?,?) """, (ndarry2blob(s.x), s.dt, 0, meas_id) )
+                INSERT INTO signal (data, dt, meas_id)
+                VALUES (?,?,?) """, (ndarry2blob(s.x), s.dt, meas_id) )
             
         self.conn.commit()
 
@@ -165,10 +173,13 @@ class GrouperModel:
         ORDER BY meas_id """, [exam_id, ]))
         for m in ms_sql:
             ss = []
+            # ss = list(self.c.execute("""
+            # SELECT signal_id, edited FROM signal
+            # WHERE meas_id = ?
+            # ORDER BY edited """, [m[0], ]))
             ss = list(self.c.execute("""
-            SELECT signal_id, edited FROM signal
-            WHERE meas_id = ?
-            ORDER BY edited """, [m[0], ]))
+            SELECT signal_id FROM signal
+            WHERE meas_id = ? """, [m[0], ]))
             ms.append((m, ss))
      
         res = (e, ms)
@@ -248,20 +259,20 @@ class GrouperModel:
         """,(exam_id, ))
         self.conn.commit()
 
-    def delete_edited_signal(self, meas_id):
-        self.c.execute("""
-        DELETE 
-        FROM signal
-        WHERE meas_id = ? AND edited > 0
-        """, (meas_id, ))
-        self.conn.commit()
+    # def delete_edited_signal(self, meas_id):
+    #     self.c.execute("""
+    #     DELETE 
+    #     FROM signal
+    #     WHERE meas_id = ? AND edited > 0
+    #     """, (meas_id, ))
+    #     self.conn.commit()
 
-    def crop_signal(self, signal_id, f, t):
-        buf = list(self.c.execute("""
-        SELECT data
-        FROM signal
-        WHERE signal_id = ?
-        """, (signal_id, )))[0][0]
-        x = blob2ndarray(buf)
-        x = x[f : t]
-        print(len(x))
+    # def crop_signal(self, signal_id, f, t):
+    #     buf = list(self.c.execute("""
+    #     SELECT data
+    #     FROM signal
+    #     WHERE signal_id = ?
+    #     """, (signal_id, )))[0][0]
+    #     x = blob2ndarray(buf)
+    #     x = x[f : t]
+    #     print(len(x))
