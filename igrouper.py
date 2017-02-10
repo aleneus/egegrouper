@@ -36,7 +36,7 @@ class GrouperShell(cmd.Cmd):
             print("*** Unknown syntax: %s" % line)
 
     def do_quit(self, arg):
-        """ Close data base and exit igrouper.
+        """ Close data base and exit.
         """
         grouper.close_db()
         return True
@@ -75,7 +75,7 @@ class GrouperShell(cmd.Cmd):
         if len(cargv) == 1:
             grouper.exam_info(cargv[0])
         if len(cargv) == 2:
-            grouper.exam_info(cargv[0], cargv[1])        
+            grouper.exam_info(cargv[0], cargv[1])
 
     def do_add_group(self, arg):
         """ add_group
