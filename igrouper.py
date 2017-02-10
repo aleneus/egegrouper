@@ -56,6 +56,9 @@ class GrouperShell(cmd.Cmd):
         Aliases: g
         """
         cargv = arg.split()
+        if len(cargv) == 0:
+            print('Few arguments')
+            return
         grouper.group_info(cargv[0])
 
     def do_exam_info(self, arg):
@@ -66,6 +69,9 @@ class GrouperShell(cmd.Cmd):
         Aliases: e
         """
         cargv = arg.split()
+        if len(cargv) < 1:
+            print('Few arguments')
+            return
         if len(cargv) == 1:
             grouper.exam_info(cargv[0])
         if len(cargv) == 2:
@@ -91,7 +97,7 @@ class GrouperShell(cmd.Cmd):
         """
         cargv = arg.split()
         if len(cargv)==0:
-            print('No group id')
+            print('Few arguments')
             return
         grouper.delete_group(cargv[0])
         
@@ -102,7 +108,10 @@ class GrouperShell(cmd.Cmd):
 
         Aliases: at
         """
-        cargv = arg.split()        
+        cargv = arg.split()
+        if len(cargv) < 2:
+            print('Few arguments')
+            return
         grouper.add_exam_to_group(cargv[0], cargv[1])
 
     def do_delete_from_group(self, arg):
@@ -112,8 +121,11 @@ class GrouperShell(cmd.Cmd):
 
         Aliases: df
         """
-        cargv = arg.split()        
-        grouper.delete_exam_from_group(cargv[0], cargv[1])        
+        cargv = arg.split()
+        if len(cargv) < 2:
+            print('Few arguments')
+            return
+        grouper.delete_exam_from_group(cargv[0], cargv[1])
 
     def do_where_is(self, arg):
         """ where_is id
@@ -122,7 +134,10 @@ class GrouperShell(cmd.Cmd):
 
         Aliases: we
         """
-        cargv = arg.split()        
+        cargv = arg.split()
+        if len(cargv) == 0:
+            print('Few arguments')
+            return
         grouper.where_is_examination(cargv[0])
 
     def do_add_sme(self, arg):
@@ -131,6 +146,9 @@ class GrouperShell(cmd.Cmd):
         Add records from sme data base.
         """
         cargv = arg.split()
+        if len(cargv) == 0:
+            print('Few arguments')
+            return
         grouper.add_sme_db(cargv[0])
 
     def do_add_gs(self, arg):
@@ -149,6 +167,9 @@ class GrouperShell(cmd.Cmd):
         Aliases: aj
         """
         cargv = arg.split()
+        if len(cargv) == 0:
+            print('Few arguments')
+            return
         grouper.add_exam_from_json_folder(cargv[0])
 
     def do_export_json(self, arg):
@@ -160,7 +181,7 @@ class GrouperShell(cmd.Cmd):
         """
         cargv = arg.split()
         if len(cargv) < 2:
-            term_view.message('Not enouth arguments')
+            print('Few arguments')
             return
         exam_id = cargv[0]
         folder_name = cargv[1]
@@ -174,6 +195,9 @@ class GrouperShell(cmd.Cmd):
         Aliases: de
         """
         cargv = arg.split()
+        if len(cargv) == 0:
+            print('Few arguments')
+            return
         exam_id = cargv[0]
         grouper.delete_exam(exam_id)
         
