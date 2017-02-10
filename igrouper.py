@@ -35,6 +35,10 @@ class GrouperShell(cmd.Cmd):
         else:
             print("*** Unknown syntax: %s" % line)
 
+    def do_EOF(self, arg):
+        print()
+        return True
+
     def do_quit(self, arg):
         """ Close data base and exit.
         """
@@ -212,5 +216,6 @@ if __name__ == '__main__':
     grouper = GrouperController(model, term_view, plot_view)
     
     grouper.open_or_create_db(args.fname)
-
-    GrouperShell().cmdloop()
+    
+    gshell = GrouperShell()
+    gshell.cmdloop()
