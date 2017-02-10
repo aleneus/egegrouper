@@ -28,9 +28,15 @@ class GrouperController:
     def exam_info(self, exam_id, ofile = None):
         if ofile:
             e = self.model.get_examination(exam_id)
+            if not e:
+                self.term_view.message('Something wrong')
+                return
             self.plot_view.plot_examination(e, ofile)
         else:
             info = self.model.exam_info(exam_id)
+            if not info:
+                self.term_view.message('Something wrong')
+                return
             self.term_view.exam_info(info)
 
     def insert_group(self, name, description):
@@ -61,7 +67,9 @@ class GrouperController:
         self.term_view.print_table(data)
 
     def add_exam_from_json_folder(self, folder_name):
-        self.model.add_exam_from_json_folder(folder_name)
+        if not self.model.add_exam_from_json_folder(folder_name):
+            self.term_view.message('Something wrong')
+            return
 
     def export_as_json_folder(self, exam_id, folder_name):
         self.model.export_as_json_folder(exam_id, folder_name)
@@ -71,9 +79,3 @@ class GrouperController:
         if answer not in ['yes', 'y']:
             return
         self.model.delete_exam(exam_id)
-        
-    # def delete_edited_signal(self, meas_id):
-    #     self.model.delete_edited_signal(meas_id)
-
-    # def crop_signal(self, signal_id, f, t):
-    #     self.model.crop_signal(signal_id, f, t)

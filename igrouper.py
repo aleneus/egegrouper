@@ -36,23 +36,20 @@ class GrouperShell(cmd.Cmd):
             print("*** Unknown syntax: %s" % line)
 
     def do_quit(self, arg):
-        """
-        Close data base and exit igrouper.
+        """ Close data base and exit igrouper.
         """
         grouper.close_db()
         return True
 
     def do_db_info(self, arg):
-        """
-        Print information about data base.
+        """ Print information about data base.
 
         Aliases: d
         """
         grouper.db_info()
 
     def do_group_info(self, arg):
-        """
-        group_info id
+        """ group_info id
         
         Print information about group.
 
@@ -62,8 +59,7 @@ class GrouperShell(cmd.Cmd):
         grouper.group_info(cargv[0])
 
     def do_exam_info(self, arg):
-        """
-        Syntax: exam_info id
+        """ exam_info id
         
         Print information about examination.
 
@@ -76,8 +72,7 @@ class GrouperShell(cmd.Cmd):
             grouper.exam_info(cargv[0], cargv[1])        
 
     def do_add_group(self, arg):
-        """
-        Syntax: add_group
+        """ add_group
 
         Add new group.
 
@@ -88,19 +83,20 @@ class GrouperShell(cmd.Cmd):
         grouper.insert_group(name, descr)
 
     def do_delete_group(self, arg):
-        """
-        Syntax: delete_group id
+        """ delete_group id
 
         Delete group
 
         Aliases: dg
         """
         cargv = arg.split()
+        if len(cargv)==0:
+            print('No group id')
+            return
         grouper.delete_group(cargv[0])
         
     def do_add_to_group(self, arg):
-        """
-        Syntax: add_to_group exam_id group_id
+        """ add_to_group exam_id group_id
 
         Add examination to group.
 
@@ -110,8 +106,7 @@ class GrouperShell(cmd.Cmd):
         grouper.add_exam_to_group(cargv[0], cargv[1])
 
     def do_delete_from_group(self, arg):
-        """
-        Syntax: delete_from_group exam_id group_id
+        """ delete_from_group exam_id group_id
 
         Delete examination from group.
 
@@ -121,8 +116,7 @@ class GrouperShell(cmd.Cmd):
         grouper.delete_exam_from_group(cargv[0], cargv[1])        
 
     def do_where_is(self, arg):
-        """
-        Syntax: where_is id
+        """ where_is id
 
         Show where is examination.
 
@@ -132,8 +126,7 @@ class GrouperShell(cmd.Cmd):
         grouper.where_is_examination(cargv[0])
 
     def do_add_sme(self, arg):
-        """
-        Syntax: add_sme file_name
+        """ add_sme file_name
 
         Add records from sme data base.
         """
@@ -141,8 +134,7 @@ class GrouperShell(cmd.Cmd):
         grouper.add_sme_db(cargv[0])
 
     def do_add_gs(self, arg):
-        """
-        Syntax: add_gs file_name
+        """ add_gs file_name
 
         Add records from Gastroscan sqlite data base.
         """
@@ -150,8 +142,7 @@ class GrouperShell(cmd.Cmd):
         grouper.add_gs_db(cargv[0])
 
     def do_add_json(self, arg):
-        """
-        Syntax: add_json folder_name
+        """ add_json folder_name
 
         Add examination from json forder.
 
@@ -161,8 +152,7 @@ class GrouperShell(cmd.Cmd):
         grouper.add_exam_from_json_folder(cargv[0])
 
     def do_export_json(self, arg):
-        """
-        Syntax: export_json folder_name
+        """ export_json folder_name
 
         Export examination to json forder.
 
@@ -177,8 +167,7 @@ class GrouperShell(cmd.Cmd):
         grouper.export_as_json_folder(exam_id, folder_name)
 
     def do_delete_exam(self, arg):
-        """
-        Syntax delete_exam id
+        """ delete_exam id
 
         Delete examination from data base.
 
@@ -187,32 +176,6 @@ class GrouperShell(cmd.Cmd):
         cargv = arg.split()
         exam_id = cargv[0]
         grouper.delete_exam(exam_id)
-
-    # def do_delete_edited(self, arg):
-    #     """
-    #     Syntax: delete_edited meas_id
-
-    #     Delete edited signal
-    #     """
-    #     cargv = arg.split()
-    #     meas_id = cargv[0]
-    #     grouper.delete_edited_signal(meas_id)
-
-    # def do_crop_signal(self, arg):
-    #     """
-    #     Syntax: crop_signal signal_id from to
-
-    #     Crop signal. From and to in samples.
-    #     """
-    #     cargv = arg.split()
-    #     if len(cargv) < 3:
-    #         print('Not enouth arguments')
-    #         return
-    #     signal_id = cargv[0]
-    #     f = int(cargv[1])
-    #     t = int(cargv[2])
-    #     grouper.crop_signal(signal_id, f, t)
-
         
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()

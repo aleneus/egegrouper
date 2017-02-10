@@ -49,35 +49,32 @@ class GrouperModel:
     """
     
     def get_examination(self, exam_id):
-        e = Examination()
-        e.name, e.diagnosis, e.age, e.gender = list(self.c.execute("""
-        SELECT E.name, E.diagnosis, E.age, E.gender FROM examination AS E
-        WHERE exam_id = ? """, [exam_id, ]))[0]
-        e.ms = []
-        ms_sql = list(self.c.execute("""
-        SELECT M.meas_id, M.time FROM measurement AS M
-        WHERE exam_id = ?
-        ORDER BY meas_id """, [exam_id, ]))
-        for m_sql in ms_sql:
-            m = Measurement()
-            m_id, m.time = m_sql
-            m.ss = []
-            # ss_sql = list(self.c.execute("""
-            # SELECT S.dt, S.edited, S.data FROM signal AS S
-            # WHERE meas_id = ?
-            # ORDER BY edited """, [m_id, ]))
-            ss_sql = list(self.c.execute("""
-            SELECT S.dt, S.data FROM signal AS S
-            WHERE meas_id = ? """, [m_id, ]))
-            for s_sql in ss_sql:
-                s = Signal()
-                # s.dt, s.edited = s_sql[:-1]
-                # s.x = blob2ndarray(s_sql[-1])
-                s.dt = s_sql[0]
-                s.x = blob2ndarray(s_sql[1])
-                m.ss.append(s)
-            e.ms.append(m)
-        return e
+        try:
+            e = Examination()
+            e.name, e.diagnosis, e.age, e.gender = list(self.c.execute("""
+            SELECT E.name, E.diagnosis, E.age, E.gender FROM examination AS E
+            WHERE exam_id = ? """, [exam_id, ]))[0]
+            e.ms = []
+            ms_sql = list(self.c.execute("""
+            SELECT M.meas_id, M.time FROM measurement AS M
+            WHERE exam_id = ?
+            ORDER BY meas_id """, [exam_id, ]))
+            for m_sql in ms_sql:
+                m = Measurement()
+                m_id, m.time = m_sql
+                m.ss = []
+                ss_sql = list(self.c.execute("""
+                SELECT S.dt, S.data FROM signal AS S
+                WHERE meas_id = ? """, [m_id, ]))
+                for s_sql in ss_sql:
+                    s = Signal()
+                    s.dt = s_sql[0]
+                    s.x = blob2ndarray(s_sql[1])
+                    m.ss.append(s)
+                e.ms.append(m)
+            return e
+        except Exception:
+            return False
 
     def insert_examination(self, e):
         exam_id = list(self.c.execute("""
@@ -162,28 +159,26 @@ class GrouperModel:
         ORDER BY E.name """, [group_id, ]))
 
     def exam_info(self, exam_id):
-        e = list(self.c.execute("""
-        SELECT * FROM examination
-        WHERE exam_id = ? """, [exam_id, ]))[0]
-        s = ('234', 'source', '40 m', '2 Hz', 'Q=0.56')
-        ms = []
-        ms_sql = list(self.c.execute("""
-        SELECT meas_id, time FROM measurement
-        WHERE exam_id = ?
-        ORDER BY meas_id """, [exam_id, ]))
-        for m in ms_sql:
-            ss = []
-            # ss = list(self.c.execute("""
-            # SELECT signal_id, edited FROM signal
-            # WHERE meas_id = ?
-            # ORDER BY edited """, [m[0], ]))
-            ss = list(self.c.execute("""
-            SELECT signal_id FROM signal
-            WHERE meas_id = ? """, [m[0], ]))
-            ms.append((m, ss))
-     
-        res = (e, ms)
-        return res
+        try:
+            e = list(self.c.execute("""
+            SELECT * FROM examination
+            WHERE exam_id = ? """, [exam_id, ]))[0]
+            s = ('234', 'source', '40 m', '2 Hz', 'Q=0.56')
+            ms = []
+            ms_sql = list(self.c.execute("""
+            SELECT meas_id, time FROM measurement
+            WHERE exam_id = ?
+            ORDER BY meas_id """, [exam_id, ]))
+            for m in ms_sql:
+                ss = []
+                ss = list(self.c.execute("""
+                SELECT signal_id FROM signal
+                WHERE meas_id = ? """, [m[0], ]))
+                ms.append((m, ss))
+            res = (e, ms)
+            return res
+        except Exception:
+            return False
         
     """ Grouping
     """
@@ -245,8 +240,12 @@ class GrouperModel:
         self.open_db(dest_name)
 
     def add_exam_from_json_folder(self, folder_name):
-        e = get_exam_from_folder(folder_name)
-        self.insert_examination(e)
+        try:
+            e = get_exam_from_folder(folder_name)
+            self.insert_examination(e)
+            return True
+        except Exception: #FileNotFoundError:
+            return False
 
     def export_as_json_folder(self, exam_id, folder_name):
         e = self.get_examination(exam_id)
@@ -258,21 +257,3 @@ class GrouperModel:
         WHERE exam_id = ?
         """,(exam_id, ))
         self.conn.commit()
-
-    # def delete_edited_signal(self, meas_id):
-    #     self.c.execute("""
-    #     DELETE 
-    #     FROM signal
-    #     WHERE meas_id = ? AND edited > 0
-    #     """, (meas_id, ))
-    #     self.conn.commit()
-
-    # def crop_signal(self, signal_id, f, t):
-    #     buf = list(self.c.execute("""
-    #     SELECT data
-    #     FROM signal
-    #     WHERE signal_id = ?
-    #     """, (signal_id, )))[0][0]
-    #     x = blob2ndarray(buf)
-    #     x = x[f : t]
-    #     print(len(x))
