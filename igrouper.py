@@ -63,7 +63,7 @@ class GrouperShell(cmd.Cmd):
         if len(cargv) == 0:
             print('Few arguments')
             return
-        grouper.group_info(cargv[0])
+        print(grouper.group_info(cargv[0]))
 
     def do_exam_info(self, arg):
         """ exam_info id

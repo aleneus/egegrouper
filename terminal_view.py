@@ -22,6 +22,16 @@ class TerminalView:
             self.print_row(d)
         print()
 
+    def table(self, data):
+        s = '\n'
+        for row in data:
+            s += '{:>5d} | '.format(row[0])
+            for record in row[1:]:
+                s += '{} '.format(record)
+            s += '\n'
+        s += '\n'
+        return s
+
     def exam_info(self, e_info):
         print()
         e = e_info

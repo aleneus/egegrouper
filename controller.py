@@ -22,8 +22,9 @@ class GrouperController:
         return self.term_view.db_info(data)
 
     def group_info(self, group_id):
-        info = self.model.group_info(group_id)
-        self.term_view.print_table(info)
+        data = self.model.group_info(group_id)
+        #self.term_view.print_table(info)
+        return self.term_view.table(data)
 
     def exam_info(self, exam_id, ofile = None):
         if ofile:
