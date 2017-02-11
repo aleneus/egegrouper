@@ -50,7 +50,7 @@ class GrouperShell(cmd.Cmd):
 
         Aliases: d
         """
-        grouper.db_info()
+        print(grouper.db_info())
 
     def do_group_info(self, arg):
         """ group_info id

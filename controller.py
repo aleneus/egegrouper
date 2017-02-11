@@ -18,8 +18,8 @@ class GrouperController:
         self.model.close_db()
 
     def db_info(self):
-        info = self.model.db_info()
-        self.term_view.db_info(info)
+        data = self.model.db_info()
+        return self.term_view.db_info(data)
 
     def group_info(self, group_id):
         info = self.model.group_info(group_id)

@@ -3,13 +3,13 @@ class TerminalView:
         print(text)
     
     def db_info(self, db_info):
-        print()
-        print('Total examinations number: {}'.format(db_info[0]))
-        print('Groups number: {}'.format(db_info[1]))
+        s = '\n'
+        s += 'Total examinations number: {}\n'.format(db_info[0])
+        s += 'Groups number: {}\n'.format(db_info[1])
         for gi, gn in zip(db_info[2],db_info[3]):
-             print('{} {} ({}): {}'.format(gi[0], gi[1], gi[2], gn))
-        print('Ungrouped: {}'.format(db_info[4]))
-        print()
+             s += '{} {} ({}): {}\n'.format(gi[0], gi[1], gi[2], gn)
+        s += 'Ungrouped: {}\n'.format(db_info[4])
+        return s
 
     def print_row(self, data):
         for d in data:
