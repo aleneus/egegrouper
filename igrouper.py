@@ -3,10 +3,10 @@
 
 import cmd, sys, argparse
 
-from model import *
+from egegrouper_mvc.model import *
+from egegrouper_mvc.controller import *
 from string_view import *
 from plot_view import *
-from controller import *
 
 class GrouperShell(cmd.Cmd):
     intro = 'Welcome to the Grouper shell.   Type help or ? to list commands.\n'
@@ -227,9 +227,9 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     model = GrouperModel()
+    grouper = GrouperController(model)
     str_view = StringView()
     plot_view = PlotView()
-    grouper = GrouperController(model)
     
     grouper.open_or_create_db(args.fname)
     

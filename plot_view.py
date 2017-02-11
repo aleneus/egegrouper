@@ -1,7 +1,8 @@
 import matplotlib.pyplot as plt
 
 from pylab import rcParams
-from view import *
+
+from egegrouper_mvc.view import View
 
 class PlotView(View):
     def exam(self, e, ofile):

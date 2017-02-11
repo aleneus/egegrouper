@@ -2,9 +2,9 @@ import sqlite3
 import numpy as np
 import os
 
-from sme import *
-from DBImport import *
-from sme_json_folders import *
+from egegrouper_mvc.sme import *
+from egegrouper_mvc.DBImport import *
+from egegrouper_mvc.sme_json_folders import *
 
 def blob2ndarray(signal_blob):
     return np.array(np.frombuffer(signal_blob))

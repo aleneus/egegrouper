@@ -1,4 +1,4 @@
-from view import *
+from egegrouper_mvc.view import View
 
 class StringView(View):
     def message(self, text):
