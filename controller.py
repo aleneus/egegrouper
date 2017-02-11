@@ -17,7 +17,7 @@ class GrouperController:
 
     def db_info(self):
         data = self.model.db_info()
-        return self.term_view.db_info(data)
+        return self.term_view.db(data)
 
     def group_info(self, group_id):
         data = self.model.group_info(group_id)
@@ -33,15 +33,15 @@ class GrouperController:
             info = self.model.exam_info(exam_id)
             if not info:
                 return self.term_view.error_message('Something wrong')
-            return self.term_view.exam_info(info)
+            return self.term_view.exam(info)
 
     def insert_group(self, name, description):
         self.model.insert_group(name, description)
-        self.db_info()
+        return self.db_info()
 
     def delete_group(self, group_id):
         self.model.delete_group(group_id)
-        self.db_info()
+        return self.db_info()
 
     def add_exam_to_group(self, exam_id, group_id):
         self.model.add_exam_to_group(exam_id, group_id)

@@ -90,7 +90,7 @@ class GrouperShell(cmd.Cmd):
         """
         name = input('Name: ')
         descr = input('Description: ')
-        grouper.insert_group(name, descr)
+        print(grouper.insert_group(name, descr))
 
     def do_delete_group(self, arg):
         """ delete_group id
@@ -106,7 +106,7 @@ class GrouperShell(cmd.Cmd):
         answer = input('Are your shure? Type yes or no: ')
         if answer not in ['yes', 'y']:
             return
-        grouper.delete_group(cargv[0])
+        print(grouper.delete_group(cargv[0]))
         
     def do_add_to_group(self, arg):
         """ add_to_group exam_id group_id
