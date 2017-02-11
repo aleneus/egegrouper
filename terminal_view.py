@@ -1,4 +1,6 @@
-class TerminalView:
+from view import *
+
+class TerminalView(View):
     def message(self, text):
         return text
         

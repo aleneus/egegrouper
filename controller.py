@@ -28,7 +28,7 @@ class GrouperController:
             e = self.model.get_examination(exam_id)
             if not e:
                 return self.term_view.error_message('Something wrong')
-            return self.plot_view.plot_examination(e, ofile)
+            return self.plot_view.exam(e, ofile)
         else:
             info = self.model.exam_info(exam_id)
             if not info:

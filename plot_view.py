@@ -1,9 +1,10 @@
 import matplotlib.pyplot as plt
 
 from pylab import rcParams
+from view import *
 
-class PlotView:
-    def plot_examination(self, e, ofile):
+class PlotView(View):
+    def exam(self, e, ofile):
         n = 0
         for m in e.ms:
             for s in m.ss:
