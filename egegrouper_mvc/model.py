@@ -150,7 +150,8 @@ class GrouperModel:
             return list(self.c.execute("""
             SELECT exam_id, name, diagnosis, age, gender
             FROM examination
-            WHERE exam_id NOT IN (SELECT exam_id FROM group_element) """, []))
+            WHERE exam_id NOT IN (SELECT exam_id FROM group_element) 
+            ORDER BY name """, []))
             
         return list(self.c.execute("""
         SELECT E.exam_id, E.name, E.diagnosis, E.age, E.gender
