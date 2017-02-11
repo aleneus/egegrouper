@@ -1,11 +1,17 @@
 import os.path
 
 class GrouperController:
-    def __init__(self, model, term_view, plot_view):
+    def __init__(self, model = None, view = None):
         self.model = model
-        self.term_view = term_view
-        self.plot_view = plot_view
+        self.view = view
 
+    def set_model(self, model):
+        self.model = model
+        self.view = view
+
+    def set_view(self, view):
+        self.view = view
+        
     def open_or_create_db(self, fname):
         if os.path.isfile(fname):
             self.model.open_db(fname)
@@ -17,23 +23,23 @@ class GrouperController:
 
     def db_info(self):
         data = self.model.db_info()
-        return self.term_view.db(data)
+        return self.view.db(data)
 
     def group_info(self, group_id):
         data = self.model.group_info(group_id)
-        return self.term_view.table(data)
+        return self.view.table(data)
 
     def exam_info(self, exam_id, ofile = None):
         if ofile:
             e = self.model.get_examination(exam_id)
             if not e:
-                return self.term_view.error_message('Something wrong')
-            return self.plot_view.exam(e, ofile)
+                return self.view.error_message('Something wrong')
+            return self.view.exam(e, ofile)
         else:
             info = self.model.exam_info(exam_id)
             if not info:
-                return self.term_view.error_message('Something wrong')
-            return self.term_view.exam(info)
+                return self.view.error_message('Something wrong')
+            return self.view.exam(info)
 
     def insert_group(self, name, description):
         self.model.insert_group(name, description)
@@ -51,7 +57,7 @@ class GrouperController:
 
     def where_is_examination(self, exam_id):
         data = self.model.where_is_examination(exam_id)
-        return self.term_view.table(data)
+        return self.view.table(data)
         
     def add_sme_db(self, fname):
         self.model.add_sme_db(fname)
@@ -61,8 +67,8 @@ class GrouperController:
 
     def add_exam_from_json_folder(self, folder_name):
         if not self.model.add_exam_from_json_folder(folder_name):
-            return self.term_view.error_message('Something wrong')
-        return self.term_view.message('Done')
+            return self.view.error_message('Something wrong')
+        return self.view.message('Done')
 
     def export_as_json_folder(self, exam_id, folder_name):
         self.model.export_as_json_folder(exam_id, folder_name)

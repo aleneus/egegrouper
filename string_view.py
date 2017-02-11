@@ -1,6 +1,6 @@
 from view import *
 
-class TerminalView(View):
+class StringView(View):
     def message(self, text):
         return text
         

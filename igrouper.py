@@ -4,7 +4,7 @@
 import cmd, sys, argparse
 
 from model import *
-from terminal_view import *
+from string_view import *
 from plot_view import *
 from controller import *
 
@@ -50,6 +50,7 @@ class GrouperShell(cmd.Cmd):
 
         Aliases: d
         """
+        grouper.set_view(str_view)
         print(grouper.db_info())
 
     def do_group_info(self, arg):
@@ -63,6 +64,7 @@ class GrouperShell(cmd.Cmd):
         if len(cargv) == 0:
             print('Few arguments')
             return
+        grouper.set_view(str_view)
         print(grouper.group_info(cargv[0]))
 
     def do_exam_info(self, arg):
@@ -77,8 +79,10 @@ class GrouperShell(cmd.Cmd):
             print('Few arguments')
             return
         if len(cargv) == 1:
+            grouper.set_view(str_view)
             print(grouper.exam_info(cargv[0]))
         if len(cargv) == 2:
+            grouper.set_view(plot_view)
             print(grouper.exam_info(cargv[0], cargv[1]))
 
     def do_add_group(self, arg):
@@ -90,6 +94,7 @@ class GrouperShell(cmd.Cmd):
         """
         name = input('Name: ')
         descr = input('Description: ')
+        grouper.set_view(str_view)
         print(grouper.insert_group(name, descr))
 
     def do_delete_group(self, arg):
@@ -106,6 +111,7 @@ class GrouperShell(cmd.Cmd):
         answer = input('Are your shure? Type yes or no: ')
         if answer not in ['yes', 'y']:
             return
+        grouper.set_view(str_view)
         print(grouper.delete_group(cargv[0]))
         
     def do_add_to_group(self, arg):
@@ -145,6 +151,7 @@ class GrouperShell(cmd.Cmd):
         if len(cargv) == 0:
             print('Few arguments')
             return
+        grouper.set_view(str_view)
         print(grouper.where_is_examination(cargv[0]))
 
     def do_add_sme(self, arg):
@@ -177,6 +184,7 @@ class GrouperShell(cmd.Cmd):
         if len(cargv) == 0:
             print('Few arguments')
             return
+        grouper.set_view(str_view)
         print(grouper.add_exam_from_json_folder(cargv[0]))
 
     def do_export_json(self, arg):
@@ -219,9 +227,9 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     model = GrouperModel()
-    term_view = TerminalView()
+    str_view = StringView()
     plot_view = PlotView()
-    grouper = GrouperController(model, term_view, plot_view)
+    grouper = GrouperController(model)
     
     grouper.open_or_create_db(args.fname)
     
