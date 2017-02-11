@@ -35,6 +35,21 @@ class GrouperShell(cmd.Cmd):
         else:
             print("*** Unknown syntax: %s" % line)
 
+    def parse(self, arg, option_name, has_value = False):
+        args = arg.split()
+        for (a, i) in zip(args, range(0, len(args))):
+            if (a == option_name):
+                if not has_value:
+                    return a
+                else:
+                    if len(args) > i+1:
+                        return args[i+1]
+        return None
+
+    def do_test(self, arg):
+        print(self.parse(arg, 'show'))
+        print(self.parse(arg, 'file', has_value = True))
+
     def do_EOF(self, arg):
         print()
         return True
