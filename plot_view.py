@@ -23,3 +23,4 @@ class PlotView:
 
         plt.tight_layout()
         plt.show()
+        return "Plot signals"

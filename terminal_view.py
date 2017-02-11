@@ -1,6 +1,10 @@
 class TerminalView:
     def message(self, text):
-        print(text)
+        return text
+        
+    def error_message(self, text):
+        s = 'Error: {}'.format(text)
+        return s
     
     def db_info(self, db_info):
         s = '\n'
@@ -11,16 +15,11 @@ class TerminalView:
         s += 'Ungrouped: {}\n'.format(db_info[4])
         return s
 
-    def print_row(self, data):
+    def row(self, data):
+        s = ''
         for d in data:
-            print(d, end=' ')
-        print()
-
-    def print_table(self, data):
-        print()
-        for d in data:
-            self.print_row(d)
-        print()
+            s += '{} '.format(d)
+        return s
 
     def table(self, data):
         s = '\n'
@@ -29,23 +28,20 @@ class TerminalView:
             for record in row[1:]:
                 s += '{} '.format(record)
             s += '\n'
-        s += '\n'
         return s
 
     def exam_info(self, e_info):
-        print()
+        res = '\n'
         e = e_info
-        print('E: ', end = '')
-        self.print_row(e[0])
+        res += 'E: '
+        res += self.row(e[0])
+        res += '\n'
         for m in e[1]:
-            print('  M: ', end = '')
-            self.print_row(m[0])
+            res += '  M: '
+            res += self.row(m[0])
+            res += '\n'
             for s in m[1]:
-                print('    S: ', end = '')
-                # s = list(s)
-                # if s[1] == 0:
-                #     s[1] = 'Source'
-                # else:
-                #     s[1] = 'Edited'
-                self.print_row(s)
-        print()
+                res += '    S: '
+                res += self.row(s)
+                res += '\n'
+        return res

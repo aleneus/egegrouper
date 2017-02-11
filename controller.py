@@ -23,31 +23,25 @@ class GrouperController:
 
     def group_info(self, group_id):
         data = self.model.group_info(group_id)
-        #self.term_view.print_table(info)
         return self.term_view.table(data)
 
     def exam_info(self, exam_id, ofile = None):
         if ofile:
             e = self.model.get_examination(exam_id)
             if not e:
-                self.term_view.message('Something wrong')
-                return
-            self.plot_view.plot_examination(e, ofile)
+                return self.term_view.error_message('Something wrong')
+            return self.plot_view.plot_examination(e, ofile)
         else:
             info = self.model.exam_info(exam_id)
             if not info:
-                self.term_view.message('Something wrong')
-                return
-            self.term_view.exam_info(info)
+                return self.term_view.error_message('Something wrong')
+            return self.term_view.exam_info(info)
 
     def insert_group(self, name, description):
         self.model.insert_group(name, description)
         self.db_info()
 
     def delete_group(self, group_id):
-        answer = input('Are your shure? Type yes or no: ')
-        if answer not in ['yes', 'y']:
-            return
         self.model.delete_group(group_id)
         self.db_info()
 
@@ -57,26 +51,23 @@ class GrouperController:
     def delete_exam_from_group(self, exam_id, group_id):
         self.model.delete_exam_from_group(exam_id, group_id)
 
+    def where_is_examination(self, exam_id):
+        data = self.model.where_is_examination(exam_id)
+        return self.term_view.table(data)
+        
     def add_sme_db(self, fname):
         self.model.add_sme_db(fname)
 
     def add_gs_db(self, fname):
         self.model.add_gs_db(fname)
 
-    def where_is_examination(self, exam_id):
-        data = self.model.where_is_examination(exam_id)
-        self.term_view.print_table(data)
-
     def add_exam_from_json_folder(self, folder_name):
         if not self.model.add_exam_from_json_folder(folder_name):
-            self.term_view.message('Something wrong')
-            return
+            return self.term_view.error_message('Something wrong')
+        return self.term_view.message('Done')
 
     def export_as_json_folder(self, exam_id, folder_name):
         self.model.export_as_json_folder(exam_id, folder_name)
 
     def delete_exam(self, exam_id):
-        answer = input('Are you sure? (yes/no): ')
-        if answer not in ['yes', 'y']:
-            return
         self.model.delete_exam(exam_id)

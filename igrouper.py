@@ -77,9 +77,9 @@ class GrouperShell(cmd.Cmd):
             print('Few arguments')
             return
         if len(cargv) == 1:
-            grouper.exam_info(cargv[0])
+            print(grouper.exam_info(cargv[0]))
         if len(cargv) == 2:
-            grouper.exam_info(cargv[0], cargv[1])
+            print(grouper.exam_info(cargv[0], cargv[1]))
 
     def do_add_group(self, arg):
         """ add_group
@@ -102,6 +102,9 @@ class GrouperShell(cmd.Cmd):
         cargv = arg.split()
         if len(cargv)==0:
             print('Few arguments')
+            return
+        answer = input('Are your shure? Type yes or no: ')
+        if answer not in ['yes', 'y']:
             return
         grouper.delete_group(cargv[0])
         
@@ -142,7 +145,7 @@ class GrouperShell(cmd.Cmd):
         if len(cargv) == 0:
             print('Few arguments')
             return
-        grouper.where_is_examination(cargv[0])
+        print(grouper.where_is_examination(cargv[0]))
 
     def do_add_sme(self, arg):
         """ add_sme file_name
@@ -174,7 +177,7 @@ class GrouperShell(cmd.Cmd):
         if len(cargv) == 0:
             print('Few arguments')
             return
-        grouper.add_exam_from_json_folder(cargv[0])
+        print(grouper.add_exam_from_json_folder(cargv[0]))
 
     def do_export_json(self, arg):
         """ export_json folder_name
@@ -202,6 +205,11 @@ class GrouperShell(cmd.Cmd):
         if len(cargv) == 0:
             print('Few arguments')
             return
+        
+        answer = input('Are you sure? (yes/no): ')
+        if answer not in ['yes', 'y']:
+            return
+        
         exam_id = cargv[0]
         grouper.delete_exam(exam_id)
         
