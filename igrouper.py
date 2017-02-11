@@ -18,14 +18,16 @@ class GrouperShell(cmd.Cmd):
             'd' : self.do_db_info,
             'g' : self.do_group_info,
             'e' : self.do_exam_info,
+            'p' : self.do_plot_exam,
+            
             'ag' : self.do_add_group,
             'dg' : self.do_delete_group,
             'at' : self.do_add_to_group,
             'df' : self.do_delete_from_group,
             'we' : self.do_where_is,
+            
             'aj' : self.do_add_json,
-            'ej' : self.do_export_json,
-            'de' : self.do_delete_exam
+            'ej' : self.do_export_json
             }
 
     def default(self, line):
@@ -40,15 +42,11 @@ class GrouperShell(cmd.Cmd):
         for (a, i) in zip(args, range(0, len(args))):
             if (a == option_name):
                 if not has_value:
-                    return a
+                    return True
                 else:
                     if len(args) > i+1:
                         return args[i+1]
         return None
-
-    def do_test(self, arg):
-        print(self.parse(arg, 'show'))
-        print(self.parse(arg, 'file', has_value = True))
 
     def do_EOF(self, arg):
         print()
@@ -69,7 +67,7 @@ class GrouperShell(cmd.Cmd):
         print(grouper.db_info())
 
     def do_group_info(self, arg):
-        """ group_info id
+        """ group_info id [hfa]
         
         Print information about group.
 
@@ -79,6 +77,8 @@ class GrouperShell(cmd.Cmd):
         if len(cargv) == 0:
             print('Few arguments')
             return
+        if self.parse(arg, 'hfa'):
+            print('Calc quality stub')
         grouper.set_view(str_view)
         print(grouper.group_info(cargv[0]))
 
@@ -93,13 +93,23 @@ class GrouperShell(cmd.Cmd):
         if len(cargv) < 1:
             print('Few arguments')
             return
-        if len(cargv) == 1:
-            grouper.set_view(str_view)
-            print(grouper.exam_info(cargv[0]))
-        if len(cargv) == 2:
-            grouper.set_view(plot_view)
-            print(grouper.exam_info(cargv[0], cargv[1]))
+        grouper.set_view(str_view)
+        print(grouper.exam_info(cargv[0]))
 
+    def do_plot_exam(self, arg):
+        """ plot_exam id
+        
+        Plot signals in examination.
+
+        Aliases: pe
+        """
+        cargv = arg.split()
+        if len(cargv) < 1:
+            print('Few arguments')
+            return
+        grouper.set_view(plot_view)
+        grouper.plot_exam(cargv[0])
+            
     def do_add_group(self, arg):
         """ add_group
 

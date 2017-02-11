@@ -5,7 +5,7 @@ from pylab import rcParams
 from egegrouper_mvc.view import View
 
 class PlotView(View):
-    def exam(self, e, ofile):
+    def exam(self, e):
         n = 0
         for m in e.ms:
             for s in m.ss:
@@ -17,8 +17,6 @@ class PlotView(View):
             for s in m.ss:
                 i = i + 1
                 plt.subplot(n*100 + 10 + i)
-                # plt.title(t)
-                # t = 'edited'
                 plt.plot(s.x)
                 plt.xlim(0,len(s.x))
                 plt.grid(True)
