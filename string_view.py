@@ -32,18 +32,8 @@ class StringView(View):
         s += 'Ungrouped: {}\n'.format(db_info[4])
         return s
 
-    def exam(self, e_info):
-        res = '\n'
-        e = e_info
-        res += 'E: '
-        res += self.row(e[0])
-        res += '\n'
-        for m in e[1]:
-            res += '  M: '
-            res += self.row(m[0])
-            res += '\n'
-            for s in m[1]:
-                res += '    S: '
-                res += self.row(s)
-                res += '\n'
-        return res
+    def exam(self, e):
+        s = 'E: {} {} {} {}\n'.format(e.name, e.gender, e.age, e.diagnosis)
+        for m in e.ms:
+            s += '    M: {}\n'.format(m.time)
+        return s

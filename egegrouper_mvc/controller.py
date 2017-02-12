@@ -1,3 +1,4 @@
+
 import os.path
 
 class GrouperController:
@@ -29,18 +30,12 @@ class GrouperController:
         data = self.model.group_info(group_id)
         return self.view.table(data)
 
-    def exam_info(self, exam_id):
-        info = self.model.exam_info(exam_id)
-        if not info:
-            return self.view.error_message('Something wrong')
-        return self.view.exam(info)
-
-    def plot_exam(self, exam_id):
+    def exam(self, exam_id):
         e = self.model.get_examination(exam_id)
         if not e:
             return self.view.error_message('Something wrong')
         return self.view.exam(e)
-        
+
     def insert_group(self, name, description):
         self.model.insert_group(name, description)
         return self.db_info()

@@ -94,21 +94,21 @@ class GrouperShell(cmd.Cmd):
             print('Few arguments')
             return
         grouper.set_view(str_view)
-        print(grouper.exam_info(cargv[0]))
+        print(grouper.exam(cargv[0]))
 
     def do_plot_exam(self, arg):
         """ plot_exam id
         
         Plot signals in examination.
 
-        Aliases: pe
+        Aliases: p
         """
         cargv = arg.split()
         if len(cargv) < 1:
             print('Few arguments')
             return
         grouper.set_view(plot_view)
-        grouper.plot_exam(cargv[0])
+        grouper.exam(cargv[0])
             
     def do_add_group(self, arg):
         """ add_group
