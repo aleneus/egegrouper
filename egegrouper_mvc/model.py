@@ -101,9 +101,6 @@ class GrouperModel:
             meas_id += 1
 
             for s in m.ss:
-                # self.c.execute("""
-                # INSERT INTO signal (data, dt, edited, meas_id)
-                # VALUES (?,?,?,?) """, (ndarry2blob(s.x), s.dt, 0, meas_id) )
                 self.c.execute("""
                 INSERT INTO signal (data, dt, meas_id)
                 VALUES (?,?,?) """, (ndarry2blob(s.x), s.dt, meas_id) )
@@ -151,13 +148,13 @@ class GrouperModel:
             SELECT exam_id, name, diagnosis, age, gender
             FROM examination
             WHERE exam_id NOT IN (SELECT exam_id FROM group_element) 
-            ORDER BY name """, []))
+            """, []))
             
         return list(self.c.execute("""
         SELECT E.exam_id, E.name, E.diagnosis, E.age, E.gender
         FROM examination AS E, group_element AS GE
         WHERE GE.exam_id = E.exam_id AND GE.group_id = ?
-        ORDER BY E.name """, [group_id, ]))
+        """, [group_id, ]))
 
     def exam_info(self, exam_id):
         try:
