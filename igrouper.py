@@ -3,7 +3,7 @@
 
 import cmd, sys, argparse
 
-from egegrouper_mvc.model import *
+from egegrouper_mvc.model_sqlite3 import *
 from egegrouper_mvc.controller import *
 from string_view import *
 from plot_view import *
@@ -251,7 +251,7 @@ if __name__ == '__main__':
     parser.add_argument("fname", help="Name of data base")
     args = parser.parse_args()
 
-    model = GrouperModel()
+    model = GrouperModelSqlite3()
     grouper = GrouperController(model)
     str_view = StringView()
     plot_view = PlotView()
