@@ -1,6 +1,6 @@
 from egegrouper_mvc.view import View
 
-class StringView(View):
+class ViewString(View):
     def message(self, text):
         return text
         

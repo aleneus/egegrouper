@@ -5,8 +5,8 @@ import cmd, sys, argparse
 
 from egegrouper_mvc.model_sqlite3 import *
 from egegrouper_mvc.controller import *
-from string_view import *
-from plot_view import *
+from view_string import *
+from view_plot import *
 
 class GrouperShell(cmd.Cmd):
     intro = 'Welcome to the Grouper shell.   Type help or ? to list commands.\n'
@@ -63,7 +63,7 @@ class GrouperShell(cmd.Cmd):
 
         Aliases: d
         """
-        grouper.set_view(str_view)
+        grouper.set_view(view_s)
         print(grouper.storage_info())
 
     def do_group_info(self, arg):
@@ -79,7 +79,7 @@ class GrouperShell(cmd.Cmd):
             return
         if self.parse(arg, 'hfa'):
             print('Calc quality stub')
-        grouper.set_view(str_view)
+        grouper.set_view(view_s)
         print(grouper.group_info(cargv[0]))
 
     def do_exam_info(self, arg):
@@ -93,7 +93,7 @@ class GrouperShell(cmd.Cmd):
         if len(cargv) < 1:
             print('Few arguments')
             return
-        grouper.set_view(str_view)
+        grouper.set_view(view_s)
         print(grouper.exam(cargv[0]))
 
     def do_plot_exam(self, arg):
@@ -107,7 +107,7 @@ class GrouperShell(cmd.Cmd):
         if len(cargv) < 1:
             print('Few arguments')
             return
-        grouper.set_view(plot_view)
+        grouper.set_view(view_p)
         grouper.exam(cargv[0])
             
     def do_add_group(self, arg):
@@ -119,7 +119,7 @@ class GrouperShell(cmd.Cmd):
         """
         name = input('Name: ')
         descr = input('Description: ')
-        grouper.set_view(str_view)
+        grouper.set_view(view_s)
         print(grouper.insert_group(name, descr))
 
     def do_delete_group(self, arg):
@@ -136,7 +136,7 @@ class GrouperShell(cmd.Cmd):
         answer = input('Are your shure? Type yes or no: ')
         if answer not in ['yes', 'y']:
             return
-        grouper.set_view(str_view)
+        grouper.set_view(view_s)
         print(grouper.delete_group(cargv[0]))
         
     def do_add_to_group(self, arg):
@@ -176,7 +176,7 @@ class GrouperShell(cmd.Cmd):
         if len(cargv) == 0:
             print('Few arguments')
             return
-        grouper.set_view(str_view)
+        grouper.set_view(view_s)
         print(grouper.where_is_examination(cargv[0]))
 
     def do_add_sme(self, arg):
@@ -209,7 +209,7 @@ class GrouperShell(cmd.Cmd):
         if len(cargv) == 0:
             print('Few arguments')
             return
-        grouper.set_view(str_view)
+        grouper.set_view(view_s)
         print(grouper.add_exam_from_json_folder(cargv[0]))
 
     def do_export_json(self, arg):
@@ -253,8 +253,8 @@ if __name__ == '__main__':
 
     model = GrouperModelSqlite3()
     grouper = GrouperController(model)
-    str_view = StringView()
-    plot_view = PlotView()
+    view_s = ViewString()
+    view_p = ViewPlot()
     
     grouper.open_or_create_storage(args.fname)
     

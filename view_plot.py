@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 from egegrouper_mvc.view import View
 
-class PlotView(View):
+class ViewPlot(View):
     def exam(self, e):
         n = 0
         for m in e.ms:
