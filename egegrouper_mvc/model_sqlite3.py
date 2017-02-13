@@ -3,7 +3,7 @@ import numpy as np
 
 from egegrouper_mvc.model import *
 from egegrouper_mvc.sme import *
-from egegrouper_mvc.DBImport import *
+from egegrouper_mvc.db_import import *
 from egegrouper_mvc.sme_json_folders import *
 
 def blob2ndarray(signal_blob):
