@@ -39,9 +39,6 @@ class GrouperModelSqlite3(GrouperModel):
         self.conn = None
         self.file_name = None
 
-    """ Mapping
-    """
-    
     def get_examination(self, exam_id):
         try:
             e = Examination()
@@ -100,9 +97,6 @@ class GrouperModelSqlite3(GrouperModel):
                 VALUES (?,?,?) """, (ndarry2blob(s.x), s.dt, meas_id) )
             
         self.conn.commit()
-
-    """ Data Viewing
-    """
 
     def storage_info(self):
         # number of groups
@@ -172,9 +166,6 @@ class GrouperModelSqlite3(GrouperModel):
         except Exception:
             return False
         
-    """ Grouping
-    """
-    
     def insert_group(self, name, description):
         self.c.execute("""
         INSERT INTO egeg_group (name, description)
@@ -211,9 +202,6 @@ class GrouperModelSqlite3(GrouperModel):
         FROM egeg_group as G, group_element
         WHERE G.group_id = group_element.group_id AND group_element.exam_id = ? """, [exam_id]))
         return data
-
-    """ Import and export
-    """
 
     def add_sme_db(self, file_name):
         source_name = file_name
