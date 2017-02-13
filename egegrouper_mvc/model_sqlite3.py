@@ -2,9 +2,6 @@ import sqlite3
 import numpy as np
 
 from egegrouper_mvc.model import *
-from egegrouper_mvc.sme import *
-from egegrouper_mvc.db_import import *
-from egegrouper_mvc.sme_json_folders import *
 
 def blob2ndarray(signal_blob):
     return np.array(np.frombuffer(signal_blob))
@@ -16,31 +13,31 @@ class GrouperModelSqlite3(GrouperModel):
     def __init__(self):
         self.conn = None
         self.cur = None
-        self.fname = None
+        self.file_name = None
 
     def storage_opened(self):
         return self.conn != None
     
-    def create_storage(self, fname):
+    def create_storage(self, file_name):
         if self.storage_opened():
             self.close_storage()
-        self.conn = sqlite3.connect(fname)
+        self.conn = sqlite3.connect(file_name)
         self.c = self.conn.cursor()
         script = open('sqlite_scripts/Create_SME_DB.sql', 'r').read()
         self.c.executescript(script)
         self.conn.commit()
-        self.fname = fname
+        self.file_name = file_name
 
     def open_storage(self, file_name):
         self.conn = sqlite3.connect(file_name)
         self.c = self.conn.cursor()
         self.c.execute("pragma foreign_keys=on")
-        self.fname = file_name
+        self.file_name = file_name
 
     def close_storage(self):
         self.conn.close()
         self.conn = None
-        self.fname = None
+        self.file_name = None
 
     """ Mapping
     """
@@ -218,17 +215,17 @@ class GrouperModelSqlite3(GrouperModel):
     """ Import and export
     """
 
-    def add_sme_db(self, fname):
-        source_name = fname
-        dest_name = self.fname
+    def add_sme_db(self, file_name):
+        source_name = file_name
+        dest_name = self.file_name
         if self.storage_opened():
             self.close_storage()
         SMEDBImporter().DBimport(dest_name, source_name)
         self.open_storage(dest_name)
 
-    def add_gs_db(self, fname):
-        source_name = fname
-        dest_name = self.fname
+    def add_gs_db(self, file_name):
+        source_name = file_name
+        dest_name = self.file_name
         if self.storage_opened():
             self.close_storage()
         GSDBImporter().DBimport(dest_name, source_name)

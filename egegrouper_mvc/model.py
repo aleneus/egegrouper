@@ -1,3 +1,7 @@
+from egegrouper_mvc.sme import *
+from egegrouper_mvc.db_import import *
+from egegrouper_mvc.sme_json_folders import *
+
 class GrouperModel:
     def __init__(self):
         pass
@@ -49,8 +53,22 @@ class GrouperModel:
     def where_is_examination(self, exam_id):
         pass
 
-    """ Other data manipulation
-    """
+    # Import and export
+
+    def add_sme_db(self, file_name):
+        pass
+
+    def add_gs_db(self, file_name):
+        pass
+
+    def add_exam_from_json_folder(self, folder_name):
+        pass
+
+    def export_as_json_folder(self, exam_id, folder_name):
+        pass
+
+
+    # Other data manipulation
 
     def delete_exam(self, exam_id):
         pass
