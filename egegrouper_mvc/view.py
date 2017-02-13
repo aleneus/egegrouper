@@ -11,7 +11,7 @@ class View:
     def table(self, data):
         pass
 
-    def db(self, db_info):
+    def storage(self, db_info):
         pass
 
     def exam(self, e_info):

@@ -12,18 +12,18 @@ class GrouperController:
     def set_view(self, view):
         self.view = view
         
-    def open_or_create_db(self, fname):
+    def open_or_create_storage(self, fname):
         if os.path.isfile(fname):
-            self.model.open_db(fname)
+            self.model.open_storage(fname)
         else:
-            self.model.create_db(fname)
+            self.model.create_storage(fname)
 
-    def close_db(self):
-        self.model.close_db()
+    def close_storage(self):
+        self.model.close_storage()
 
-    def db_info(self):
-        data = self.model.db_info()
-        return self.view.db(data)
+    def storage_info(self):
+        data = self.model.storage_info()
+        return self.view.storage(data)
 
     def group_info(self, group_id):
         data = self.model.group_info(group_id)
@@ -37,11 +37,11 @@ class GrouperController:
 
     def insert_group(self, name, description):
         self.model.insert_group(name, description)
-        return self.db_info()
+        return self.storage_info()
 
     def delete_group(self, group_id):
         self.model.delete_group(group_id)
-        return self.db_info()
+        return self.storage_info()
 
     def add_exam_to_group(self, exam_id, group_id):
         self.model.add_exam_to_group(exam_id, group_id)

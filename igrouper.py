@@ -55,7 +55,7 @@ class GrouperShell(cmd.Cmd):
     def do_quit(self, arg):
         """ Close data base and exit.
         """
-        grouper.close_db()
+        grouper.close_storage()
         return True
 
     def do_db_info(self, arg):
@@ -64,7 +64,7 @@ class GrouperShell(cmd.Cmd):
         Aliases: d
         """
         grouper.set_view(str_view)
-        print(grouper.db_info())
+        print(grouper.storage_info())
 
     def do_group_info(self, arg):
         """ group_info id [hfa]
@@ -256,7 +256,7 @@ if __name__ == '__main__':
     str_view = StringView()
     plot_view = PlotView()
     
-    grouper.open_or_create_db(args.fname)
+    grouper.open_or_create_storage(args.fname)
     
     gshell = GrouperShell()
     gshell.cmdloop()

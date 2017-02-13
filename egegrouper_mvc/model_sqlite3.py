@@ -18,15 +18,12 @@ class GrouperModelSqlite3(GrouperModel):
         self.cur = None
         self.fname = None
 
-    """ Work with DB
-    """
-
-    def db_opened(self):
+    def storage_opened(self):
         return self.conn != None
     
-    def create_db(self, fname):
-        if self.db_opened():
-            self.close_db()
+    def create_storage(self, fname):
+        if self.storage_opened():
+            self.close_storage()
         self.conn = sqlite3.connect(fname)
         self.c = self.conn.cursor()
         script = open('sqlite_scripts/Create_SME_DB.sql', 'r').read()
@@ -34,13 +31,13 @@ class GrouperModelSqlite3(GrouperModel):
         self.conn.commit()
         self.fname = fname
 
-    def open_db(self, file_name):
+    def open_storage(self, file_name):
         self.conn = sqlite3.connect(file_name)
         self.c = self.conn.cursor()
         self.c.execute("pragma foreign_keys=on")
         self.fname = file_name
 
-    def close_db(self):
+    def close_storage(self):
         self.conn.close()
         self.conn = None
         self.fname = None
@@ -110,7 +107,7 @@ class GrouperModelSqlite3(GrouperModel):
     """ Data Viewing
     """
 
-    def db_info(self):
+    def storage_info(self):
         # number of groups
         q = """
         SELECT count(*)
@@ -224,18 +221,18 @@ class GrouperModelSqlite3(GrouperModel):
     def add_sme_db(self, fname):
         source_name = fname
         dest_name = self.fname
-        if self.db_opened():
-            self.close_db()
+        if self.storage_opened():
+            self.close_storage()
         SMEDBImporter().DBimport(dest_name, source_name)
-        self.open_db(dest_name)
+        self.open_storage(dest_name)
 
     def add_gs_db(self, fname):
         source_name = fname
         dest_name = self.fname
-        if self.db_opened():
-            self.close_db()
+        if self.storage_opened():
+            self.close_storage()
         GSDBImporter().DBimport(dest_name, source_name)
-        self.open_db(dest_name)
+        self.open_storage(dest_name)
 
     def add_exam_from_json_folder(self, folder_name):
         try:

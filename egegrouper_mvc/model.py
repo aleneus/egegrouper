@@ -2,23 +2,21 @@ class GrouperModel:
     def __init__(self):
         pass
 
-    """ Work with DB
-    """
+    # Work with storage
 
-    def create_db(self, fname):
+    def create_storage(self, name):
         pass
 
-    def open_db(self, file_name):
+    def open_storage(self, name):
         pass
 
-    def close_db(self):
+    def close_storage(self):
         pass
 
-    def db_opened(self):
+    def storage_opened(self):
         pass
     
-    """ Mapping
-    """
+    # Mapping
     
     def get_examination(self, exam_id):
         pass
@@ -26,17 +24,15 @@ class GrouperModel:
     def insert_examination(self, e):
         pass
 
-    """ Data Viewing
-    """
+    # Data Viewing
 
-    def db_info(self):
+    def storage_info(self):
         pass
 
     def group_info(self, group_id):
         pass
 
-    """ Grouping
-    """
+    # Grouping
     
     def insert_group(self, name, description):
         pass
@@ -51,21 +47,6 @@ class GrouperModel:
         pass
 
     def where_is_examination(self, exam_id):
-        pass
-
-    """ Import and export
-    """
-
-    def add_sme_db(self, fname):
-        pass
-
-    def add_gs_db(self, fname):
-        pass
-
-    def add_exam_from_json_folder(self, folder_name):
-        pass
-
-    def export_as_json_folder(self, exam_id, folder_name):
         pass
 
     """ Other data manipulation

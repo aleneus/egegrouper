@@ -23,7 +23,7 @@ class StringView(View):
             s += '\n'
         return s
 
-    def db(self, db_info):
+    def storage(self, db_info):
         s = '\n'
         s += 'Total examinations number: {}\n'.format(db_info[0])
         s += 'Groups number: {}\n'.format(db_info[1])
