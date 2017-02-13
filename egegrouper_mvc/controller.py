@@ -1,4 +1,5 @@
 import os.path
+from egegrouper_mvc import sme
 
 class GrouperController:
     def __init__(self, model = None, view = None):
@@ -69,3 +70,10 @@ class GrouperController:
 
     def delete_exam(self, exam_id):
         self.model.delete_exam(exam_id)
+
+    def merge_exams(self, exam_id_1, exam_id_2):
+        e1 = self.model.get_examination(exam_id_1)
+        e2 = self.model.get_examination(exam_id_2)
+        e = sme.merge_exams(e1, e2)
+        self.model.insert_examination(e)
+        return self.view.message('Done')

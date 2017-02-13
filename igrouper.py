@@ -245,6 +245,16 @@ class GrouperShell(cmd.Cmd):
         
         exam_id = cargv[0]
         grouper.delete_exam(exam_id)
+
+    def do_merge_exams(self, arg):
+        cargv = arg.split()
+        if len(cargv) < 2:
+            print('Few arguments')
+            return
+        exam_id_1 = cargv[0]
+        exam_id_2 = cargv[1]
+        grouper.set_view(view_s)
+        grouper.merge_exams(exam_id_1, exam_id_2)
         
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
