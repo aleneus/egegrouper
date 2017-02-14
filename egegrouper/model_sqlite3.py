@@ -99,6 +99,23 @@ class GrouperModelSqlite3(GrouperModel):
         self.conn.commit()
 
     def storage_info(self):
+        """Return information about storage.
+        
+        :return: exams_total_num -- total number of examinations
+        :rtype: int
+
+        :return: groups_num -- number of group
+        :rtype: int
+
+        :return: fields -- description of groups
+        :rtype: list of tuples
+
+        :return: num_in_groups -- number of examinations in groups
+        :rtype: list
+
+        :return: ungrouped_num -- number of ungroupes examination
+        :rtype: int
+        """
         # number of groups
         q = """
         SELECT count(*)
@@ -113,22 +130,22 @@ class GrouperModelSqlite3(GrouperModel):
         q = """
         SELECT *
         FROM egeg_group """
-        fields = list(self.c.execute(q, []))
+        data = list(self.c.execute(q, []))
         # numbers of exams in groups
         num_in_groups = []
-        for f in fields:
+        for d in data:
             q = """
             SELECT COUNT(E.exam_id)
             FROM examination as E, group_element as GE
             WHERE GE.exam_id = E.exam_id AND GE.group_id = ? """
-            num_in_groups.append(list(self.c.execute(q, [f[0], ]))[0][0])
+            num_in_groups.append(list(self.c.execute(q, [d[0], ]))[0][0])
         # number of ungrouped examinations
         q = """
         SELECT COUNT(exam_id)
         FROM examination
         WHERE exam_id NOT IN (SELECT exam_id FROM group_element) """
         ungrouped_num = list(self.c.execute(q, []))[0][0]
-        return [exams_total_num, groups_num, fields, num_in_groups, ungrouped_num]
+        return [exams_total_num, groups_num, data, num_in_groups, ungrouped_num]
 
     def group_info(self, group_id):
         """Return information about group of examinations.

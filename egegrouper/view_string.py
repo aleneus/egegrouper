@@ -10,6 +10,7 @@ class ViewString(View):
         return s
     
     def table(self, data, headers = None, width=40):
+        """Return string with data from table."""
         t = []
         for row in data:
             t_row = []
@@ -22,13 +23,14 @@ class ViewString(View):
             return '\n' + tabulate(t, tablefmt="orgtbl") + '\n'
 
     def exam(self, e):
+        """Return string with examination text info."""
         s = '\nE: {} {} {} {}\n'.format(e.name, e.gender, e.age, e.diagnosis)
         for m in e.ms:
             s += '    M: {}\n'.format(m.time)
         return s
     
     def storage(self, db_info):
-        # [exams_total_num, groups_num, fields, num_in_groups, ungrouped_num]
+        """Return string with storage info."""
         t = []
         for row, num in zip(db_info[2], db_info[3]):
             t_row = []
