@@ -1,4 +1,5 @@
 import sqlite3
+from egegrouper_mvc import sqlite3_scripts
 
 class DBImporter:
     def DBimport(self, dest_filename, source_filename):
@@ -17,8 +18,7 @@ class SMEDBImporter(DBImporter):
         self._dest_c = self._dconn.cursor()
         self._src_c = self._sconn.cursor()
         self._dest_c.execute("attach database ? as 'source';", (self._source_filename,))
-        script = open('egegrouper_mvc/sqlite_scripts/SMEDBImporter.sql', 'r').read()
-        self._dest_c.executescript(script)
+        self._dest_c.executescript(sqlite3_scripts.add_sme_db)
         self._dest_c.execute("detach database source;")
         self._dest_c.execute('drop table variable;')
         self._dconn.commit()

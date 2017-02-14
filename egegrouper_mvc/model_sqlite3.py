@@ -2,6 +2,7 @@ import sqlite3
 import numpy as np
 
 from egegrouper_mvc.model import *
+from egegrouper_mvc import sqlite3_scripts
 
 def blob2ndarray(signal_blob):
     return np.array(np.frombuffer(signal_blob))
@@ -23,8 +24,7 @@ class GrouperModelSqlite3(GrouperModel):
             self.close_storage()
         self.conn = sqlite3.connect(file_name)
         self.c = self.conn.cursor()
-        script = open('egegrouper_mvc/sqlite_scripts/Create_SME_DB.sql', 'r').read()
-        self.c.executescript(script)
+        self.c.executescript(sqlite3_scripts.create_sme_db)
         self.conn.commit()
         self.file_name = file_name
 
