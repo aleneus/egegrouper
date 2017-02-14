@@ -27,8 +27,8 @@ class GrouperController:
         return self.view.storage(data)
 
     def group_info(self, group_id):
-        data = self.model.group_info(group_id)
-        return self.view.table(data)
+        d, h = self.model.group_info(group_id)
+        return self.view.table(d, headers = h)
 
     def exam(self, exam_id):
         e = self.model.get_examination(exam_id)

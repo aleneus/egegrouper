@@ -131,18 +131,27 @@ class GrouperModelSqlite3(GrouperModel):
         return [exams_total_num, groups_num, fields, num_in_groups, ungrouped_num]
 
     def group_info(self, group_id):
+        """Return information about group of examinations.
+
+        :return: data, headers
+        :rtype: list of tuple, tuple
+        """
         if group_id == '0':
-            return list(self.c.execute("""
+            data = list(self.c.execute("""
             SELECT exam_id, name, diagnosis, age, gender
             FROM examination
             WHERE exam_id NOT IN (SELECT exam_id FROM group_element) 
             """, []))
-            
-        return list(self.c.execute("""
-        SELECT E.exam_id, E.name, E.diagnosis, E.age, E.gender
-        FROM examination AS E, group_element AS GE
-        WHERE GE.exam_id = E.exam_id AND GE.group_id = ?
-        """, [group_id, ]))
+        else:
+            data = list(self.c.execute("""
+            SELECT E.exam_id, E.name, E.diagnosis, E.age, E.gender
+            FROM examination AS E, group_element AS GE
+            WHERE GE.exam_id = E.exam_id AND GE.group_id = ?
+            """, [group_id, ]))
+
+        headers = tuple(map(lambda x: x[0], self.c.description))
+
+        return data, headers
 
     def exam_info(self, exam_id):
         try:
