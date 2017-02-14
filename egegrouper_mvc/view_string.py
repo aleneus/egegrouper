@@ -1,4 +1,5 @@
 from egegrouper_mvc.view import View
+from tabulate import tabulate
 
 class ViewString(View):
     def message(self, text):
@@ -8,21 +9,24 @@ class ViewString(View):
         s = 'Error: {}'.format(text)
         return s
     
-    def row(self, data):
-        s = ''
-        for d in data:
-            s += '{} '.format(d)
-        return s
-
-    def table(self, data):
-        s = '\n'
+    def table(self, data, headers = None, width=30):
+        t = []
         for row in data:
-            s += '{:>5d} | '.format(row[0])
-            for record in row[1:]:
-                s += '{} '.format(record)
-            s += '\n'
-        return s
+            t_row = []
+            for record in row:
+                t_row.append(str(record)[:width])
+            t.append(t_row)
+        if headers:
+            return '\n' + tabulate(t, headers=headers, tablefmt="orgtbl") + '\n'
+        else:
+            return '\n' + tabulate(t, tablefmt="orgtbl") + '\n'
 
+    def exam(self, e):
+        s = 'E: {} {} {} {}\n'.format(e.name, e.gender, e.age, e.diagnosis)
+        for m in e.ms:
+            s += '    M: {}\n'.format(m.time)
+        return s
+    
     def storage(self, db_info):
         s = '\n'
         s += 'Total examinations number: {}\n'.format(db_info[0])
@@ -32,8 +36,3 @@ class ViewString(View):
         s += 'Ungrouped: {}\n'.format(db_info[4])
         return s
 
-    def exam(self, e):
-        s = 'E: {} {} {} {}\n'.format(e.name, e.gender, e.age, e.diagnosis)
-        for m in e.ms:
-            s += '    M: {}\n'.format(m.time)
-        return s
