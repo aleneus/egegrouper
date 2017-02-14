@@ -23,7 +23,7 @@ class GrouperModelSqlite3(GrouperModel):
             self.close_storage()
         self.conn = sqlite3.connect(file_name)
         self.c = self.conn.cursor()
-        script = open('sqlite_scripts/Create_SME_DB.sql', 'r').read()
+        script = open('egegrouper_mvc/sqlite_scripts/Create_SME_DB.sql', 'r').read()
         self.c.executescript(script)
         self.conn.commit()
         self.file_name = file_name
