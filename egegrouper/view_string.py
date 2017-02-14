@@ -3,9 +3,11 @@ from tabulate import tabulate
 
 class ViewString(View):
     def message(self, text):
+        """Return string with message."""
         return text
         
     def error_message(self, text):
+        """Return string with error message."""
         s = 'Error: {}'.format(text)
         return s
     
