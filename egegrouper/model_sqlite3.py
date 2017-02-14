@@ -4,12 +4,6 @@ import numpy as np
 from egegrouper.model import *
 from egegrouper import sqlite3_scripts
 
-def blob2ndarray(signal_blob):
-    return np.array(np.frombuffer(signal_blob))
-
-def ndarry2blob(signal_ndarray):
-    return signal_ndarray.tobytes()
-
 class GrouperModelSqlite3(GrouperModel):
     """Model implementation for SQLite3 SME data base."""
     def __init__(self):
@@ -66,7 +60,7 @@ class GrouperModelSqlite3(GrouperModel):
                 for s_sql in ss_sql:
                     s = Signal()
                     s.dt = s_sql[0]
-                    s.x = blob2ndarray(s_sql[1])
+                    s.x = np.array(np.frombuffer(s_sql[1]))
                     m.ss.append(s)
                 e.ms.append(m)
             return e
@@ -101,7 +95,7 @@ class GrouperModelSqlite3(GrouperModel):
             for s in m.ss:
                 self.c.execute("""
                 INSERT INTO signal (data, dt, meas_id)
-                VALUES (?,?,?) """, (ndarry2blob(s.x), s.dt, meas_id) )
+                VALUES (?,?,?) """, (s.x.tobytes(), s.dt, meas_id) )
             
         self.conn.commit()
 
