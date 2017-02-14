@@ -11,15 +11,18 @@ def ndarry2blob(signal_ndarray):
     return signal_ndarray.tobytes()
 
 class GrouperModelSqlite3(GrouperModel):
+    """Model implementation for SQLite3 SME data base."""
     def __init__(self):
         self.conn = None
         self.cur = None
         self.file_name = None
 
     def storage_opened(self):
+        """Check if data base opened."""
         return self.conn != None
     
     def create_storage(self, file_name):
+        """Create new data base."""
         if self.storage_opened():
             self.close_storage()
         self.conn = sqlite3.connect(file_name)
@@ -29,17 +32,20 @@ class GrouperModelSqlite3(GrouperModel):
         self.file_name = file_name
 
     def open_storage(self, file_name):
+        """Open data base."""
         self.conn = sqlite3.connect(file_name)
         self.c = self.conn.cursor()
         self.c.execute("pragma foreign_keys=on")
         self.file_name = file_name
 
     def close_storage(self):
+        """Close data base."""
         self.conn.close()
         self.conn = None
         self.file_name = None
 
     def get_examination(self, exam_id):
+        """Return examination from data base."""
         try:
             e = Examination()
             e.name, e.diagnosis, e.age, e.gender = list(self.c.execute("""
@@ -68,6 +74,7 @@ class GrouperModelSqlite3(GrouperModel):
             return False
 
     def insert_examination(self, e):
+        """Insert examination into data base."""
         exam_id = list(self.c.execute("""
         SELECT max(exam_id)
         FROM examination """))[0][0]
@@ -171,6 +178,7 @@ class GrouperModelSqlite3(GrouperModel):
         return data, headers
 
     def exam_info(self, exam_id):
+        """Returns detailed examination info."""
         try:
             e = list(self.c.execute("""
             SELECT * FROM examination
@@ -193,18 +201,21 @@ class GrouperModelSqlite3(GrouperModel):
             return False
         
     def insert_group(self, name, description):
+        """Add new group of examinations."""
         self.c.execute("""
         INSERT INTO egeg_group (name, description)
         VALUES (?, ?) """, [name, description, ])
         self.conn.commit()
 
     def delete_group(self, group_id):
+        """Delete group of examinations fron data base."""
         self.c.execute("""
         DELETE FROM egeg_group
         WHERE group_id = ? """, [group_id, ])
         self.conn.commit()
 
     def add_exam_to_group(self, exam_id, group_id):
+        """Add examination into group."""
         try:
             self.c.execute("""
             INSERT OR REPLACE INTO group_element
@@ -214,6 +225,7 @@ class GrouperModelSqlite3(GrouperModel):
             print('Error: no such examination or group')
 
     def delete_exam_from_group(self, exam_id, group_id):
+        """Delete examination from group."""
         try:        
             self.c.execute("""
             DELETE FROM group_element
@@ -223,6 +235,7 @@ class GrouperModelSqlite3(GrouperModel):
             print('Error: no such examination or group')
 
     def where_is_examination(self, exam_id):
+        """Return groups numbers and names where examination is."""
         data = list(self.c.execute("""
         SELECT G.group_id, G.name
         FROM egeg_group as G, group_element
@@ -230,6 +243,7 @@ class GrouperModelSqlite3(GrouperModel):
         return data
 
     def add_sme_db(self, file_name):
+        """Add SME sqlite3 data base to current data base."""
         source_name = file_name
         dest_name = self.file_name
         if self.storage_opened():
@@ -238,6 +252,7 @@ class GrouperModelSqlite3(GrouperModel):
         self.open_storage(dest_name)
 
     def add_gs_db(self, file_name):
+        """Add GS sqlite3 data base to current data base."""
         source_name = file_name
         dest_name = self.file_name
         if self.storage_opened():
@@ -246,6 +261,7 @@ class GrouperModelSqlite3(GrouperModel):
         self.open_storage(dest_name)
 
     def add_exam_from_json_folder(self, folder_name):
+        """Add examination from JSON folder to current data base."""
         try:
             e = get_exam_from_folder(folder_name)
             self.insert_examination(e)
@@ -254,10 +270,12 @@ class GrouperModelSqlite3(GrouperModel):
             return False
 
     def export_as_json_folder(self, exam_id, folder_name):
+        """Export examination to JSON folder"""
         e = self.get_examination(exam_id)
         put_exam_to_folder(e, folder_name)
 
     def delete_exam(self, exam_id):
+        """Remove examination from data base."""
         self.c.execute("""
         DELETE FROM Examination
         WHERE exam_id = ?
