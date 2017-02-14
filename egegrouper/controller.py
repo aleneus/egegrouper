@@ -1,5 +1,5 @@
 import os.path
-from egegrouper_mvc import sme
+from egegrouper import sme
 
 class GrouperController:
     def __init__(self, model = None, view = None):

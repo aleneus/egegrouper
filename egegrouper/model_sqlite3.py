@@ -1,8 +1,8 @@
 import sqlite3
 import numpy as np
 
-from egegrouper_mvc.model import *
-from egegrouper_mvc import sqlite3_scripts
+from egegrouper.model import *
+from egegrouper import sqlite3_scripts
 
 def blob2ndarray(signal_blob):
     return np.array(np.frombuffer(signal_blob))

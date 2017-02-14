@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-from egegrouper_mvc.view import View
+from egegrouper.view import View
 
 class ViewPlot(View):
     def exam(self, e):

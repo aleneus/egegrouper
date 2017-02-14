@@ -1,7 +1,7 @@
 import json
 import os
 
-from egegrouper_mvc.sme import *
+from egegrouper.sme import *
 
 def get_exam_from_folder(folder_name):
     e = Examination()

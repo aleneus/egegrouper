@@ -3,10 +3,10 @@
 
 import cmd, sys, argparse
 
-from egegrouper_mvc.model_sqlite3 import *
-from egegrouper_mvc.controller import *
-from egegrouper_mvc.view_string import *
-from egegrouper_mvc.view_plot import *
+from egegrouper.model_sqlite3 import *
+from egegrouper.controller import *
+from egegrouper.view_string import *
+from egegrouper.view_plot import *
 
 class GrouperShell(cmd.Cmd):
     intro = 'Welcome to the Grouper shell.   Type help or ? to list commands.\n'

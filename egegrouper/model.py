@@ -1,6 +1,6 @@
-from egegrouper_mvc.sme import *
-from egegrouper_mvc.db_import import *
-from egegrouper_mvc.sme_json_folders import *
+from egegrouper.sme import *
+from egegrouper.db_import import *
+from egegrouper.sme_json_folders import *
 
 class GrouperModel:
     def __init__(self):

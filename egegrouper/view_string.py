@@ -1,4 +1,4 @@
-from egegrouper_mvc.view import View
+from egegrouper.view import View
 from tabulate import tabulate
 
 class ViewString(View):
