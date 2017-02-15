@@ -12,11 +12,25 @@ class GrouperModelSqlite3(GrouperModel):
         self.file_name = None
 
     def storage_opened(self):
-        """Check if data base opened."""
+        """Check if data base opened.
+
+        Returns
+        -------
+        bool
+            True if opened, False otherwise.
+
+        """
         return self.conn != None
     
     def create_storage(self, file_name):
-        """Create new data base."""
+        """Create new data base.
+
+        Parameters
+        ----------
+        file_name : str
+            File name.
+
+        """
         if self.storage_opened():
             self.close_storage()
         self.conn = sqlite3.connect(file_name)
@@ -26,7 +40,14 @@ class GrouperModelSqlite3(GrouperModel):
         self.file_name = file_name
 
     def open_storage(self, file_name):
-        """Open data base."""
+        """Open data base.
+
+        Parameters
+        ----------
+        file_name : str
+            File name.
+
+        """
         self.conn = sqlite3.connect(file_name)
         self.c = self.conn.cursor()
         self.c.execute("pragma foreign_keys=on")
@@ -39,7 +60,19 @@ class GrouperModelSqlite3(GrouperModel):
         self.file_name = None
 
     def get_examination(self, exam_id):
-        """Return examination from data base."""
+        """Return examination from data base.
+
+        Parameters
+        ----------
+        exam_id : str
+            Examination ID.
+
+        Returns
+        -------
+        sme.Examination
+            Examination object.
+
+        """
         try:
             e = Examination()
             e.name, e.diagnosis, e.age, e.gender = list(self.c.execute("""
@@ -68,7 +101,14 @@ class GrouperModelSqlite3(GrouperModel):
             return False
 
     def insert_examination(self, e):
-        """Insert examination into data base."""
+        """Insert examination into data base.
+
+        Parameters
+        ----------
+        e : sme.Examination
+            Examination object
+
+        """
         exam_id = list(self.c.execute("""
         SELECT max(exam_id)
         FROM examination """))[0][0]
@@ -102,20 +142,19 @@ class GrouperModelSqlite3(GrouperModel):
     def storage_info(self):
         """Return information about storage.
         
-        :return: exams_total_num -- total number of examinations
-        :rtype: int
+        Returns
+        -------
+        exams_total_num : int 
+            Total number of examinations.
+        groups_num : int
+            Number of groups.
+        data : list of tuples
+            Group description.
+        num_in_groups : list
+            Number of examination in every group.
+        ungrouped_num : int 
+            Number of ungrouped examinations.
 
-        :return: groups_num -- number of group
-        :rtype: int
-
-        :return: fields -- description of groups
-        :rtype: list of tuples
-
-        :return: num_in_groups -- number of examinations in groups
-        :rtype: list
-
-        :return: ungrouped_num -- number of ungroupes examination
-        :rtype: int
         """
         # number of groups
         q = """
@@ -151,8 +190,18 @@ class GrouperModelSqlite3(GrouperModel):
     def group_info(self, group_id):
         """Return information about group of examinations.
 
-        :return: data, headers
-        :rtype: list of tuple, tuple
+        Parameters
+        ----------
+        group_id : str
+            Group ID
+
+        Returns
+        -------
+        data : list of tuple
+            Groups descriptions.
+        headers : tuple
+            Headers.
+
         """
         if group_id == '0':
             data = list(self.c.execute("""
@@ -171,45 +220,46 @@ class GrouperModelSqlite3(GrouperModel):
 
         return data, headers
 
-    def exam_info(self, exam_id):
-        """Returns detailed examination info."""
-        try:
-            e = list(self.c.execute("""
-            SELECT * FROM examination
-            WHERE exam_id = ? """, [exam_id, ]))[0]
-            s = ('234', 'source', '40 m', '2 Hz', 'Q=0.56')
-            ms = []
-            ms_sql = list(self.c.execute("""
-            SELECT meas_id, time FROM measurement
-            WHERE exam_id = ?
-            ORDER BY meas_id """, [exam_id, ]))
-            for m in ms_sql:
-                ss = []
-                ss = list(self.c.execute("""
-                SELECT signal_id FROM signal
-                WHERE meas_id = ? """, [m[0], ]))
-                ms.append((m, ss))
-            res = (e, ms)
-            return res
-        except Exception:
-            return False
-        
     def insert_group(self, name, description):
-        """Add new group of examinations."""
+        """Add new group of examinations.
+
+        Parameters
+        ----------
+        name : str
+            Name of new group.
+        description : str
+            Description for new group.
+
+        """
         self.c.execute("""
         INSERT INTO egeg_group (name, description)
         VALUES (?, ?) """, [name, description, ])
         self.conn.commit()
 
     def delete_group(self, group_id):
-        """Delete group of examinations fron data base."""
+        """Delete group of examinations fron data base.
+
+        Parameters
+        ----------
+        group_id : str
+            Group ID.
+        """
         self.c.execute("""
         DELETE FROM egeg_group
         WHERE group_id = ? """, [group_id, ])
         self.conn.commit()
 
     def add_exam_to_group(self, exam_id, group_id):
-        """Add examination into group."""
+        """Add examination into group.
+
+        Parameters
+        ----------
+        exam_id : str
+            Examination ID.
+        group_id : str
+            Group ID.
+
+        """
         try:
             self.c.execute("""
             INSERT OR REPLACE INTO group_element
@@ -219,7 +269,16 @@ class GrouperModelSqlite3(GrouperModel):
             print('Error: no such examination or group')
 
     def delete_exam_from_group(self, exam_id, group_id):
-        """Delete examination from group."""
+        """Delete examination from group.
+
+        Parameters
+        ----------
+        exam_id : str
+            Examination ID.
+        group_id : str
+            Group ID.
+
+        """
         try:        
             self.c.execute("""
             DELETE FROM group_element
@@ -229,7 +288,13 @@ class GrouperModelSqlite3(GrouperModel):
             print('Error: no such examination or group')
 
     def where_is_examination(self, exam_id):
-        """Return groups numbers and names where examination is."""
+        """Return groups numbers and names where examination is.
+
+        Returns
+        -------
+        list of tuples
+
+        """
         data = list(self.c.execute("""
         SELECT G.group_id, G.name
         FROM egeg_group as G, group_element
@@ -237,7 +302,14 @@ class GrouperModelSqlite3(GrouperModel):
         return data
 
     def add_sme_db(self, file_name):
-        """Add SME sqlite3 data base to current data base."""
+        """Add SME sqlite3 data base to current data base.
+
+        Parameters
+        ----------
+        file_name : str
+            Name of file with SQLite3 SME data base.
+
+        """
         source_name = file_name
         dest_name = self.file_name
         if self.storage_opened():
@@ -246,7 +318,14 @@ class GrouperModelSqlite3(GrouperModel):
         self.open_storage(dest_name)
 
     def add_gs_db(self, file_name):
-        """Add GS sqlite3 data base to current data base."""
+        """Add GS sqlite3 data base to current data base.
+        
+        Parameters
+        ----------
+        file_name : str
+            Name of file with SQLite3 Gastroscan data base.
+
+        """
         source_name = file_name
         dest_name = self.file_name
         if self.storage_opened():
@@ -255,7 +334,14 @@ class GrouperModelSqlite3(GrouperModel):
         self.open_storage(dest_name)
 
     def add_exam_from_json_folder(self, folder_name):
-        """Add examination from JSON folder to current data base."""
+        """Add examination from JSON folder to current data base.
+
+        Parameters
+        ----------
+        folder_name : str
+            Name of folder with info.json and signal txt files.
+        
+        """
         try:
             e = get_exam_from_folder(folder_name)
             self.insert_examination(e)
@@ -264,12 +350,25 @@ class GrouperModelSqlite3(GrouperModel):
             return False
 
     def export_as_json_folder(self, exam_id, folder_name):
-        """Export examination to JSON folder"""
+        """Export examination to JSON folder
+        
+        Parameters
+        ----------
+        folder_name : str
+            Name of folder for export info.json and signals in txt format.
+        
+        """
         e = self.get_examination(exam_id)
         put_exam_to_folder(e, folder_name)
 
     def delete_exam(self, exam_id):
-        """Remove examination from data base."""
+        """Remove examination from data base.
+
+        Parameters
+        ----------
+        exam_id : str
+            Examination ID.
+        """
         self.c.execute("""
         DELETE FROM Examination
         WHERE exam_id = ?

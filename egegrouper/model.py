@@ -2,7 +2,7 @@ from egegrouper.sme import *
 from egegrouper.db_import import *
 from egegrouper.sme_json_folders import *
 
-class GrouperModel:
+class GrouperModel():
     def __init__(self):
         pass
 
