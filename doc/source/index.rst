@@ -10,9 +10,9 @@ Contents:
 --------------------------------------
 
 .. toctree::
-
+   
+   controller
    model_sqlite3
-
 
 
 Indices and tables
