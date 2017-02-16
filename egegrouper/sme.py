@@ -12,7 +12,11 @@ class Signal:
     """Samples values."""
     
 class Measurement:
-    """Measurement."""
+    """Measurement.
+
+    Measurement contains one or more signals. 
+    
+    """
 
     time = None
     """Measurement start time."""
@@ -20,7 +24,11 @@ class Measurement:
     """Signals."""
     
 class Examination:
-    """Examination."""
+    """Examination.
+
+    Examination contains one or more measurements.
+
+    """
     
     name = None
     """Name of patient."""

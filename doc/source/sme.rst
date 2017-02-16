@@ -1,5 +1,10 @@
-sme
+SME
 ========================
+
+Conceptual SME model
+--------------------
+
+.. image:: pic/sme.png
 
 sme module
 ----------	   
@@ -7,8 +12,9 @@ sme module
 .. automodule:: sme
    :members:
 
-About SME
----------
+sme_json_folders module
+-----------------------
 
-.. image:: pic/sme.png
+.. automodule:: sme_json_folders
+   :members:
 

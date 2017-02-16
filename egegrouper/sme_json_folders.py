@@ -1,9 +1,12 @@
+"""Mapping examinations to and from JSON folders."""
+
 import json
 import os
 
 from egegrouper.sme import *
 
 def get_exam_from_folder(folder_name):
+    """Get examination object from folder with file info.json."""
     e = Examination()
     with open('{}/info.json'.format(folder_name), 'r') as f:
         data = json.load(f)
@@ -26,6 +29,11 @@ def get_exam_from_folder(folder_name):
     return e
 
 def put_exam_to_folder(e, folder_name):
+    """Put examination to folder. 
+
+    Create info.json and text files with samples.
+    
+    """
     # create folder
     if os.path.exists(folder_name):
         return 1 # folder exists
