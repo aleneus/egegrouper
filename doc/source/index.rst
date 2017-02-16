@@ -9,7 +9,15 @@ Welcome to egegrouper's documentation!
 Contents:
 --------------------------------------
 
-Base Part
+SME Model
+^^^^^^^^^
+
+.. toctree::
+
+   sme
+   
+
+Base classes
 ^^^^^^^^^
 
 .. toctree::

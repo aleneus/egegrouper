@@ -1,26 +1,44 @@
+"""Very simple implementation of SME model."""
+
 import json
 import numpy as np
 
 class Signal:
-    def __init__(self):
-        self.dt = None
-        self.edited = None
-        self.x = []
-
+    """Signal."""
+    
+    dt = None
+    """Sample step."""
+    x = []
+    """Samples values."""
+    
 class Measurement:
-    def __init__(self):
-        self.time = None
-        self.ss = []
-        
-class Examination:
-    def __init__(self):
-        self.name = None
-        self.age = None
-        self.gender = None
-        self.diagnosis = None
-        self.ms = []
+    """Measurement."""
 
+    time = None
+    """Measurement start time."""
+    ss = []
+    """Signals."""
+    
+class Examination:
+    """Examination."""
+    
+    name = None
+    """Name of patient."""
+    
+    age = None
+    """Age of patient."""
+    
+    gender = None
+    """Gender of patient."""
+    
+    diagnosis = None
+    """Diagnosis."""
+    
+    ms = []
+    """Measurements."""
+    
 def merge_exams(e1, e2):
+    """Merge exams."""
     e = Examination()
     e = e1
     for m in e2.ms:
