@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
-from egegrouper.view import View
+from egegrouper.view import GrouperView
 
-class ViewPlot(View):
+class ViewPlot(GrouperView):
     def exam(self, e):
         n = 0
         for m in e.ms:
