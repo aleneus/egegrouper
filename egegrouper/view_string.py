@@ -31,7 +31,7 @@ class ViewString(View):
             s += '    M: {}\n'.format(m.time)
         return s
     
-    def storage(self, exams_total_num, groups_num, data, num_in_groups, ungrouped_num):
+    def storage(self, exams_num, data, num_in_groups, ungrouped_num):
         """Return string with storage info."""
         t = []
         for row, num in zip(data, num_in_groups):
@@ -42,7 +42,7 @@ class ViewString(View):
             t.append(t_row)
         t.append(['','','',''])
         t.append(['','','Ungrouped:',ungrouped_num])
-        t.append(['','','Total:',exams_total_num])
+        t.append(['','','Total:',exams_num])
         h = ['ID','Name','Description','Number']
         return '\n' + tabulate(t, headers = h, tablefmt="orgtbl") + '\n'
         

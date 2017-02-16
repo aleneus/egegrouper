@@ -156,16 +156,11 @@ class GrouperModelSqlite3(GrouperModel):
             Number of ungrouped examinations.
 
         """
-        # number of groups
-        q = """
-        SELECT count(*)
-        FROM egeg_group """
-        groups_num = list(self.c.execute(q, []))[0][0]
         # total number of examinations
         q = """
         SELECT count(*)
         FROM examination """
-        exams_total_num = list(self.c.execute(q, []))[0][0]
+        exams_num = list(self.c.execute(q, []))[0][0]
         # fields from db
         q = """
         SELECT *
@@ -185,7 +180,7 @@ class GrouperModelSqlite3(GrouperModel):
         FROM examination
         WHERE exam_id NOT IN (SELECT exam_id FROM group_element) """
         ungrouped_num = list(self.c.execute(q, []))[0][0]
-        return exams_total_num, groups_num, data, num_in_groups, ungrouped_num
+        return exams_num, data, num_in_groups, ungrouped_num
 
     def group_info(self, group_id):
         """Return information about group of examinations.
