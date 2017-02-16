@@ -10,7 +10,8 @@ Contents:
 --------------------------------------
 
 .. toctree::
-   
+   :maxdepth: 2
+
    controller
    model_sqlite3
 
