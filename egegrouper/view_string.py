@@ -31,18 +31,18 @@ class ViewString(View):
             s += '    M: {}\n'.format(m.time)
         return s
     
-    def storage(self, db_info):
+    def storage(self, exams_total_num, groups_num, data, num_in_groups, ungrouped_num):
         """Return string with storage info."""
         t = []
-        for row, num in zip(db_info[2], db_info[3]):
+        for row, num in zip(data, num_in_groups):
             t_row = []
             for record in row:
                 t_row.append(str(record))
             t_row.append(num)
             t.append(t_row)
         t.append(['','','',''])
-        t.append(['','','Ungrouped:',db_info[4]])
-        t.append(['','','Total:',db_info[0]])
+        t.append(['','','Ungrouped:',ungrouped_num])
+        t.append(['','','Total:',exams_total_num])
         h = ['ID','Name','Description','Number']
         return '\n' + tabulate(t, headers = h, tablefmt="orgtbl") + '\n'
-
+        

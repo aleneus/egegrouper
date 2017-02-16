@@ -98,7 +98,7 @@ class GrouperModelSqlite3(GrouperModel):
                 e.ms.append(m)
             return e
         except Exception:
-            return False
+            return None
 
     def insert_examination(self, e):
         """Insert examination into data base.
@@ -185,7 +185,7 @@ class GrouperModelSqlite3(GrouperModel):
         FROM examination
         WHERE exam_id NOT IN (SELECT exam_id FROM group_element) """
         ungrouped_num = list(self.c.execute(q, []))[0][0]
-        return [exams_total_num, groups_num, data, num_in_groups, ungrouped_num]
+        return exams_total_num, groups_num, data, num_in_groups, ungrouped_num
 
     def group_info(self, group_id):
         """Return information about group of examinations.

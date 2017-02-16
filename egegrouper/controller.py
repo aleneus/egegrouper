@@ -39,8 +39,8 @@ class GrouperController:
 
     def storage_info(self):
         """Get and pass storage info."""
-        data = self.model.storage_info()
-        return self.view.storage(data)
+        exams_total_num, groups_num, data, num_in_groups, ungrouped_num = self.model.storage_info()
+        return self.view.storage(exams_total_num, groups_num, data, num_in_groups, ungrouped_num)
 
     def group_info(self, group_id):
         """Get and pass group info."""
