@@ -9,10 +9,18 @@ Welcome to egegrouper's documentation!
 Contents:
 --------------------------------------
 
+Base Part
+^^^^^^^^^
+
 .. toctree::
-   :maxdepth: 2
 
    controller
+
+SQLite3
+^^^^^^^
+
+.. toctree::
+   
    model_sqlite3
 
 
