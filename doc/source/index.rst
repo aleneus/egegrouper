@@ -18,13 +18,20 @@ Base Part
    view
    controller
 
-SQLite3
-^^^^^^^
+Model implementations
+^^^^^^^^^^^^^^^^^^^^^
 
 .. toctree::
    
    model_sqlite3
 
+View implementations
+^^^^^^^^^^^^^^^^^^^^^
+
+.. toctree::
+   
+   view_string
+   view_plot
 
 Indices and tables
 ==================
