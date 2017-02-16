@@ -14,6 +14,8 @@ Base Part
 
 .. toctree::
 
+   model
+   view
    controller
 
 SQLite3
