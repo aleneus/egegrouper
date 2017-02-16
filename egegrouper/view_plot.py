@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 from egegrouper.view import GrouperView
 
 class ViewPlot(GrouperView):
+    """View for plot signals."""
     def exam(self, e):
         n = 0
         for m in e.ms:
