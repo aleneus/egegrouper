@@ -42,8 +42,8 @@ View implementations
 
 .. toctree::
    
-   ViewString <view_string>
-   ViewPlot <view_plot>
+   GrouperViewString <view_string>
+   GrouperViewPlot <view_plot>
 
 Indices and tables
 ==================
