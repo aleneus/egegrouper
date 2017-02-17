@@ -28,7 +28,7 @@ Base classes
 
    GrouperModel <model>
    GrouperView <view>
-   GrouperController <view>
+   GrouperController <controller>
 
 Model implementations
 ---------------------
