@@ -263,8 +263,8 @@ if __name__ == '__main__':
 
     model = GrouperModelSqlite3()
     grouper = GrouperController(model)
-    view_s = ViewString()
-    view_p = ViewPlot()
+    view_s = GrouperViewString()
+    view_p = GrouperViewPlot()
     
     grouper.open_or_create_storage(args.fname)
     

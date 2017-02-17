@@ -1,7 +1,7 @@
 from egegrouper.view import GrouperView
 from tabulate import tabulate
 
-class ViewString(GrouperView):
+class GrouperViewString(GrouperView):
     """String view. Used for text interface."""
     def message(self, text):
         """Return string with message."""
