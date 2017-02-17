@@ -1,5 +1,5 @@
-view_string
-========================
+ViewString
+==========
 
 .. automodule:: view_string
    :members:

@@ -6,40 +6,44 @@
 Welcome to egegrouper's documentation!
 ======================================
 
-Contents:
---------------------------------------
-
-SME Model
-^^^^^^^^^
+SME model
+---------
 
 .. toctree::
 
-   sme
+   SME <sme>
+      
+MVC
+---
+
+.. toctree::
+
+   Used MVC pattern <mvc>
+
    
-
 Base classes
-^^^^^^^^^
+------------
 
 .. toctree::
 
-   model
-   view
-   controller
+   GrouperModel <model>
+   GrouperView <view>
+   GrouperController <view>
 
 Model implementations
-^^^^^^^^^^^^^^^^^^^^^
+---------------------
 
 .. toctree::
    
-   model_sqlite3
+   GrouperModelSqlite3 <model_sqlite3>
 
 View implementations
-^^^^^^^^^^^^^^^^^^^^^
+--------------------
 
 .. toctree::
    
-   view_string
-   view_plot
+   ViewString <view_string>
+   ViewPlot <view_plot>
 
 Indices and tables
 ==================

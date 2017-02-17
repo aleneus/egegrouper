@@ -1,5 +1,5 @@
-controller
-========================
+GrouperController
+=================
 
 .. automodule:: controller
    :members:

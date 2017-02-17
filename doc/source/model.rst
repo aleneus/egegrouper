@@ -1,5 +1,6 @@
-model
-========================
+GrouperModel
+============
 
 .. automodule:: model
    :members:
+

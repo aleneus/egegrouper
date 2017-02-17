@@ -1,5 +1,5 @@
-view_plot
-========================
+ViewPlot
+========
 
 .. automodule:: view_plot
    :members:

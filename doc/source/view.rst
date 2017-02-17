@@ -1,5 +1,5 @@
-view
-========================
+GrouperView
+===========
 
 .. automodule:: view
    :members:
