@@ -1,7 +1,9 @@
+from egegrouper.dialog import *
+
 import readline
 from collections import OrderedDict
 
-class EditRecordDialog:
+class DialogText(Dialog):
     """Text dialog for input fields values."""
     
     data_dict = None

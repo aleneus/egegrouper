@@ -1,6 +1,6 @@
 import os.path
 from egegrouper import sme
-from egegrouper.edit_record_dialog import *
+from egegrouper.dialog_text import *
 
 class GrouperController:
     """Controller in MVC.
@@ -242,5 +242,5 @@ class GrouperController:
     def edit_group_record(self, group_id):
         """Edit attributes of selected group."""
         data_dict = self.model.group_record(group_id)
-        EditRecordDialog(data_dict).input()
+        DialogText(data_dict).input()
         self.model.update_group_record(group_id, data_dict)
