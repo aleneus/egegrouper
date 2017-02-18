@@ -1,5 +1,6 @@
 import os.path
 from egegrouper import sme
+from egegrouper.dialogs import *
 
 class GrouperController:
     """Controller in MVC.
@@ -237,3 +238,9 @@ class GrouperController:
         e = sme.merge_exams(e1, e2)
         self.model.insert_examination(e)
         return self.view.message('Done')
+
+    def edit_group_record(self, group_id):
+        """Edit attributes of selected group."""
+        data_dict = self.model.group_record(group_id)
+        FieldsTextDialog(data_dict).input()
+        self.model.update_group_record(group_id, data_dict)

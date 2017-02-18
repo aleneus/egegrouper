@@ -1,5 +1,6 @@
 import sqlite3
 import numpy as np
+from collections import OrderedDict
 
 from egegrouper.model import *
 from egegrouper import sqlite3_scripts
@@ -368,4 +369,34 @@ class GrouperModelSqlite3(GrouperModel):
         DELETE FROM Examination
         WHERE exam_id = ?
         """,(exam_id, ))
+        self.conn.commit()
+
+    def group_record(self, group_id):
+        """Get group record by id.
+
+        Parameters
+        ----------
+        group_id : str
+            Group ID.
+
+        Returns
+        -------
+        data_dict : OrderedDict
+            Attributes of selected group.
+        """
+        data_dict = OrderedDict()
+        data_dict['name'], data_dict['description'] = list(self.c.execute("""
+        SELECT name, description
+        FROM egeg_group
+        WHERE group_id = ?
+        """, (group_id, )))[0]
+        return data_dict
+
+    def update_group_record(self, group_id, data_dict):
+        """Update group record in data base."""
+        self.c.execute("""
+        UPDATE egeg_group
+        SET name = ?, description = ?
+        WHERE group_id = ?
+        """, (data_dict['name'], data_dict['description'], group_id, ))
         self.conn.commit()
