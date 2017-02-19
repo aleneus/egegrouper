@@ -344,7 +344,7 @@ class GrouperModelSqlite3(GrouperModel):
             return False
 
     def export_as_json_folder(self, exam_id, folder_name):
-        """Export examination to JSON folder
+        """Export examination to JSON folder. Return True if sucsess, False overwise.
         
         Parameters
         ----------
@@ -353,7 +353,7 @@ class GrouperModelSqlite3(GrouperModel):
         
         """
         e = self.get_examination(exam_id)
-        put_exam_to_folder(e, folder_name)
+        return put_exam_to_folder(e, folder_name)
 
     def delete_exam(self, exam_id):
         """Remove examination from data base.

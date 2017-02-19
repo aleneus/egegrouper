@@ -226,7 +226,8 @@ class GrouperShell(cmd.Cmd):
             return
         exam_id = cargv[0]
         folder_name = cargv[1]
-        grouper.export_as_json_folder(exam_id, folder_name)
+        grouper.set_view(view_s)
+        print(grouper.export_as_json_folder(exam_id, folder_name))
 
     def do_delete_exam(self, arg):
         """ delete_exam id

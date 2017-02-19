@@ -192,8 +192,8 @@ class GrouperController:
         
         """
         if not self.model.add_exam_from_json_folder(folder_name):
-            return self.view.error_message('Something wrong')
-        return self.view.message('Done')
+            return self.view.error_message('Something wrong.')
+        return self.view.message('Done.')
 
     def export_as_json_folder(self, exam_id, folder_name):
         """Export examination to JSON folder.
@@ -206,7 +206,10 @@ class GrouperController:
             Name of folder for export info.json and signals in text format.
 
         """
-        self.model.export_as_json_folder(exam_id, folder_name)
+        if self.model.export_as_json_folder(exam_id, folder_name):
+            return self.view.message('Done.')
+        else:
+            return self.view.error_message('Something wrong.')
 
     def delete_exam(self, exam_id):
         """Delete examination from storage.
