@@ -1,6 +1,5 @@
-import os.path
+import os.path # TODO: remove from here (?)
 from egegrouper import sme
-from egegrouper.dialog_text import *
 
 class GrouperController:
     """Controller in MVC.
@@ -239,8 +238,9 @@ class GrouperController:
         self.model.insert_examination(e)
         return self.view.message('Done')
 
-    def edit_group_record(self, group_id):
-        """Edit attributes of selected group."""
-        data_dict = self.model.group_record(group_id)
-        DialogText(data_dict).input()
+    def group_record(self, group_id):
+        return self.model.group_record(group_id)
+
+    def update_group_record(self, group_id, data_dict):
         self.model.update_group_record(group_id, data_dict)
+        return self.view.message('Done')

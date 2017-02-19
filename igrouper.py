@@ -7,6 +7,7 @@ from egegrouper.model_sqlite3 import *
 from egegrouper.controller import *
 from egegrouper.view_string import *
 from egegrouper.view_plot import *
+from dialog import *
 
 class GrouperShell(cmd.Cmd):
     intro = 'Welcome to the Grouper shell.   Type help or ? to list commands.\n'
@@ -264,7 +265,10 @@ class GrouperShell(cmd.Cmd):
             print('Few arguments')
             return
         group_id = cargv[0]
-        grouper.edit_group_record(group_id)
+        
+        data_dict = grouper.group_record(group_id)
+        DialogText(data_dict).input()
+        grouper.update_group_record(group_id, data_dict)
         
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
