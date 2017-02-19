@@ -38,11 +38,11 @@ class GrouperModel():
     # Data Viewing
 
     def storage_info(self):
-        """Return storage info."""
+        """Return common information about current storage."""
         pass
 
     def group_info(self, group_id):
-        """Return group info."""
+        """Return short information about examinations of selected group."""
         pass
 
     # Grouping

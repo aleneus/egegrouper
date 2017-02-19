@@ -184,7 +184,7 @@ class GrouperModelSqlite3(GrouperModel):
         return exams_num, data, num_in_groups, ungrouped_num
 
     def group_info(self, group_id):
-        """Return information about group of examinations.
+        """Return short information about examinations in selected group.
 
         Parameters
         ----------
@@ -194,7 +194,7 @@ class GrouperModelSqlite3(GrouperModel):
         Returns
         -------
         data : list of tuple
-            Groups descriptions.
+            Examination descriptions.
         headers : tuple
             Headers.
 
@@ -372,7 +372,7 @@ class GrouperModelSqlite3(GrouperModel):
         self.conn.commit()
 
     def group_record(self, group_id):
-        """Get group record by id.
+        """Return attribute names and values of selected group.
 
         Parameters
         ----------
@@ -381,22 +381,38 @@ class GrouperModelSqlite3(GrouperModel):
 
         Returns
         -------
-        data_dict : OrderedDict
+        : OrderedDict
             Attributes of selected group.
         """
         data_dict = OrderedDict()
-        data_dict['name'], data_dict['description'] = list(self.c.execute("""
-        SELECT name, description
-        FROM egeg_group
-        WHERE group_id = ?
-        """, (group_id, )))[0]
-        return data_dict
+        try:
+            data_dict['name'], data_dict['description'] = list(self.c.execute("""
+            SELECT name, description
+            FROM egeg_group
+            WHERE group_id = ?
+            """, (group_id, )))[0]
+            return data_dict
+        except IndexError:
+            return None
 
     def update_group_record(self, group_id, data_dict):
-        """Update group record in data base."""
-        self.c.execute("""
-        UPDATE egeg_group
-        SET name = ?, description = ?
-        WHERE group_id = ?
-        """, (data_dict['name'], data_dict['description'], group_id, ))
-        self.conn.commit()
+        """Update group record in data base. Return True if sucsess, False overwise.
+
+        Parameters
+        ----------
+        group_id : str
+            Group ID.
+        data_dict : OrderedDict
+            Attributes names and values.
+
+        """
+        try:
+            self.c.execute("""
+            UPDATE egeg_group
+            SET name = ?, description = ?
+            WHERE group_id = ?
+            """, (data_dict['name'], data_dict['description'], group_id, ))
+            self.conn.commit()
+            return True
+        except Exceprtion:
+            return False

@@ -271,6 +271,9 @@ class GrouperShell(cmd.Cmd):
         group_id = cargv[0]
         
         data_dict = grouper.group_record(group_id)
+        if not data_dict:
+            print('Something wrong')
+            return
         DialogText(data_dict).input()
         print(grouper.update_group_record(group_id, data_dict))
         
