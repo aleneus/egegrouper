@@ -248,7 +248,9 @@ class GrouperShell(cmd.Cmd):
         grouper.delete_exam(exam_id)
 
     def do_merge_exams(self, arg):
-        """Merge two examinations."""
+        """ merge_exams exam_id_1 exam_id_2
+
+        Merge two examinations."""
         cargv = arg.split()
         if len(cargv) < 2:
             print('Few arguments')
@@ -259,7 +261,9 @@ class GrouperShell(cmd.Cmd):
         grouper.merge_exams(exam_id_1, exam_id_2)
 
     def do_edit_group(self, arg):
-        """Edit group fields."""
+        """edit_group group_id
+
+        Edit group fields."""
         cargv = arg.split()
         if len(cargv) < 1:
             print('Few arguments')
@@ -268,7 +272,7 @@ class GrouperShell(cmd.Cmd):
         
         data_dict = grouper.group_record(group_id)
         DialogText(data_dict).input()
-        grouper.update_group_record(group_id, data_dict)
+        print(grouper.update_group_record(group_id, data_dict))
         
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
