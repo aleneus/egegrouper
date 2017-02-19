@@ -239,8 +239,35 @@ class GrouperController:
         return self.view.message('Done')
 
     def group_record(self, group_id):
+        """Return group record.
+
+        Parameters
+        ----------
+        group_id : str
+            Group ID.
+
+        Return
+        ------
+        : OrderedDict
+            Attributes names and values.
+
+        """
         return self.model.group_record(group_id)
 
     def update_group_record(self, group_id, data_dict):
+        """ Update attribute values of selected group.
+
+        Parameters
+        ----------
+        group_id : str
+            Group ID.
+        data_dict : OrderedDict
+            Attributes names and values.
+
+        Return
+        ------
+        : str
+        
+        """
         self.model.update_group_record(group_id, data_dict)
         return self.view.message('Done')
