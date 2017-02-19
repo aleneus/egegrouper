@@ -147,8 +147,6 @@ class GrouperModelSqlite3(GrouperModel):
         -------
         exams_total_num : int 
             Total number of examinations.
-        groups_num : int
-            Number of groups.
         data : list of tuples
             Group description.
         num_in_groups : list
