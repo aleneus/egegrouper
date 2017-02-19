@@ -382,27 +382,27 @@ class GrouperModelSqlite3(GrouperModel):
         Returns
         -------
         : OrderedDict
-            Attributes of selected group.
+            Attributes names and values for selected group.
         """
-        data_dict = OrderedDict()
+        attr = OrderedDict()
         try:
-            data_dict['name'], data_dict['description'] = list(self.c.execute("""
+            attr['name'], attr['description'] = list(self.c.execute("""
             SELECT name, description
             FROM egeg_group
             WHERE group_id = ?
             """, (group_id, )))[0]
-            return data_dict
+            return attr
         except IndexError:
             return None
 
-    def update_group_record(self, group_id, data_dict):
+    def update_group_record(self, group_id, attr):
         """Update group record in data base. Return True if sucsess, False overwise.
 
         Parameters
         ----------
         group_id : str
             Group ID.
-        data_dict : OrderedDict
+        attr : OrderedDict
             Attributes names and values.
 
         """
@@ -411,7 +411,7 @@ class GrouperModelSqlite3(GrouperModel):
             UPDATE egeg_group
             SET name = ?, description = ?
             WHERE group_id = ?
-            """, (data_dict['name'], data_dict['description'], group_id, ))
+            """, (attr['name'], attr['description'], group_id, ))
             self.conn.commit()
             return True
         except Exceprtion:

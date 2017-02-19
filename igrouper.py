@@ -263,19 +263,21 @@ class GrouperShell(cmd.Cmd):
     def do_edit_group(self, arg):
         """edit_group group_id
 
-        Edit group fields."""
+        Edit attributes of selected group.
+        
+        """
         cargv = arg.split()
         if len(cargv) < 1:
             print('Few arguments')
             return
         group_id = cargv[0]
         
-        data_dict = grouper.group_record(group_id)
-        if not data_dict:
+        data = grouper.group_record(group_id)
+        if not data:
             print('Something wrong')
             return
-        DialogText(data_dict).input()
-        print(grouper.update_group_record(group_id, data_dict))
+        DialogText(data).input()
+        print(grouper.update_group_record(group_id, data))
         
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
