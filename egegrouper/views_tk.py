@@ -7,15 +7,11 @@ class ViewStorageTk(ViewStorage):
     
     def show_data(self):
         """Show information about storage."""
-        # data = [exams_num, groups_data, num_in_groups, ungrouped_num]
-        
-        exams_num = self.data[0]
-        groups_data = self.data[1]
-        num_in_groups = self.data[2]
-        ungrouped_num = self.data[3]
-
-        for row in groups_data:
-            self.tree.insert("", END, text=str(row[0]), values=row[1:])
+        exams_num, groups_data, num_in_groups, ungrouped_num = self.data
+        for (row, num) in zip(groups_data, num_in_groups):
+            self.tree.insert("", END, text=str(row[0]), values=(row[1], row[2], num))
+        self.tree.insert("", END, text="", values=("", "Ungrouped", ungrouped_num) )
+        self.tree.insert("", END, text="", values=("", "Total", exams_num) )
 
     def set_widget(self, widget):
         """Set widget."""
