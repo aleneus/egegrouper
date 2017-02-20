@@ -6,6 +6,8 @@
 from tkinter import *
 
 class Application(Frame):
+    """Application class."""
+    
     def __init__(self, master=None):
         super().__init__(master)
         self.pack()
