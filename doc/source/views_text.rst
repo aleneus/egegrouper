@@ -1,5 +1,5 @@
 GrouperViewString
 =================
 
-.. automodule:: view_string
+.. automodule:: views_text
    :members:

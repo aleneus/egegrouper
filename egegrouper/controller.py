@@ -68,7 +68,8 @@ class GrouperController:
     def storage_info(self):
         """Return storage info."""
         exams_num, data, num_in_groups, ungrouped_num = self.model.storage_info()
-        return self.view.storage(exams_num, data, num_in_groups, ungrouped_num)
+        self.view.set_data([exams_num, data, num_in_groups, ungrouped_num])
+        self.view.show_data()
 
     def group_info(self, group_id):
         """Return group info.
@@ -80,7 +81,8 @@ class GrouperController:
 
         """
         d, h = self.model.group_info(group_id)
-        return self.view.table(d, headers = h)
+        self.view.set_data([d, h])
+        self.view.show_data()
 
     def exam(self, exam_id):
         """Return examination info.
@@ -93,8 +95,10 @@ class GrouperController:
         """
         e = self.model.get_examination(exam_id)
         if not e:
-            return self.view.error_message('Something wrong')
-        return self.view.exam(e)
+            print('Something wrong') # TODO
+            return
+        self.view.set_data(e)
+        self.view.show_data()
 
     def insert_group(self, name, description):
         """Add new group to current storage.
@@ -158,7 +162,8 @@ class GrouperController:
 
         """
         data = self.model.where_is_examination(exam_id)
-        return self.view.table(data)
+        self.view.set_data([data])
+        self.view.show_data()
         
     def add_sme_db(self, file_name):
         """Add SME sqlite3 data base to current storage.
@@ -192,8 +197,9 @@ class GrouperController:
         
         """
         if not self.model.add_exam_from_json_folder(folder_name):
-            return self.view.error_message('Something wrong.')
-        return self.view.message('Done.')
+            self.view.set_data('Something wrong.')
+        self.view.set_data('Done.')
+        self.view.show_data()
 
     def export_as_json_folder(self, exam_id, folder_name):
         """Export examination to JSON folder.
@@ -207,9 +213,10 @@ class GrouperController:
 
         """
         if self.model.export_as_json_folder(exam_id, folder_name):
-            return self.view.message('Done.')
+            self.view.set_data('Done.')
         else:
-            return self.view.error_message('Something wrong.')
+            self.view.set_data('Something wrong.')
+        self.view.show_data()
 
     def delete_exam(self, exam_id):
         """Delete examination from storage.
@@ -239,7 +246,9 @@ class GrouperController:
         e2 = self.model.get_examination(exam_id_2)
         e = sme.merge_exams(e1, e2)
         self.model.insert_examination(e)
-        return self.view.message('Done')
+        # todo exceptions
+        self.view.set_data('Done')
+        self.view.show_data()
 
     def group_record(self, group_id):
         """Return group record.
@@ -273,4 +282,6 @@ class GrouperController:
         
         """
         self.model.update_group_record(group_id, attr)
-        return self.view.message('Done')
+        # TODO exceptions
+        self.view.set_data('Done')
+        self.view.show_data()

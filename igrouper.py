@@ -4,9 +4,9 @@
 import cmd, sys, argparse
 
 from egegrouper.model_sqlite3 import *
+from egegrouper.views_text import *
 from egegrouper.controller import *
-from egegrouper.view_string import *
-from egegrouper.view_plot import *
+
 from dialog import *
 
 class GrouperShell(cmd.Cmd):
@@ -64,8 +64,8 @@ class GrouperShell(cmd.Cmd):
 
         Aliases: d
         """
-        grouper.set_view(view_s)
-        print(grouper.storage_info())
+        grouper.set_view(storage_view)
+        grouper.storage_info()
 
     def do_group_info(self, arg):
         """ group_info id [hfa]
@@ -80,8 +80,8 @@ class GrouperShell(cmd.Cmd):
             return
         if self.parse(arg, 'hfa'):
             print('Calc quality stub')
-        grouper.set_view(view_s)
-        print(grouper.group_info(cargv[0]))
+        grouper.set_view(table_view)
+        grouper.group_info(cargv[0])
 
     def do_exam_info(self, arg):
         """ exam_info id
@@ -94,8 +94,8 @@ class GrouperShell(cmd.Cmd):
         if len(cargv) < 1:
             print('Few arguments')
             return
-        grouper.set_view(view_s)
-        print(grouper.exam(cargv[0]))
+        grouper.set_view(exam_view)
+        grouper.exam(cargv[0])
 
     def do_plot_exam(self, arg):
         """ plot_exam id
@@ -108,7 +108,7 @@ class GrouperShell(cmd.Cmd):
         if len(cargv) < 1:
             print('Few arguments')
             return
-        grouper.set_view(view_p)
+        grouper.set_view(exam_plot_view)
         grouper.exam(cargv[0])
             
     def do_add_group(self, arg):
@@ -120,8 +120,8 @@ class GrouperShell(cmd.Cmd):
         """
         name = input('Name: ')
         descr = input('Description: ')
-        grouper.set_view(view_s)
-        print(grouper.insert_group(name, descr))
+        grouper.set_view(storage_view)
+        grouper.insert_group(name, descr)
 
     def do_delete_group(self, arg):
         """ delete_group id
@@ -137,8 +137,8 @@ class GrouperShell(cmd.Cmd):
         answer = input('Are your shure? Type yes or no: ')
         if answer not in ['yes', 'y']:
             return
-        grouper.set_view(view_s)
-        print(grouper.delete_group(cargv[0]))
+        grouper.set_view(storage_view)
+        grouper.delete_group(cargv[0])
         
     def do_add_to_group(self, arg):
         """ add_to_group exam_id group_id
@@ -177,8 +177,8 @@ class GrouperShell(cmd.Cmd):
         if len(cargv) == 0:
             print('Few arguments')
             return
-        grouper.set_view(view_s)
-        print(grouper.where_is_examination(cargv[0]))
+        grouper.set_view(table_view)
+        grouper.where_is_examination(cargv[0])
 
     def do_add_sme(self, arg):
         """ add_sme file_name
@@ -210,8 +210,8 @@ class GrouperShell(cmd.Cmd):
         if len(cargv) == 0:
             print('Few arguments')
             return
-        grouper.set_view(view_s)
-        print(grouper.add_exam_from_json_folder(cargv[0]))
+        grouper.set_view(message_view)
+        grouper.add_exam_from_json_folder(cargv[0])
 
     def do_export_json(self, arg):
         """ export_json folder_name
@@ -226,8 +226,8 @@ class GrouperShell(cmd.Cmd):
             return
         exam_id = cargv[0]
         folder_name = cargv[1]
-        grouper.set_view(view_s)
-        print(grouper.export_as_json_folder(exam_id, folder_name))
+        grouper.set_view(message_view)
+        grouper.export_as_json_folder(exam_id, folder_name)
 
     def do_delete_exam(self, arg):
         """ delete_exam id
@@ -258,7 +258,7 @@ class GrouperShell(cmd.Cmd):
             return
         exam_id_1 = cargv[0]
         exam_id_2 = cargv[1]
-        grouper.set_view(view_s)
+        grouper.set_view(message_view)
         grouper.merge_exams(exam_id_1, exam_id_2)
 
     def do_edit_group(self, arg):
@@ -278,7 +278,8 @@ class GrouperShell(cmd.Cmd):
             print('Something wrong')
             return
         DialogText(data).input()
-        print(grouper.update_group_record(group_id, data))
+        grouper.set_view(message_view)
+        grouper.update_group_record(group_id, data)
         
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -287,8 +288,12 @@ if __name__ == '__main__':
 
     model = GrouperModelSqlite3()
     grouper = GrouperController(model)
-    view_s = GrouperViewString()
-    view_p = GrouperViewPlot()
+
+    message_view = ViewMessageText()
+    table_view = ViewTableText()
+    storage_view = ViewStorageText()
+    exam_view = ViewExamText()
+    exam_plot_view = ViewExamPlot()
     
     grouper.open_or_create_storage(args.fname)
     
