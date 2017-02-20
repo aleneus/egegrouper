@@ -64,7 +64,6 @@ class GrouperShell(cmd.Cmd):
 
         Aliases: d
         """
-        grouper.set_view(storage_view)
         grouper.storage_info()
 
     def do_group_info(self, arg):
@@ -80,7 +79,6 @@ class GrouperShell(cmd.Cmd):
             return
         if self.parse(arg, 'hfa'):
             print('Calc quality stub')
-        grouper.set_view(table_view)
         grouper.group_info(cargv[0])
 
     def do_exam_info(self, arg):
@@ -94,7 +92,6 @@ class GrouperShell(cmd.Cmd):
         if len(cargv) < 1:
             print('Few arguments')
             return
-        grouper.set_view(exam_view)
         grouper.exam(cargv[0])
 
     def do_plot_exam(self, arg):
@@ -108,8 +105,7 @@ class GrouperShell(cmd.Cmd):
         if len(cargv) < 1:
             print('Few arguments')
             return
-        grouper.set_view(exam_plot_view)
-        grouper.exam(cargv[0])
+        grouper.plot_exam(cargv[0])
             
     def do_add_group(self, arg):
         """ add_group
@@ -118,10 +114,9 @@ class GrouperShell(cmd.Cmd):
 
         Aliases: ag
         """
-        name = input('Name: ')
-        descr = input('Description: ')
-        grouper.set_view(storage_view)
-        grouper.insert_group(name, descr)
+        data = OrderedDict([('Name', ''), ('Description', '')])
+        DialogText(data).input()
+        grouper.insert_group(data['Name'], data['Description'])
 
     def do_delete_group(self, arg):
         """ delete_group id
@@ -134,10 +129,9 @@ class GrouperShell(cmd.Cmd):
         if len(cargv)==0:
             print('Few arguments')
             return
-        answer = input('Are your shure? Type yes or no: ')
+        answer = input('Are you shure? (yes/no/y/n): ')
         if answer not in ['yes', 'y']:
             return
-        grouper.set_view(storage_view)
         grouper.delete_group(cargv[0])
         
     def do_add_to_group(self, arg):
@@ -177,7 +171,6 @@ class GrouperShell(cmd.Cmd):
         if len(cargv) == 0:
             print('Few arguments')
             return
-        grouper.set_view(table_view)
         grouper.where_is_examination(cargv[0])
 
     def do_add_sme(self, arg):
@@ -210,7 +203,6 @@ class GrouperShell(cmd.Cmd):
         if len(cargv) == 0:
             print('Few arguments')
             return
-        grouper.set_view(message_view)
         grouper.add_exam_from_json_folder(cargv[0])
 
     def do_export_json(self, arg):
@@ -226,7 +218,6 @@ class GrouperShell(cmd.Cmd):
             return
         exam_id = cargv[0]
         folder_name = cargv[1]
-        grouper.set_view(message_view)
         grouper.export_as_json_folder(exam_id, folder_name)
 
     def do_delete_exam(self, arg):
@@ -241,7 +232,7 @@ class GrouperShell(cmd.Cmd):
             print('Few arguments')
             return
         
-        answer = input('Are you sure? (yes/no): ')
+        answer = input('Are you sure? (yes/no/y/n): ')
         if answer not in ['yes', 'y']:
             return
         
@@ -258,7 +249,6 @@ class GrouperShell(cmd.Cmd):
             return
         exam_id_1 = cargv[0]
         exam_id_2 = cargv[1]
-        grouper.set_view(message_view)
         grouper.merge_exams(exam_id_1, exam_id_2)
 
     def do_edit_group(self, arg):
@@ -278,7 +268,6 @@ class GrouperShell(cmd.Cmd):
             print('Something wrong')
             return
         DialogText(data).input()
-        grouper.set_view(message_view)
         grouper.update_group_record(group_id, data)
         
 if __name__ == '__main__':
@@ -286,14 +275,14 @@ if __name__ == '__main__':
     parser.add_argument("fname", help="Name of data base")
     args = parser.parse_args()
 
-    model = GrouperModelSqlite3()
-    grouper = GrouperController(model)
+    grouper = GrouperController()
+    grouper.set_model(GrouperModelSqlite3())
 
-    message_view = ViewMessageText()
-    table_view = ViewTableText()
-    storage_view = ViewStorageText()
-    exam_view = ViewExamText()
-    exam_plot_view = ViewExamPlot()
+    grouper.view_message = ViewMessageText()
+    grouper.view_table = ViewTableText()
+    grouper.view_storage = ViewStorageText()
+    grouper.view_exam = ViewExamText()
+    grouper.view_exam_plot = ViewExamPlot()
     
     grouper.open_or_create_storage(args.fname)
     

@@ -2,23 +2,24 @@ import os.path # TODO: remove from here (?)
 from egegrouper import sme
 
 class GrouperController:
-    """Controller in MVC.
-
-    Asks model to do something with storage and then asks view to represent data and return answer from view.
-
-    """
+    model = None
+    """Model."""
     
-    def __init__(self, model = None, view = None):
-        """Set model and view.
+    """Controller in MVC."""
+    view_message = None
+    """View for messages."""
 
-        Parameters
-        ----------
-        model : egegrouper.GrouperModel
-        view : egegrouper.View
+    view_table = None
+    """View for tabular data."""
 
-        """
-        self.model = model
-        self.view = view
+    view_storage = None
+    """View for common information about storage."""
+    
+    view_exam = None
+    """View for examination."""
+
+    view_exam_plot = None
+    """View for plotting signals of examination."""
 
     def set_model(self, model):
         """Set model.
@@ -30,23 +31,9 @@ class GrouperController:
 
         """
         self.model = model
-        self.view = view
 
-    def set_view(self, view):
-        """Set view.
-
-        Different views may be needed.
-
-        Parameters
-        ----------
-        view : egegrouper.View
-            View.
-
-        """
-        self.view = view
-        
     def open_or_create_storage(self, file_name):
-        """Open or create data base.
+        """Open or create storage.
 
         If there are no data base it will be created.
 
@@ -66,13 +53,13 @@ class GrouperController:
         self.model.close_storage()
 
     def storage_info(self):
-        """Return storage info."""
+        """Show common information about storage."""
         exams_num, data, num_in_groups, ungrouped_num = self.model.storage_info()
-        self.view.set_data([exams_num, data, num_in_groups, ungrouped_num])
-        self.view.show_data()
+        self.view_storage.set_data([exams_num, data, num_in_groups, ungrouped_num])
+        self.view_storage.show_data()
 
     def group_info(self, group_id):
-        """Return group info.
+        """Show list of examinations of group.
 
         Parameters
         ----------
@@ -81,11 +68,11 @@ class GrouperController:
 
         """
         d, h = self.model.group_info(group_id)
-        self.view.set_data([d, h])
-        self.view.show_data()
+        self.view_table.set_data([d, h])
+        self.view_table.show_data()
 
     def exam(self, exam_id):
-        """Return examination info.
+        """Show information about selected examination.
 
         Parameters
         ----------
@@ -95,10 +82,28 @@ class GrouperController:
         """
         e = self.model.get_examination(exam_id)
         if not e:
-            print('Something wrong') # TODO
+            self.view_message.set_data('Something wrong')
+            self.view_message.show_data()
             return
-        self.view.set_data(e)
-        self.view.show_data()
+        self.view_exam.set_data(e)
+        self.view_exam.show_data()
+
+    def plot_exam(self, exam_id):
+        """Plot signals of examination.
+
+        Parameters
+        ----------
+        exam_id : str
+            Examination ID.
+
+        """
+        e = self.model.get_examination(exam_id)
+        if not e:
+            self.view_message.set_data('Something wrong')
+            self.view_message.show_data()
+            return
+        self.view_exam_plot.set_data(e)
+        self.view_exam_plot.show_data()  
 
     def insert_group(self, name, description):
         """Add new group to current storage.
@@ -153,7 +158,7 @@ class GrouperController:
         self.model.delete_exam_from_group(exam_id, group_id)
 
     def where_is_examination(self, exam_id):
-        """Return information of groups where examination is.
+        """Show information of groups where examination is.
 
         Parameters
         ----------
@@ -162,8 +167,8 @@ class GrouperController:
 
         """
         data = self.model.where_is_examination(exam_id)
-        self.view.set_data([data])
-        self.view.show_data()
+        self.view_table.set_data([data, ("Group ID", "Group name")])
+        self.view_table.show_data()
         
     def add_sme_db(self, file_name):
         """Add SME sqlite3 data base to current storage.
@@ -197,9 +202,9 @@ class GrouperController:
         
         """
         if not self.model.add_exam_from_json_folder(folder_name):
-            self.view.set_data('Something wrong.')
-        self.view.set_data('Done.')
-        self.view.show_data()
+            self.view_message.set_data('Something wrong.')
+        self.view_message.set_data('Done.')
+        self.view_message.show_data()
 
     def export_as_json_folder(self, exam_id, folder_name):
         """Export examination to JSON folder.
@@ -213,10 +218,10 @@ class GrouperController:
 
         """
         if self.model.export_as_json_folder(exam_id, folder_name):
-            self.view.set_data('Done.')
+            self.view_message.set_data('Done.')
         else:
-            self.view.set_data('Something wrong.')
-        self.view.show_data()
+            self.view_message.set_data('Something wrong.')
+        self.view_message.show_data()
 
     def delete_exam(self, exam_id):
         """Delete examination from storage.
@@ -247,8 +252,8 @@ class GrouperController:
         e = sme.merge_exams(e1, e2)
         self.model.insert_examination(e)
         # todo exceptions
-        self.view.set_data('Done')
-        self.view.show_data()
+        self.view_message.set_data('Done')
+        self.view_message.show_data()
 
     def group_record(self, group_id):
         """Return group record.
@@ -283,5 +288,5 @@ class GrouperController:
         """
         self.model.update_group_record(group_id, attr)
         # TODO exceptions
-        self.view.set_data('Done')
-        self.view.show_data()
+        self.view_message.set_data('Done')
+        self.view_message.show_data()

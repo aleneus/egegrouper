@@ -51,7 +51,7 @@ def put_exam_to_folder(e, folder_name):
     """
     if os.path.exists(folder_name):
         return False
-    
+
     os.makedirs(folder_name)
     e_dict = OrderedDict()
     e_dict['name'] = e.name
