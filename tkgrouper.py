@@ -36,16 +36,18 @@ class Application(Frame):
         self.model = GrouperModelSqlite3()
         self.grouper.set_model(self.model)
 
-        self.frame = Frame(self)
-        self.scrollbar = Scrollbar(self.frame, orient=VERTICAL)
-        self.listbox = Listbox(self.frame, yscrollcommand=self.scrollbar.set)
-        self.scrollbar.config(command=self.listbox.yview)
-        self.scrollbar.pack(side=RIGHT, fill=Y)
-        self.listbox.pack(side=LEFT, fill=BOTH, expand=1)
-        self.frame.pack()
+        self.tree = ttk.Treeview(root)
+        self.tree["columns"]=("one", "two")
+        self.tree.column("one", width=100 )
+        self.tree.column("two", width=100)
+        self.tree.heading("#0", text='ID', anchor='w')
+        self.tree.column("#0", width=30)
+        self.tree.heading("one", text="Name")
+        self.tree.heading("two", text="Description")
+        self.tree.pack()
         
         self.view_storage = ViewStorageTk()
-        self.view_storage.set_widget(self.listbox)
+        self.view_storage.set_widget(self.tree)
         self.grouper.view_storage = self.view_storage
 
     def open_storage(self):
