@@ -6,6 +6,10 @@
 from tkinter import *
 from tkinter import filedialog
 
+from egegrouper.controller import *
+from egegrouper.model_sqlite3 import *
+from egegrouper.views_tk import *
+
 class Application(Frame):
     """Application class."""
 
@@ -13,7 +17,7 @@ class Application(Frame):
         super().__init__(master)
         self.pack()
         self.create_widgets()
-        # self.init_mvc()
+        self.init_mvc()
 
     def create_widgets(self):
         """Create widgets."""
@@ -27,16 +31,22 @@ class Application(Frame):
         menubar.add_cascade(label="File", menu=filemenu)
         root.config(menu=menubar)
 
-    # def init_mvc(self):
-        # self.grouper = GrouperController()
-        # self.model = GrouperModel()
-        # self.grouper.set_model(model)
+    def init_mvc(self):
+        self.grouper = GrouperController()
+        self.model = GrouperModelSqlite3()
+        self.grouper.set_model(self.model)
 
-        # self.widget = some list widget from tk
-        # settings for widget, pack, size and so on ...
-        # self.view_storage = ViewStorageTk()
-        # self.view_storage.set_widget(self.widget)
-        # self.grouper.view_storage = self.view_storage
+        self.frame = Frame(self)
+        self.scrollbar = Scrollbar(self.frame, orient=VERTICAL)
+        self.listbox = Listbox(self.frame, yscrollcommand=self.scrollbar.set)
+        self.scrollbar.config(command=self.listbox.yview)
+        self.scrollbar.pack(side=RIGHT, fill=Y)
+        self.listbox.pack(side=LEFT, fill=BOTH, expand=1)
+        self.frame.pack()
+        
+        self.view_storage = ViewStorageTk()
+        self.view_storage.set_widget(self.listbox)
+        self.grouper.view_storage = self.view_storage
 
     def open_storage(self):
         """Open storage."""
@@ -47,9 +57,10 @@ class Application(Frame):
         options['parent'] = root
         options['title'] = 'Open storage'
         file_name = filedialog.askopenfilename()
-
-        # self.grouper.open_db()
-        # self.grouper.storage_info()
+        if file_name == '':
+            return
+        self.grouper.open_or_create_storage(file_name)
+        self.grouper.storage_info()
 
 
 root = Tk()
