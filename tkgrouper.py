@@ -57,12 +57,15 @@ class Application(Frame):
         menubar.add_cascade(label="File", menu=filemenu)
         root.config(menu=menubar)
 
+        self.storage_info_table = StorageInfoTable(root)
+
     def init_mvc(self):
         """Initialization of MVC system."""
         self.grouper = GrouperController()
         self.grouper.set_model(GrouperModelSqlite3())
+        # views
         self.view_storage = ViewStorageTk()
-        self.view_storage.set_widget(StorageInfoTable(root))
+        self.view_storage.set_widget(self.storage_info_table)
         self.grouper.view_storage = self.view_storage
 
     def open_storage(self):
