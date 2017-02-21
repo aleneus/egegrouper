@@ -6,10 +6,8 @@ from egegrouper.model import *
 from egegrouper import sqlite3_scripts
 
 class GrouperModelSqlite3(GrouperModel):
-    db_file_name = ''
-    """Name of data base file."""
-    
     """Model implementation for SQLite3 SME data base."""
+    
     def __init__(self):
         super().__init__()
         self.conn = None
@@ -30,7 +28,6 @@ class GrouperModelSqlite3(GrouperModel):
         self.c = self.conn.cursor()
         self.c.executescript(sqlite3_scripts.create_sme_db)
         self.conn.commit()
-        self.db_file_name = file_name
         self.set_storage_opened(True)
 
     def open_storage(self, file_name):
@@ -47,7 +44,6 @@ class GrouperModelSqlite3(GrouperModel):
         self.conn = sqlite3.connect(file_name)
         self.c = self.conn.cursor()
         self.c.execute("pragma foreign_keys=on")
-        self.db_file_name = file_name
         self.set_storage_opened(True)
 
     def close_storage(self):
