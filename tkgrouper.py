@@ -13,26 +13,33 @@ from egegrouper.views_tk import *
 
 # my widgets
 
-class StorageInfoTable(Frame):
-    """Table widget for stoarge info."""
-    def __init__(self, parent):
+class TableWidget(Frame):
+    """Table widget."""
+    def __init__(self, parent, names, headers):
         Frame.__init__(self, parent)
         self.scrollbar = Scrollbar(self, orient=VERTICAL)
         self.tree = ttk.Treeview(self, yscrollcommand=self.scrollbar.set)
         self.scrollbar.config(command=self.tree.yview)
-        self.tree["columns"]=("Name", "Description", "Num")
-        self.tree.heading("#0", text="ID")
-        self.tree.column("#0", width=50)
-        self.tree.column("Name")
-        self.tree.heading("Name", text="Name")
-        self.tree.column("Description")
-        self.tree.heading("Description", text="Description")
-        self.tree.column("Num", width=50)
-        self.tree.heading("Num", text="Num")
+        self.tree["columns"] = names[1:]
+        for (name, header) in zip(names, headers):
+            self.tree.heading(name, text=header)
         self.scrollbar.pack(side=RIGHT, fill=Y, expand=1)
         self.tree.pack()
-        self.pack()
 
+class StorageInfoTable(TableWidget):
+    """Table widget for stoarge info."""
+    def __init__(self, parent):
+        names = ["#0", "name", "description", "number"]
+        headers = ["ID", "Name", "Description", "Num"]
+        super().__init__(parent, names, headers)
+
+class GroupInfoTable(TableWidget):
+    """Table widget for stoarge info."""
+    def __init__(self, parent):
+        names = ["#0", "name", "age", "sex", "diagnosis"]
+        headers = ["ID", "Name", "Age", "Gender", "Diagnosis"]
+        super().__init__(parent, names, headers)
+       
 
 # Application
 
@@ -58,6 +65,9 @@ class Application(Frame):
         root.config(menu=menubar)
 
         self.storage_info_table = StorageInfoTable(root)
+        self.group_info_table = GroupInfoTable(root)
+        self.storage_info_table.pack(side=LEFT, fill=Y)
+        self.group_info_table.pack(side=LEFT, fill=Y)
 
     def init_mvc(self):
         """Initialization of MVC system."""
