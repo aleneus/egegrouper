@@ -6,23 +6,15 @@ from egegrouper.model import *
 from egegrouper import sqlite3_scripts
 
 class GrouperModelSqlite3(GrouperModel):
+    db_file_name = ''
+    """Name of data base file."""
+    
     """Model implementation for SQLite3 SME data base."""
     def __init__(self):
+        super().__init__()
         self.conn = None
-        self.cur = None
-        self.file_name = None
+        self.c = None
 
-    def storage_opened(self):
-        """Check if data base opened.
-
-        Returns
-        -------
-        bool
-            True if opened, False otherwise.
-
-        """
-        return self.conn != None
-    
     def create_storage(self, file_name):
         """Create new data base.
 
@@ -38,7 +30,8 @@ class GrouperModelSqlite3(GrouperModel):
         self.c = self.conn.cursor()
         self.c.executescript(sqlite3_scripts.create_sme_db)
         self.conn.commit()
-        self.file_name = file_name
+        self.db_file_name = file_name
+        self.set_storage_opened(True)
 
     def open_storage(self, file_name):
         """Open data base.
@@ -49,16 +42,18 @@ class GrouperModelSqlite3(GrouperModel):
             File name.
 
         """
+        if self.storage_opened():
+            self.close_storage()
         self.conn = sqlite3.connect(file_name)
         self.c = self.conn.cursor()
         self.c.execute("pragma foreign_keys=on")
-        self.file_name = file_name
+        self.db_file_name = file_name
+        self.set_storage_opened(True)
 
     def close_storage(self):
         """Close data base."""
         self.conn.close()
-        self.conn = None
-        self.file_name = None
+        self.set_storage_opened(False)
 
     def get_examination(self, exam_id):
         """Return examination from data base.

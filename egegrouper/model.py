@@ -4,10 +4,12 @@ from egegrouper.sme_json_folders import *
 
 class GrouperModel():
     """Model in MVC. Base class."""
+    
     def __init__(self):
         pass
 
-    # Work with storage
+
+    # Common work with storage
 
     def create_storage(self, name):
         """Create new storage."""
@@ -21,10 +23,21 @@ class GrouperModel():
         """Close current storage."""
         pass
 
+
+    # Model state
+
+    _storage_opened = False
+    """Storage opened flag."""
+    
+    def set_storage_opened(self, value):
+        """Set value to storage opened flag."""
+        self._storage_opened = value
+        
     def storage_opened(self):
         """Check if storage is opened."""
-        pass
+        return self._storage_opened
     
+
     # Mapping
     
     def get_examination(self, exam_id):
@@ -35,6 +48,7 @@ class GrouperModel():
         """Add examination into current storage."""
         pass
 
+
     # Data Viewing
 
     def storage_info(self):
@@ -44,6 +58,7 @@ class GrouperModel():
     def group_info(self, group_id):
         """Return short information about examinations of selected group."""
         pass
+
 
     # Grouping
     
@@ -66,6 +81,7 @@ class GrouperModel():
     def where_is_examination(self, exam_id):
         """Return description of groups where examination is."""
         pass
+
 
     # Import and export
 
@@ -91,4 +107,3 @@ class GrouperModel():
     def delete_exam(self, exam_id):
         """Delete examination from storage."""
         pass
-    
