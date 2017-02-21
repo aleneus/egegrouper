@@ -10,12 +10,11 @@ from egegrouper.controller import *
 from egegrouper.model_sqlite3 import *
 from egegrouper.views_tk import *
 
-
 # my widgets
 
 class TableWidget(Frame):
     """Table widget."""
-    def __init__(self, parent, names, headers):
+    def __init__(self, parent, names, headers, widths = []):
         Frame.__init__(self, parent)
         self.scrollbar = Scrollbar(self, orient=VERTICAL)
         self.tree = ttk.Treeview(self, yscrollcommand=self.scrollbar.set)
@@ -23,15 +22,20 @@ class TableWidget(Frame):
         self.tree["columns"] = names[1:]
         for (name, header) in zip(names, headers):
             self.tree.heading(name, text=header)
-        self.scrollbar.pack(side=RIGHT, fill=Y, expand=1)
-        self.tree.pack()
+            #self.tree.column(name, stretch=False)
+        if len(widths) == len(names):
+            for (name, width) in zip(names, widths):
+                self.tree.column(name, width=width)
+        self.scrollbar.pack(side=RIGHT, fill=Y, expand=True)
+        self.tree.pack(side=LEFT, fill=BOTH, expand=True)
 
 class StorageInfoTable(TableWidget):
     """Table widget for stoarge info."""
     def __init__(self, parent):
         names = ["#0", "name", "description", "number"]
         headers = ["ID", "Name", "Description", "Num"]
-        super().__init__(parent, names, headers)
+        widths = [50, 100, 200, 50]
+        super().__init__(parent, names, headers, widths)
 
 class GroupInfoTable(TableWidget):
     """Table widget for stoarge info."""
@@ -48,7 +52,6 @@ class Application(Frame):
 
     def __init__(self, master=None):
         super().__init__(master)
-        self.pack()
         self.create_widgets()
         self.init_mvc()
 
@@ -66,8 +69,8 @@ class Application(Frame):
 
         self.storage_info_table = StorageInfoTable(root)
         self.group_info_table = GroupInfoTable(root)
-        self.storage_info_table.pack(side=LEFT, fill=Y)
-        self.group_info_table.pack(side=LEFT, fill=Y)
+        self.storage_info_table.pack(side=LEFT, fill=BOTH)
+        self.group_info_table.pack(side=LEFT, fill=BOTH)
 
     def init_mvc(self):
         """Initialization of MVC system."""
@@ -87,7 +90,7 @@ class Application(Frame):
         options['parent'] = root
         options['title'] = 'Open storage'
         file_name = filedialog.askopenfilename()
-        if file_name == '':
+        if not file_name:
             return
         self.grouper.open_or_create_storage(file_name)
         self.grouper.storage_info()
