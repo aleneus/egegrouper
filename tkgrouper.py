@@ -22,7 +22,6 @@ class TableWidget(Frame):
         self.tree["columns"] = names[1:]
         for (name, header) in zip(names, headers):
             self.tree.heading(name, text=header)
-            #self.tree.column(name, stretch=False)
         if len(widths) == len(names):
             for (name, width) in zip(names, widths):
                 self.tree.column(name, width=width)
@@ -78,6 +77,7 @@ class Application(Frame):
         self.grouper.set_model(GrouperModelSqlite3())
         # views
         self.view_storage = ViewStorageTk()
+        #self.view_storage = ViewTableTk()
         self.view_storage.set_widget(self.storage_info_table)
         self.grouper.view_storage = self.view_storage
 
