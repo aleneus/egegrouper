@@ -64,7 +64,7 @@ class GrouperShell(cmd.Cmd):
 
         Aliases: d
         """
-        grouper.storage_info()
+        grouper.storage_info_new()
 
     def do_group_info(self, arg):
         """ group_info id [hfa]

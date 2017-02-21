@@ -131,6 +131,47 @@ class GrouperModelSqlite3(GrouperModel):
             
         self.conn.commit()
 
+    def storage_info_new(self):
+        """Return tabular information about storage.
+
+        Return
+        ------
+        ext_data : list of tuples
+            Table with information about storage.
+        ext_headers : tuple
+            Headers.
+
+        """
+        # group records
+        data = list(self.c.execute("""
+        SELECT * FROM egeg_group;
+        """))
+        headers = tuple(map(lambda x: x[0], self.c.description))
+        # number of examinations in groups
+        num_in_groups = []
+
+        ext_data = []
+        for d in data:
+            n = list(self.c.execute("""
+            SELECT COUNT(E.exam_id)
+            FROM examination as E, group_element as GE
+            WHERE GE.exam_id = E.exam_id AND GE.group_id = ? """, [d[0], ]))[0][0]
+            ext_data.append(d + (n,))
+        ext_headers = headers + ("number",)
+
+        ungrouped_num = list(self.c.execute("""
+        SELECT COUNT(exam_id)
+        FROM examination
+        WHERE exam_id NOT IN (SELECT exam_id FROM group_element) """, []))[0][0]
+
+        last_string = ['' for d in ext_data[0]]
+        last_string[0] = '0'
+        last_string[-2] = 'Ungrouped'
+        last_string[-1] = ungrouped_num
+        ext_data.append(tuple(last_string))
+        
+        return ext_data, ext_headers
+    
     def storage_info(self):
         """Return information about storage.
         

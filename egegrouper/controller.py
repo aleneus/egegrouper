@@ -52,6 +52,12 @@ class GrouperController:
         """Close storage."""
         self.model.close_storage()
 
+    def storage_info_new(self):
+        """Show common information about storage."""
+        data, headers = self.model.storage_info_new()
+        self.view_table.set_data([data, headers])
+        self.view_table.show_data()
+        
     def storage_info(self):
         """Show common information about storage."""
         exams_num, data, num_in_groups, ungrouped_num = self.model.storage_info()
@@ -117,7 +123,7 @@ class GrouperController:
 
         """
         self.model.insert_group(name, description)
-        return self.storage_info()
+        self.storage_info_new()
 
     def delete_group(self, group_id):
         """Delete group.
@@ -129,7 +135,7 @@ class GrouperController:
 
         """
         self.model.delete_group(group_id)
-        return self.storage_info()
+        self.storage_info_new()
 
     def add_exam_to_group(self, exam_id, group_id):
         """Add examination to group.
