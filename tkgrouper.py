@@ -114,6 +114,7 @@ class Application(Frame):
             pass
 
     def plot_exam(self, event):
+        """Plot examination in separate Python's window."""
         try:
             item = self.group_info_table.tree.selection()[0]
             self.grouper.plot_exam(self.group_info_table.tree.item(item,"text"))
