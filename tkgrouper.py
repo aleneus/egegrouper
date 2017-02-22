@@ -70,7 +70,7 @@ class Application(Frame):
 
         self.storage_info_table = StorageInfoTable(root)
         self.storage_info_table.pack(side=LEFT, fill=BOTH)
-        self.storage_info_table.tree.bind("<ButtonRelease-1>", self.group_info) # TODO: Access to tree here is not good.
+        self.storage_info_table.tree.bind("<<TreeviewSelect>>", self.group_info) # TODO: Access to tree here is not good.
         
         self.group_info_table = GroupInfoTable(root)
         self.group_info_table.pack(side=LEFT, fill=BOTH)
