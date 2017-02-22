@@ -5,6 +5,7 @@ class ViewExamPlot(ViewExam):
     """Plot view to show details of examination."""
     def show_data(self):
         """Plot signals of examination with matplotlib."""
+        plt.ion()
         plt.clf()
         e = self.data
         n = 0
