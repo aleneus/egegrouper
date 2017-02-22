@@ -10,7 +10,7 @@ from egegrouper.controller import *
 from egegrouper.model_sqlite3 import *
 from egegrouper.views_tk import *
 
-# my widgets
+# grouper_tk_widgets
 
 class TableWidget(Frame):
     """Table widget."""
@@ -42,6 +42,8 @@ class GroupInfoTable(TableWidget):
         names = ["#0", "name", "age", "sex", "diagnosis"]
         headers = ["ID", "Name", "Age", "Gender", "Diagnosis"]
         super().__init__(parent, names, headers)
+
+#################################################################
        
 
 # Application
