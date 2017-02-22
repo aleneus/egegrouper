@@ -65,7 +65,7 @@ class Application(Frame):
         filemenu = Menu(menubar, tearoff=0)
         filemenu.add_command(label="Open storage", command=self.open_storage)
         filemenu.add_separator()
-        filemenu.add_command(label="Exit", command=root.quit)
+        filemenu.add_command(label="Exit", command=self.close_db_and_exit)
         menubar.add_cascade(label="File", menu=filemenu)
         root.config(menu=menubar)
 
@@ -120,6 +120,10 @@ class Application(Frame):
             self.grouper.plot_exam(self.group_info_table.tree.item(item,"text"))
         except IndexError:
             pass
+
+    def close_db_and_exit(self):
+        self.grouper.close_storage()
+        root.quit()
 
 
 root = Tk()
