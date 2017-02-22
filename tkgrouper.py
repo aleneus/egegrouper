@@ -67,8 +67,10 @@ class Application(Frame):
         root.config(menu=menubar)
 
         self.storage_info_table = StorageInfoTable(root)
-        self.group_info_table = GroupInfoTable(root)
         self.storage_info_table.pack(side=LEFT, fill=BOTH)
+        self.storage_info_table.tree.bind("<ButtonRelease-1>", self.group_info)
+        
+        self.group_info_table = GroupInfoTable(root)
         self.group_info_table.pack(side=LEFT, fill=BOTH)
 
     def init_mvc(self):
@@ -76,10 +78,11 @@ class Application(Frame):
         self.grouper = GrouperController()
         self.grouper.set_model(GrouperModelSqlite3())
         # views
-        self.view_storage = ViewStorageTk()
-        #self.view_storage = ViewTableTk()
-        self.view_storage.set_widget(self.storage_info_table)
-        self.grouper.view_storage = self.view_storage
+        self.grouper.view_storage = ViewTableTk()
+        self.grouper.view_storage.set_widget(self.storage_info_table)
+        
+        self.grouper.view_group = ViewTableTk()
+        self.grouper.view_group.set_widget(self.group_info_table)
 
     def open_storage(self):
         """Open storage."""
@@ -93,7 +96,15 @@ class Application(Frame):
         if not file_name:
             return
         self.grouper.open_or_create_storage(file_name)
-        self.grouper.storage_info()
+        self.grouper.storage_info_new()
+
+    def group_info(self, event):
+        """Get and show information about examination in selected group."""
+        try:
+            item = self.storage_info_table.tree.selection()[0]
+            self.grouper.group_info(self.storage_info_table.tree.item(item,"text"))
+        except IndexError:
+            pass
 
 
 root = Tk()
