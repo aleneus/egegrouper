@@ -164,7 +164,7 @@ class GrouperModelSqlite3(GrouperModel):
         FROM examination
         WHERE exam_id NOT IN (SELECT exam_id FROM group_element) """, []))[0][0]
 
-        last_string = ['' for h in ext_headers[0]]
+        last_string = ['' for h in ext_headers]
         last_string[0] = '0'
         last_string[-2] = 'Ungrouped'
         last_string[-1] = ungrouped_num
