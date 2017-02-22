@@ -5,6 +5,7 @@ import cmd, sys, argparse
 
 from egegrouper.model_sqlite3 import *
 from egegrouper.views_text import *
+from egegrouper.view_exam_plot import *
 from egegrouper.controller import *
 
 from dialog import *

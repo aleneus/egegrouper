@@ -1,16 +1,17 @@
 import matplotlib.pyplot as plt
-from egegrouper.view import GrouperView
+from egegrouper.views import *
 
-class GrouperViewPlot(GrouperView):
-    """View for plot signals."""
-    def exam(self, e):
+class ViewExamPlot(ViewExam):
+    """Plot view to show details of examination."""
+    def show_data(self):
+        """Plot signals of examination with matplotlib."""
+        plt.clf()
+        e = self.data
         n = 0
         for m in e.ms:
             for s in m.ss:
                 n = n + 1
-                
         i = 0
-        #plt.suptitle('{} {} {} {}\n'.format(e.name, e.gender, e.age, e.diagnosis))
         for m in e.ms:
             t = m.time
             for s in m.ss:
@@ -23,4 +24,3 @@ class GrouperViewPlot(GrouperView):
 
         plt.tight_layout()
         plt.show()
-        return "Plot signals"

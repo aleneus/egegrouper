@@ -9,6 +9,7 @@ from tkinter import filedialog
 from egegrouper.controller import *
 from egegrouper.model_sqlite3 import *
 from egegrouper.views_tk import *
+from egegrouper.view_exam_plot import *
 
 # grouper_tk_widgets
 
@@ -40,7 +41,7 @@ class GroupInfoTable(TableWidget):
     """Table widget for stoarge info."""
     def __init__(self, parent):
         names = ["#0", "name", "age", "sex", "diagnosis"]
-        headers = ["ID", "Name", "Age", "Gender", "Diagnosis"]
+        headers = ["ID", "Name", "Diagnosis", "Age", "Gender"]
         super().__init__(parent, names, headers)
 
 #################################################################
@@ -70,10 +71,11 @@ class Application(Frame):
 
         self.storage_info_table = StorageInfoTable(root)
         self.storage_info_table.pack(side=LEFT, fill=BOTH)
-        self.storage_info_table.tree.bind("<<TreeviewSelect>>", self.group_info) # TODO: Access to tree here is not good.
+        self.storage_info_table.tree.bind("<<TreeviewSelect>>", self.group_info) # TODO: Access to tree.
         
         self.group_info_table = GroupInfoTable(root)
         self.group_info_table.pack(side=LEFT, fill=BOTH)
+        self.group_info_table.tree.bind("<Double-1>", self.plot_exam) # TODO: Access to tree.
 
     def init_mvc(self):
         """Initialization of MVC system."""
@@ -85,6 +87,8 @@ class Application(Frame):
         
         self.grouper.view_group = ViewTableTk()
         self.grouper.view_group.set_widget(self.group_info_table)
+
+        self.grouper.view_exam_plot = ViewExamPlot()
 
     def open_storage(self):
         """Open storage."""
@@ -105,6 +109,13 @@ class Application(Frame):
         try:
             item = self.storage_info_table.tree.selection()[0]
             self.grouper.group_info(self.storage_info_table.tree.item(item,"text"))
+        except IndexError:
+            pass
+
+    def plot_exam(self, event):
+        try:
+            item = self.group_info_table.tree.selection()[0]
+            self.grouper.plot_exam(self.group_info_table.tree.item(item,"text"))
         except IndexError:
             pass
 
