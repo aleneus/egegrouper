@@ -32,28 +32,6 @@ class ViewTableText(ViewTable):
             print('\n' + tabulate(t, tablefmt="orgtbl") + '\n')
        
 
-class ViewStorageText(ViewStorage):
-    """Text view to show common information about storage."""
-    def show_data(self):
-        """Print information about storage."""
-        # data = [exams_num, groups_data, num_in_groups, ungrouped_num]
-        exams_num = self.data[0]
-        groups_data = self.data[1]
-        num_in_groups = self.data[2]
-        ungrouped_num = self.data[3]
-        t = []
-        for row, num in zip(groups_data, num_in_groups):
-            t_row = []
-            for record in row:
-                t_row.append(str(record))
-            t_row.append(num)
-            t.append(t_row)
-        t.append(['','','',''])
-        t.append(['','','Ungrouped:',ungrouped_num])
-        t.append(['','','Total:',exams_num])
-        h = ['ID','Name','Description','Number']
-        print('\n' + tabulate(t, headers = h, tablefmt="orgtbl") + '\n')
-
 class ViewExamText(ViewExam):
     """Text view to show details of examination."""
     def show_data(self):

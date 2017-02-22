@@ -24,7 +24,6 @@ class ViewMessage(View):
         """
         super().set_data(data)
 
-
 class ViewTable(View):
     """Table view."""
     def set_data(self, data):
@@ -34,19 +33,6 @@ class ViewTable(View):
         ----------
         data : list
             Must be [rows : list of tuples] or [rows : list of tuples, headers : tuple].
-
-        """
-        super().set_data(data)
-
-class ViewStorage(View):
-    """View for information about storage."""
-    def set_data(self, data):
-        """Set data.
-        
-        Parameters
-        ----------
-        data : list
-            Common information about storage. Must be [exams_num : int, groups_data : list of tuples, num_in_groups : int, ungrouped_num : int].
 
         """
         super().set_data(data)

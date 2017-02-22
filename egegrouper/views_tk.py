@@ -13,6 +13,7 @@ class ViewTableTk(ViewTable):
         tree.delete(*tree.get_children())
         for row in rows:
             tree.insert("", END, text=str(row[0]), values=row[1:])
+        # todo: work with headers
 
     def set_widget(self, widget):
         """Set widget."""
