@@ -76,6 +76,7 @@ class Application(Frame):
         self.group_info_table = GroupInfoTable(root)
         self.group_info_table.pack(side=LEFT, fill=BOTH)
         self.group_info_table.tree.bind("<Double-1>", self.plot_exam) # TODO: Access to tree.
+        self.group_info_table.tree.bind("<Return>", self.plot_exam) # TODO: Access to tree.
 
     def init_mvc(self):
         """Initialization of MVC system."""
