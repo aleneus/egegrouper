@@ -279,10 +279,11 @@ if __name__ == '__main__':
     grouper.set_model(GrouperModelSqlite3())
 
     grouper.view_message = ViewMessageText()
-    grouper.view_table = ViewTableText()
-    grouper.view_storage = ViewStorageText()
+    grouper.view_storage = ViewTableText()
+    grouper.view_group = ViewTableText()
     grouper.view_exam = ViewExamText()
     grouper.view_exam_plot = ViewExamPlot()
+    grouper.view_where_exam = ViewTableText()
     
     grouper.open_or_create_storage(args.fname)
     

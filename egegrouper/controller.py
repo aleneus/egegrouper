@@ -2,24 +2,28 @@ import os.path # TODO: remove from here (?)
 from egegrouper import sme
 
 class GrouperController:
+    """Controller in MVC."""
+    
     model = None
     """Model."""
     
-    """Controller in MVC."""
     view_message = None
     """View for messages."""
 
-    view_table = None
-    """View for tabular data."""
-
     view_storage = None
     """View for common information about storage."""
+
+    view_group = None
+    """View for information about examination in group."""
     
     view_exam = None
-    """View for examination."""
+    """View for details of one examination."""
 
     view_exam_plot = None
     """View for plotting signals of examination."""
+
+    view_where_exam = None
+    """View for groups in which the examination is."""
 
     def set_model(self, model):
         """Set model.
@@ -55,15 +59,9 @@ class GrouperController:
     def storage_info_new(self):
         """Show common information about storage."""
         data, headers = self.model.storage_info_new()
-        self.view_table.set_data([data, headers])
-        self.view_table.show_data()
-        
-    def storage_info(self):
-        """Show common information about storage."""
-        exams_num, data, num_in_groups, ungrouped_num = self.model.storage_info()
-        self.view_storage.set_data([exams_num, data, num_in_groups, ungrouped_num])
+        self.view_storage.set_data([data, headers])
         self.view_storage.show_data()
-
+        
     def group_info(self, group_id):
         """Show list of examinations of group.
 
@@ -73,9 +71,9 @@ class GrouperController:
             Group ID.
 
         """
-        d, h = self.model.group_info(group_id)
-        self.view_table.set_data([d, h])
-        self.view_table.show_data()
+        rows, headers = self.model.group_info(group_id)
+        self.view_group.set_data([rows, headers])
+        self.view_group.show_data()
 
     def exam(self, exam_id):
         """Show information about selected examination.
@@ -173,8 +171,8 @@ class GrouperController:
 
         """
         data = self.model.where_is_examination(exam_id)
-        self.view_table.set_data([data, ("Group ID", "Group name")])
-        self.view_table.show_data()
+        self.view_where_exam.set_data([data, ("Group ID", "Group name")])
+        self.view_where_exam.show_data()
         
     def add_sme_db(self, file_name):
         """Add SME sqlite3 data base to current storage.
