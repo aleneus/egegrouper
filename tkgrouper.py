@@ -120,10 +120,11 @@ class Application(Frame):
             self.grouper.plot_exam(self.group_info_table.tree.item(item,"text"))
         except IndexError:
             pass
-
+        
     def close_db_and_exit(self):
+        """Close data base and exit."""
         self.grouper.close_storage()
-        root.quit()
+        Tk().quit()
 
 
 root = Tk()

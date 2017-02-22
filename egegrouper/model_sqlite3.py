@@ -48,7 +48,8 @@ class GrouperModelSqlite3(GrouperModel):
 
     def close_storage(self):
         """Close data base."""
-        self.conn.close()
+        if self.storage_opened():
+            self.conn.close()
         self.set_storage_opened(False)
 
     def get_examination(self, exam_id):
