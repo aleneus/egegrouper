@@ -114,7 +114,7 @@ class Application(Frame):
             pass
 
     def plot_exam(self, event):
-        """Plot examination in separate Python's window."""
+        """Plot examination in separate matplotlib window."""
         try:
             item = self.group_info_table.tree.selection()[0]
             self.grouper.plot_exam(self.group_info_table.tree.item(item,"text"))
@@ -127,6 +127,7 @@ class Application(Frame):
         Tk().quit()
 
 
-root = Tk()
-app = Application(root)
-app.mainloop()
+if __name__ == '__main__':
+    root = Tk()
+    app = Application(root)
+    app.mainloop()
