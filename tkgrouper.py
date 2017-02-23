@@ -71,10 +71,12 @@ class Application(Frame):
 
         self.storage_info_table = StorageInfoTable(root)
         self.storage_info_table.pack(side=LEFT, fill=BOTH)
+        self.storage_info_table.tkraise()
         self.storage_info_table.tree.bind("<<TreeviewSelect>>", self.group_info) # TODO: Access to tree.
-        
+        self.tk_focusNext()        
         self.group_info_table = GroupInfoTable(root)
         self.group_info_table.pack(side=LEFT, fill=BOTH)
+        self.group_info_table.tkraise()
         self.group_info_table.tree.bind("<Double-1>", self.plot_exam) # TODO: Access to tree.
         self.group_info_table.tree.bind("<Return>", self.plot_exam) # TODO: Access to tree.
 
