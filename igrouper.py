@@ -11,6 +11,8 @@ from egegrouper.controller import *
 from dialog import *
 
 class GrouperShell(cmd.Cmd):
+    """CLI interface to EGEGrouper."""
+    
     intro = 'Welcome to the Grouper shell.   Type help or ? to list commands.\n'
     prompt = 'igrouper> '
 

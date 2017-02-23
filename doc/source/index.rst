@@ -21,28 +21,38 @@ MVC
    Used MVC pattern <mvc>
 
    
-Base classes
-------------
+Base part
+---------
 
 .. toctree::
 
-   GrouperModel <model>
-   GrouperView <view>
-   GrouperController <controller>
+   Model <model>
+   Views <views>
+   Controller <controller>
 
 Model implementations
 ---------------------
 
 .. toctree::
    
-   GrouperModelSqlite3 <model_sqlite3>
+   Sqlite3 <model_sqlite3>
 
 View implementations
 --------------------
 
 .. toctree::
    
-   GrouperViewString <views_text>
+   Text views <views_text>
+   Tk views <views_tk>
+   Plot view <view_exam_plot>
+
+User Interfaces
+---------------
+
+.. toctree::
+
+   igrouper (CLI) <igrouper>
+   tkgrouper (GUI) <tkgrouper>
 
 Indices and tables
 ==================
