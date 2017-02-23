@@ -1,0 +1,5 @@
+igrouper
+========
+
+.. automodule:: igrouper
+   :members:
