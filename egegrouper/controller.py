@@ -56,9 +56,9 @@ class GrouperController:
         """Close storage."""
         self.model.close_storage()
 
-    def storage_info_new(self):
+    def storage_info(self):
         """Show common information about storage."""
-        data, headers = self.model.storage_info_new()
+        data, headers = self.model.storage_info()
         self.view_storage.set_data([data, headers])
         self.view_storage.show_data()
         

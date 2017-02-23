@@ -103,7 +103,7 @@ class Application(Frame):
         if not file_name:
             return
         self.grouper.open_or_create_storage(file_name)
-        self.grouper.storage_info_new()
+        self.grouper.storage_info()
 
     def group_info(self, event):
         """Get and show information about examination in selected group."""
