@@ -10,46 +10,7 @@ from egegrouper.controller import *
 from egegrouper.model_sqlite3 import *
 from egegrouper.views_tk import *
 from egegrouper.view_exam_plot import *
-
-# grouper_tk_widgets
-
-class TableWidget(Frame):
-    """Table widget."""
-    def __init__(self, parent, names, headers, widths = []):
-        Frame.__init__(self, parent)
-        self.scrollbar = Scrollbar(self, orient=VERTICAL)
-        self.tree = ttk.Treeview(self, yscrollcommand=self.scrollbar.set)
-        self.scrollbar.config(command=self.tree.yview)
-        self.tree["columns"] = names[1:]
-        for (name, header) in zip(names, headers):
-            self.tree.heading(name, text=header)
-        if len(widths) == len(names):
-            for (name, width) in zip(names, widths):
-                self.tree.column(name, width=width)
-        self.scrollbar.pack(side=RIGHT, fill=Y, expand=True)
-        self.tree.pack(side=LEFT, fill=BOTH, expand=True)
-
-    def set_handler(self, handler):
-        self.tree.bind("<Double-1>", handler)
-        self.tree.bind("<Return>", handler)
-
-class StorageInfoTable(TableWidget):
-    """Table widget for stoarge info."""
-    def __init__(self, parent):
-        names = ["#0", "name", "description", "number"]
-        headers = ["ID", "Name", "Description", "Num"]
-        widths = [50, 100, 200, 50]
-        super().__init__(parent, names, headers, widths)
-
-class GroupInfoTable(TableWidget):
-    """Table widget for stoarge info."""
-    def __init__(self, parent):
-        names = ["#0", "name", "age", "sex", "diagnosis"]
-        headers = ["ID", "Name", "Diagnosis", "Age", "Gender"]
-        super().__init__(parent, names, headers)
-
-#################################################################
-       
+from grouper_tk_widgets import *
 
 class FrameStorageInfo(Frame):
     
@@ -72,18 +33,15 @@ class FrameStorageInfo(Frame):
         self.storage_info_table.set_handler(self.group_info)
         
         self.controller.view_storage = ViewTableTk()
-        self.controller.view_group = ViewTableTk()
-        
+        self.controller.view_group = ViewTableTk()        
         self.controller.view_storage.set_widget(self.storage_info_table)
 
     def open_storage(self):
         """Open storage."""
-        pass
         self.file_opt = options = {}
         options['defaultextension'] = '.sme.sqlite'
         options['filetypes'] = [('all files', '.*'), ('sme db files', '.sme.sqlite')]
-        options['initialdir'] = '.'
-        options['parent'] = root
+        options['parent'] = self.master
         options['title'] = 'Open storage'
         file_name = filedialog.askopenfilename()
         if not file_name:
@@ -96,8 +54,8 @@ class FrameStorageInfo(Frame):
         try:
             item = self.storage_info_table.tree.selection()[0]
             if not self.child_opened():
-                self.window_second = Toplevel(self.master)
-                self.frame_second = FrameGroupInfo(self.controller, self, self.window_second)
+                self.second_master = Toplevel(self.master)
+                self.frame_second = FrameGroupInfo(self.controller, self, self.second_master)
                 self.controller.view_group.set_widget(self.frame_second.get_widget())
                 self.set_child_opened(True)
             self.controller.group_info(self.storage_info_table.tree.item(item,"text"))
