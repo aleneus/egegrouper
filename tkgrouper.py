@@ -49,15 +49,16 @@ class FrameStorageInfo(Frame):
         self.controller.open_or_create_storage(file_name)
         self.controller.storage_info()
 
+    child_opened = False
+
     def group_info(self, event):
         """Get and show information about examination in selected group."""
         try:
             item = self.storage_info_table.tree.selection()[0]
-            if not self.child_opened():
+            if not self.child_opened:
                 self.second_master = Toplevel(self.master)
                 self.frame_second = FrameGroupInfo(self.controller, self, self.second_master)
-                self.controller.view_group.set_widget(self.frame_second.get_widget())
-                self.set_child_opened(True)
+                self.child_opened = True
             self.controller.group_info(self.storage_info_table.tree.item(item,"text"))
         except IndexError:
             pass
@@ -66,15 +67,6 @@ class FrameStorageInfo(Frame):
         """Close data base and exit."""
         self.controller.close_storage()
         root.quit()
-
-    _child_opened = False
-    
-    def set_child_opened(self, value):
-        self._child_opened = value
-
-    def child_opened(self):
-        return self._child_opened
-
 
 class FrameGroupInfo(Frame):
     controller = None
@@ -105,16 +97,12 @@ class FrameGroupInfo(Frame):
         
     def on_destroy(self):
         self.master.destroy()
-        self.parent.set_child_opened(False)
-
-    def get_widget(self):
-        return self.group_info_table
+        self.parent.child_opened = False
 
 if __name__ == '__main__':
     root = Tk()
-    model = GrouperModelSqlite3()
     controller = GrouperController()
-    controller.set_model(model)
+    controller.set_model(GrouperModelSqlite3())
     
     frame_storage = FrameStorageInfo(controller, root)
     frame_storage.controller = controller
