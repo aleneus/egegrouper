@@ -29,6 +29,10 @@ class TableWidget(Frame):
         self.scrollbar.pack(side=RIGHT, fill=Y, expand=True)
         self.tree.pack(side=LEFT, fill=BOTH, expand=True)
 
+    def set_handler(self, handler):
+        self.tree.bind("<Double-1>", handler)
+        self.tree.bind("<Return>", handler)
+
 class StorageInfoTable(TableWidget):
     """Table widget for stoarge info."""
     def __init__(self, parent):
@@ -65,10 +69,11 @@ class FrameStorageInfo(Frame):
         self.storage_info_table = StorageInfoTable(root)
         self.storage_info_table.pack(side=LEFT, fill=BOTH)
         self.storage_info_table.tkraise()
-        self.storage_info_table.tree.bind("<Double-1>", self.group_info) # TODO: Access to tree.
-        self.storage_info_table.tree.bind("<Return>", self.group_info) # TODO: Access to tree.
-
+        self.storage_info_table.set_handler(self.group_info)
+        
         self.controller.view_storage = ViewTableTk()
+        self.controller.view_group = ViewTableTk()
+        
         self.controller.view_storage.set_widget(self.storage_info_table)
 
     def open_storage(self):
@@ -92,10 +97,9 @@ class FrameStorageInfo(Frame):
             item = self.storage_info_table.tree.selection()[0]
             if not self.child_opened():
                 self.window_second = Toplevel(self.master)
-                self.frame_second = FrameGroupInfo(self, self.window_second)
-                self.set_child_opened(True)
-                self.controller.view_group = ViewTableTk()
+                self.frame_second = FrameGroupInfo(self.controller, self, self.window_second)
                 self.controller.view_group.set_widget(self.frame_second.get_widget())
+                self.set_child_opened(True)
             self.controller.group_info(self.storage_info_table.tree.item(item,"text"))
         except IndexError:
             pass
@@ -113,29 +117,31 @@ class FrameStorageInfo(Frame):
     def child_opened(self):
         return self._child_opened
 
-    
+
 class FrameGroupInfo(Frame):
-    def __init__(self, parent, master=None):
+    controller = None
+    
+    def __init__(self, controller, parent, master=None):
         super().__init__(master)
         self.parent = parent
         self.pack()
+        self.controller = controller
         
         self.master.protocol('WM_DELETE_WINDOW', self.on_destroy)
         self.group_info_table = GroupInfoTable(self.master)
         self.group_info_table.pack(side=LEFT, fill=BOTH)
         self.group_info_table.tkraise()
-        self.group_info_table.tree.bind("<Double-1>", self.plot_exam) # TODO: Access to tree.
-        self.group_info_table.tree.bind("<Return>", self.plot_exam) # TODO: Access to tree.
+        self.group_info_table.set_handler(self.plot_exam)
 
-        self.parent.controller.view_group = ViewTableTk()
-        self.parent.controller.view_group.set_widget(self.group_info_table)
-        self.parent.controller.view_exam_plot = ViewExamPlot()
+        self.controller.view_group = ViewTableTk()
+        self.controller.view_group.set_widget(self.group_info_table)
+        self.controller.view_exam_plot = ViewExamPlot()
 
     def plot_exam(self, event):
         """Plot examination in separate matplotlib window."""
         try:
             item = self.group_info_table.tree.selection()[0]
-            self.parent.controller.plot_exam(self.group_info_table.tree.item(item,"text"))
+            self.controller.plot_exam(self.group_info_table.tree.item(item,"text"))
         except IndexError:
             pass
         
