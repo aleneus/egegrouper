@@ -13,6 +13,8 @@ from egegrouper.view_exam_plot import *
 from grouper_tk_widgets import *
 
 class FrameStorageInfo(Frame):
+    """Frame to show groups and do operations over them."""
+    
     def __init__(self, controller, master=None):
         super().__init__(master)
         
@@ -36,7 +38,7 @@ class FrameStorageInfo(Frame):
         self.controller.view_storage.set_widget(self.storage_info_table)
 
     def open_storage(self):
-        """Open storage."""
+        """Open storage and show groups in it."""
         self.file_opt = options = {}
         options['defaultextension'] = '.sme.sqlite'
         options['filetypes'] = [('all files', '.*'), ('sme db files', '.sme.sqlite')]
@@ -68,6 +70,7 @@ class FrameStorageInfo(Frame):
         root.quit()
 
 class FrameGroupInfo(Frame):
+    """Frame for show examinations of group and do operations over them."""
     controller = None
     
     def __init__(self, controller, parent, master=None):
@@ -95,6 +98,7 @@ class FrameGroupInfo(Frame):
             pass
         
     def on_destroy(self):
+        """Say to parent window about destroy."""
         self.master.destroy()
         self.parent.child_opened = False
 
@@ -102,8 +106,6 @@ if __name__ == '__main__':
     root = Tk()
     controller = GrouperController()
     controller.set_model(GrouperModelSqlite3())
-    
     frame_storage = FrameStorageInfo(controller, root)
     frame_storage.controller = controller
-    
     frame_storage.mainloop()
