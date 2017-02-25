@@ -78,8 +78,8 @@ class GrouperModel():
         """Delete examination from group."""
         pass
 
-    def where_is_examination(self, exam_id):
-        """Return description of groups where examination is."""
+    def where_exam(self, exam_id):
+        """Return description of groups where examination in or not in."""
         pass
 
 

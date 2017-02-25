@@ -174,7 +174,7 @@ class GrouperShell(cmd.Cmd):
         if len(cargv) == 0:
             print('Few arguments')
             return
-        grouper.where_is_examination(cargv[0])
+        grouper.where_exam(cargv[0])
 
     def do_add_sme(self, arg):
         """ add_sme file_name
@@ -286,7 +286,7 @@ if __name__ == '__main__':
     grouper.view_group = ViewTableText()
     grouper.view_exam = ViewExamText()
     grouper.view_exam_plot = ViewExamPlot()
-    grouper.view_where_exam = ViewTableText()
+    grouper.view_where_exam = ViewWhereExamText()
     
     grouper.open_or_create_storage(args.fname)
     

@@ -48,3 +48,15 @@ class ViewExam(View):
 
         """
         super().set_data(data)
+
+class ViewWhereExam(View):
+    def set_data(self, data):
+        """Set data.
+        
+        Parameters
+        ----------
+        data : list
+            Must be [group_records : list of tuples, headers : list of str, placed_in : list of bool].
+
+        """
+        super().set_data(data)

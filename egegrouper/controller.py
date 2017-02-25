@@ -24,7 +24,7 @@ class GrouperController:
 
     view_where_exam = None
     """View for groups in which the examination is."""
-
+    
     def set_model(self, model):
         """Set model.
 
@@ -161,7 +161,7 @@ class GrouperController:
         """
         self.model.delete_exam_from_group(exam_id, group_id)
 
-    def where_is_examination(self, exam_id):
+    def where_exam(self, exam_id):
         """Show information of groups where examination is.
 
         Parameters
@@ -170,8 +170,8 @@ class GrouperController:
             Examination ID.
 
         """
-        data = self.model.where_is_examination(exam_id)
-        self.view_where_exam.set_data([data, ("Group ID", "Group name")])
+        group_records, headers, placed_in = self.model.where_exam(exam_id)
+        self.view_where_exam.set_data([group_records, headers, placed_in])
         self.view_where_exam.show_data()
         
     def add_sme_db(self, file_name):

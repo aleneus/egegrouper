@@ -41,3 +41,12 @@ class ViewExamText(ViewExam):
         for m in e.ms:
             s += '    M: {}\n'.format(m.time)
         print(s)
+
+class ViewWhereExamText(View):
+    """Text view to show groups in which selected examination placed."""
+    def show_data(self):
+        """Show data."""
+        group_records, headers, placed_in = self.data
+        rows = [('X' if p else '', gr[0], gr[1]) for p, gr in zip(placed_in, group_records)]
+        headers_ext = ('', ) + headers
+        print('\n' + tabulate(rows, headers=headers_ext, tablefmt="orgtbl") + '\n')

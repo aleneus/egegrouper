@@ -273,20 +273,40 @@ class GrouperModelSqlite3(GrouperModel):
         except sqlite3.IntegrityError:
             print('Error: no such examination or group')
 
-    def where_is_examination(self, exam_id):
-        """Return groups numbers and names where examination is.
+    def where_exam(self, exam_id):
+        """Return description of groups where examination in or not in.
+
+        Parameters
+        ----------
+        exam_id : str
+            Examination ID.
 
         Returns
         -------
-        list of tuples
-
+        group_records : list of tuple
+            All group records.
+        headers : list of str
+            Names of group attributes.
+        placed_in : list of bool
+            True if exam in group, False overwise.
+        
         """
-        data = list(self.c.execute("""
-        SELECT G.group_id, G.name
-        FROM egeg_group as G, group_element
-        WHERE G.group_id = group_element.group_id AND group_element.exam_id = ? """, [exam_id]))
-        return data
+        
+        including_exam_groups_ids = [
+            r[0] for r in list(self.c.execute("""
+            SELECT G.group_id
+            FROM egeg_group as G, group_element
+            WHERE G.group_id = group_element.group_id AND group_element.exam_id = ? """, [exam_id]))
+        ]
 
+        group_records = list(self.c.execute("""
+        SELECT * FROM egeg_group
+        """))
+        headers = tuple(map(lambda x: x[0], self.c.description))
+        placed_in = [gr[0] in including_exam_groups_ids for gr in group_records]
+        
+        return group_records, headers, placed_in
+    
     def add_sme_db(self, file_name):
         """Add SME sqlite3 data base to current data base.
 
