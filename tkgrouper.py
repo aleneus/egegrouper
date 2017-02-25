@@ -13,7 +13,6 @@ from egegrouper.view_exam_plot import *
 from grouper_tk_widgets import *
 
 class FrameStorageInfo(Frame):
-    
     def __init__(self, controller, master=None):
         super().__init__(master)
         
@@ -28,7 +27,7 @@ class FrameStorageInfo(Frame):
         root.config(menu=menubar)
 
         self.storage_info_table = StorageInfoTable(root)
-        self.storage_info_table.pack(side=LEFT, fill=BOTH)
+        self.storage_info_table.pack(side=LEFT, fill=BOTH, expand=True)
         self.storage_info_table.tkraise()
         self.storage_info_table.set_handler(self.group_info)
         
@@ -79,7 +78,7 @@ class FrameGroupInfo(Frame):
         
         self.master.protocol('WM_DELETE_WINDOW', self.on_destroy)
         self.group_info_table = GroupInfoTable(self.master)
-        self.group_info_table.pack(side=LEFT, fill=BOTH)
+        self.group_info_table.pack(side=LEFT, fill=BOTH, expand=True)
         self.group_info_table.tkraise()
         self.group_info_table.set_handler(self.plot_exam)
 

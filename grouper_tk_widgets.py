@@ -13,7 +13,7 @@ class TableWidget(Frame):
         if len(widths) == len(names):
             for (name, width) in zip(names, widths):
                 self.tree.column(name, width=width)
-        self.scrollbar.pack(side=RIGHT, fill=Y, expand=True)
+        self.scrollbar.pack(side=RIGHT, fill=Y)
         self.tree.pack(side=LEFT, fill=BOTH, expand=True)
 
     def set_handler(self, handler):
