@@ -1,6 +1,15 @@
 from tkinter import *
 
-class TableWidget(Frame):
+def connect(signal, slot):
+    signal[0] = slot
+
+def disconnect(signal):
+    signal = [None]
+
+class BaseWidget(Frame):
+    pass
+
+class TableWidget(BaseWidget):
     """Table widget."""
     def __init__(self, parent, names, headers, widths = []):
         Frame.__init__(self, parent)
@@ -15,10 +24,15 @@ class TableWidget(Frame):
                 self.tree.column(name, width=width)
         self.scrollbar.pack(side=RIGHT, fill=Y)
         self.tree.pack(side=LEFT, fill=BOTH, expand=True)
-
-    def set_handler(self, handler):
-        self.tree.bind("<Double-1>", handler)
-        self.tree.bind("<Return>", handler)
+        self.tree.bind("<Double-1>", self.emit_signal_item_opened)
+        self.tree.bind("<Return>", self.emit_signal_item_opened)
+        
+        # signals
+        self.signal_item_opened = [None]
+        
+    def emit_signal_item_opened(self, event):
+        if self.signal_item_opened[0]:
+            self.signal_item_opened[0]()
 
 class StorageInfoTable(TableWidget):
     """Table widget for stoarge info."""
@@ -27,7 +41,7 @@ class StorageInfoTable(TableWidget):
         headers = ["ID", "Name", "Description", "Num"]
         widths = [50, 100, 200, 50]
         super().__init__(parent, names, headers, widths)
-
+        
 class GroupInfoTable(TableWidget):
     """Table widget for stoarge info."""
     def __init__(self, parent):

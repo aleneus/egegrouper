@@ -52,7 +52,7 @@ class FrameStorageInfo(Frame):
         self.storage_info_table = StorageInfoTable(root)
         self.storage_info_table.pack(side=LEFT, fill=BOTH, expand=True)
         self.storage_info_table.tkraise()
-        self.storage_info_table.set_handler(self.group_info)
+        connect(self.storage_info_table.signal_item_opened, self.group_info)
         
         self.controller.view_storage = ViewTableTk()
         self.controller.view_group = ViewTableTk()        
@@ -74,7 +74,7 @@ class FrameStorageInfo(Frame):
         self.controller.open_or_create_storage(file_name)
         self.controller.storage_info()
 
-    def group_info(self, event):
+    def group_info(self):
         """Get and show information about examination in selected group."""
         if self.group_master.state() == "withdrawn":
             self.group_master.deiconify()
@@ -103,13 +103,13 @@ class FrameGroupInfo(Frame):
         self.group_info_table = GroupInfoTable(self.master)
         self.group_info_table.pack(side=LEFT, fill=BOTH, expand=True)
         self.group_info_table.tkraise()
-        self.group_info_table.set_handler(self.plot_exam)
+        connect(self.group_info_table.signal_item_opened, self.plot_exam)
 
         self.controller.view_group = ViewTableTk()
         self.controller.view_group.set_widget(self.group_info_table)
         self.controller.view_exam_plot = ViewExamPlot()
 
-    def plot_exam(self, event):
+    def plot_exam(self):
         """Plot examination in separate matplotlib window."""
         try:
             item = self.group_info_table.tree.selection()[0]
