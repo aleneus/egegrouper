@@ -14,6 +14,8 @@ from grouper_tk_widgets import *
 
 class FrameStorageInfo(Frame):
     """Frame to show groups and do operations over them."""
+    group_master = None
+    group_frame = None
     
     def __init__(self, controller, master=None):
         super().__init__(master)
@@ -56,6 +58,9 @@ class FrameStorageInfo(Frame):
         self.controller.view_group = ViewTableTk()        
         self.controller.view_storage.set_widget(self.storage_info_table)
 
+        self.group_master = Toplevel(self.master)
+        self.group_frame = FrameGroupInfo(self.controller, self, self.group_master)
+
     def open_storage(self):
         """Open storage and show groups in it."""
         self.file_opt = options = {}
@@ -69,16 +74,12 @@ class FrameStorageInfo(Frame):
         self.controller.open_or_create_storage(file_name)
         self.controller.storage_info()
 
-    child_opened = False
-
     def group_info(self, event):
         """Get and show information about examination in selected group."""
+        if self.group_master.state() == "withdrawn":
+            self.group_master.deiconify()
         try:
             item = self.storage_info_table.tree.selection()[0]
-            if not self.child_opened:
-                self.second_master = Toplevel(self.master)
-                self.frame_second = FrameGroupInfo(self.controller, self, self.second_master)
-                self.child_opened = True
             self.controller.group_info(self.storage_info_table.tree.item(item,"text"))
         except IndexError:
             pass
@@ -118,8 +119,7 @@ class FrameGroupInfo(Frame):
         
     def on_destroy(self):
         """Say to parent window about destroy."""
-        self.master.destroy()
-        self.parent.child_opened = False
+        self.master.withdraw()
 
 if __name__ == '__main__':
     root = Tk()
