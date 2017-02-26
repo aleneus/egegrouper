@@ -58,7 +58,7 @@ class FrameStorageInfo(Frame):
         self.controller.view_group = ViewTableTk()        
         self.controller.view_storage.set_widget(self.storage_info_table)
 
-        self.group_frame = FrameGroupInfo(self.controller, self.master)
+        self.group_frame = GroupInfoWindow(self.controller, self.master)
 
     def open_storage(self):
         """Open storage and show groups in it."""
@@ -94,16 +94,13 @@ class FrameStorageInfo(Frame):
         self.controller.close_storage()
         root.quit()
 
-class FrameGroupInfo(Frame):
-    """Frame for show examinations of group and do operations over them."""
+class GroupInfoWindow:
+    """Window for show examinations of group and do operations over them."""
     controller = None
     
     def __init__(self, controller, master=None):
-        super().__init__(master)
         self.controller = controller
-
         self.master = Toplevel(master)
-
         self.master.protocol('WM_DELETE_WINDOW', self.on_destroy)
         self.group_info_table = GroupInfoTable(self.master)
         self.group_info_table.pack(side=LEFT, fill=BOTH, expand=True)
