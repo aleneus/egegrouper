@@ -58,8 +58,7 @@ class FrameStorageInfo(Frame):
         self.controller.view_group = ViewTableTk()        
         self.controller.view_storage.set_widget(self.storage_info_table)
 
-        self.group_master = Toplevel(self.master)
-        self.group_frame = FrameGroupInfo(self.controller, self, self.group_master)
+        self.group_frame = FrameGroupInfo(self.controller, self.master)
 
     def open_storage(self):
         """Open storage and show groups in it."""
@@ -76,8 +75,8 @@ class FrameStorageInfo(Frame):
 
     def group_info(self):
         """Get and show information about examination in selected group."""
-        if self.group_master.state() == "withdrawn":
-            self.group_master.deiconify()
+        if self.group_frame.master.state() == "withdrawn":
+            self.group_frame.master.deiconify()
         try:
             item = self.storage_info_table.tree.selection()[0]
             self.controller.group_info(self.storage_info_table.tree.item(item,"text"))
@@ -99,12 +98,12 @@ class FrameGroupInfo(Frame):
     """Frame for show examinations of group and do operations over them."""
     controller = None
     
-    def __init__(self, controller, parent, master=None):
+    def __init__(self, controller, master=None):
         super().__init__(master)
-        self.parent = parent
-        self.pack()
         self.controller = controller
-        
+
+        self.master = Toplevel(master)
+
         self.master.protocol('WM_DELETE_WINDOW', self.on_destroy)
         self.group_info_table = GroupInfoTable(self.master)
         self.group_info_table.pack(side=LEFT, fill=BOTH, expand=True)
