@@ -118,7 +118,7 @@ class FrameGroupInfo(Frame):
             pass
         
     def on_destroy(self):
-        """Say to parent window about destroy."""
+        """Do not destroy, but withdraw."""
         self.master.withdraw()
 
 if __name__ == '__main__':
