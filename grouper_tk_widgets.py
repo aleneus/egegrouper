@@ -48,3 +48,10 @@ class GroupInfoTable(TableWidget):
         names = ["#0", "name", "age", "sex", "diagnosis"]
         headers = ["ID", "Name", "Diagnosis", "Age", "Gender"]
         super().__init__(parent, names, headers)
+
+class WhereExam(BaseWidget):
+    """Table widget for stoarge info."""
+    def __init__(self, master):
+        Frame.__init__(self, master)
+        self.button = Button(self, text="Stub", command=self.master.destroy)
+        self.button.pack()

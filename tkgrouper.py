@@ -40,7 +40,7 @@ class FrameStorageInfo(Frame):
         menubar.add_cascade(label="Group", menu=groupmenu)
 
         exammenu = Menu(menubar, tearoff=0)
-        exammenu.add_command(label="Grouping", command=None)
+        exammenu.add_command(label="Grouping", command=self.grouping)
         exammenu.add_command(label="Delete", command=None)
         exammenu.add_command(label="Merge with", command=None)
         exammenu.add_separator()
@@ -84,6 +84,12 @@ class FrameStorageInfo(Frame):
         except IndexError:
             pass
 
+    def grouping(self):
+        """Open grouping window stub."""
+        self.grouping_master = Toplevel(self.master)
+        self.grouping_widget = WhereExam(self.grouping_master)
+        self.grouping_widget.pack()
+        
     def close_db_and_exit(self):
         """Close data base and exit."""
         self.controller.close_storage()
