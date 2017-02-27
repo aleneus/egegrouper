@@ -9,8 +9,8 @@ class ViewTableTk(ViewTable):
     def show_data(self):
         """Fill table with data."""
         rows, headers = self.data
-        tree = self.widget.tree
         self.widget.clear()
+        tree = self.widget.tree
         for row in rows:
             tree.insert("", END, text=str(row[0]), values=row[1:])
         # todo: work with headers
@@ -28,6 +28,7 @@ class ViewWhereExamTk(ViewWhereExam):
         rows = [(gr[0], gr[1], 'X' if p else '') for p, gr in zip(placed_in, group_records)]
         headers_ext = headers + ('', )
         self.widget.clear()
+        tree = self.widget.tree
         for row in rows:
             tree.insert("", END, text=str(row[0]), values=row[1:])
         # todo incapsulation of tree

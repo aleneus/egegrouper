@@ -61,11 +61,15 @@ class GroupingTable(TableWidget):
         names = ["#0", "name", "in"]
         headers = ["ID", "Name", ""]
         super().__init__(parent, names, headers)
-        self.tree.bind("<Button-1>", self.item_touched)
+        self.tree.bind("<Double-1>", self.toggle_item)
+        self.tree.bind("<Return>", self.toggle_item)
 
-    def item_touched(self, *args):
-        pass
-
+    def toggle_item(self, event):
+        """Toggle item."""
+        item = self.tree.selection()[0]
+        values = self.tree.item(item, 'values')
+        self.tree.item(item, values=(values[0], 'X' if values[1] == '' else ''))
+        
     def checked_group_ids(self):
         ids = []
         return ids
