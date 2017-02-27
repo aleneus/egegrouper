@@ -1,10 +1,5 @@
 from tkinter import *
-
-def connect(signal, slot):
-    signal[0] = slot
-
-def disconnect(signal):
-    signal = [None]
+from simple_signal import *
 
 class BaseWidget(Frame):
     pass
@@ -24,16 +19,12 @@ class TableWidget(BaseWidget):
                 self.tree.column(name, width=width)
         self.scrollbar.pack(side=RIGHT, fill=Y)
         self.tree.pack(side=LEFT, fill=BOTH, expand=True)
-        self.tree.bind("<Double-1>", self.emit_signal_item_opened)
-        self.tree.bind("<Return>", self.emit_signal_item_opened)
-        
-        # signals
-        self.signal_item_opened = [None]
-        
-    def emit_signal_item_opened(self, event):
-        if self.signal_item_opened[0]:
-            self.signal_item_opened[0]()
 
+        # signals
+        self.signal_item_opened = SimpleSignal()
+        self.tree.bind("<Double-1>", self.signal_item_opened.emit)
+        self.tree.bind("<Return>", self.signal_item_opened.emit)
+        
 class StorageInfoTable(TableWidget):
     """Table widget for stoarge info."""
     def __init__(self, parent):

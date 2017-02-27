@@ -11,6 +11,7 @@ from egegrouper.model_sqlite3 import *
 from egegrouper.views_tk import *
 from egegrouper.view_exam_plot import *
 from grouper_tk_widgets import *
+from simple_signal import *
 
 class FrameStorageInfo(Frame):
     """Frame to show groups and do operations over them."""
@@ -52,7 +53,7 @@ class FrameStorageInfo(Frame):
         self.storage_info_table = StorageInfoTable(root)
         self.storage_info_table.pack(side=LEFT, fill=BOTH, expand=True)
         self.storage_info_table.tkraise()
-        connect(self.storage_info_table.signal_item_opened, self.group_info)
+        self.storage_info_table.signal_item_opened.connect(self.group_info)
         
         self.controller.view_storage = ViewTableTk()
         self.controller.view_group = ViewTableTk()        
@@ -73,7 +74,7 @@ class FrameStorageInfo(Frame):
         self.controller.open_or_create_storage(file_name)
         self.controller.storage_info()
 
-    def group_info(self):
+    def group_info(self, *args):
         """Get and show information about examination in selected group."""
         if self.group_frame.master.state() == "withdrawn":
             self.group_frame.master.deiconify()
@@ -105,13 +106,13 @@ class GroupInfoWindow:
         self.group_info_table = GroupInfoTable(self.master)
         self.group_info_table.pack(side=LEFT, fill=BOTH, expand=True)
         self.group_info_table.tkraise()
-        connect(self.group_info_table.signal_item_opened, self.plot_exam)
+        self.group_info_table.signal_item_opened.connect(self.plot_exam)
 
         self.controller.view_group = ViewTableTk()
         self.controller.view_group.set_widget(self.group_info_table)
         self.controller.view_exam_plot = ViewExamPlot()
 
-    def plot_exam(self):
+    def plot_exam(self, *args):
         """Plot examination in separate matplotlib window."""
         try:
             item = self.group_info_table.tree.selection()[0]
