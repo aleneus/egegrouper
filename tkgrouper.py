@@ -83,10 +83,11 @@ class MainWindow:
             pass
 
     def grouping(self):
-        """Open grouping window stub."""
-        self.grouping_master = Toplevel(self.master)
-        self.grouping_widget = WhereExam(self.grouping_master)
-        self.grouping_widget.pack()
+        """Open grouping dialog stub."""
+        grouping_dialog = GroupingDialog(controller, self.master)
+        grouping_dialog.master.transient(self.master)
+        grouping_dialog.master.grab_set()
+        grouping_dialog.master.wait_window(grouping_dialog.master)
         
     def close_db_and_exit(self):
         """Close data base and exit."""
@@ -97,9 +98,9 @@ class GroupInfoWindow:
     """Window for show examinations of group and do operations over them."""
     controller = None
     
-    def __init__(self, controller, master=None):
+    def __init__(self, controller, parent):
         self.controller = controller
-        self.master = Toplevel(master)
+        self.master = Toplevel(parent)
         self.master.protocol('WM_DELETE_WINDOW', self.on_destroy)
         self.group_info_table = GroupInfoTable(self.master)
         self.group_info_table.pack(side=LEFT, fill=BOTH, expand=True)
@@ -121,6 +122,14 @@ class GroupInfoWindow:
     def on_destroy(self):
         """Do not destroy, but withdraw."""
         self.master.withdraw()
+
+class GroupingDialog:
+    """Dialog for grouping examinations."""
+    
+    def __init__(self, controller, parent):
+        self.master = Toplevel(parent)
+        self.grouping_widget = WhereExam(self.master)
+        self.grouping_widget.pack()
 
 if __name__ == '__main__':
     controller = GrouperController()
