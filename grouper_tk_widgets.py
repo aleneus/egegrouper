@@ -66,10 +66,16 @@ class GroupingTable(TableWidget):
 
     def toggle_item(self, event):
         """Toggle item."""
+        if len(self.tree.selection()) == 0:
+            return
         item = self.tree.selection()[0]
         values = self.tree.item(item, 'values')
         self.tree.item(item, values=(values[0], 'X' if values[1] == '' else ''))
         
     def checked_group_ids(self):
-        ids = []
-        return ids
+        placed_in = []
+        group_ids = []
+        for item in self.tree.get_children():
+            group_ids.append(self.tree.item(item, 'text'))
+            placed_in.append(self.tree.item(item, 'values')[1] == 'X')
+        return group_ids, placed_in

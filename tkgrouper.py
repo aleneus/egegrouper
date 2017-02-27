@@ -147,9 +147,8 @@ class GroupingDialog:
 
     def on_save_button(self):
         """Save button handler."""
-        # I have self.exam_id
-        # I need list of group ids
-        # Then I will ask controller to put exam to groups
+        group_ids, placed_in = self.grouping_widget.checked_group_ids()
+        self.controller.group_exam(self.exam_id, group_ids, placed_in)
         self.master.destroy()
 
 if __name__ == '__main__':
