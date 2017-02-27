@@ -148,7 +148,7 @@ class GrouperShell(cmd.Cmd):
         if len(cargv) < 2:
             print('Few arguments')
             return
-        grouper.add_exam_to_group(cargv[0], cargv[1])
+        grouper.group_exam(cargv[0], [cargv[1], ], [True, ])
 
     def do_delete_from_group(self, arg):
         """ delete_from_group exam_id group_id
@@ -161,7 +161,7 @@ class GrouperShell(cmd.Cmd):
         if len(cargv) < 2:
             print('Few arguments')
             return
-        grouper.delete_exam_from_group(cargv[0], cargv[1])
+        grouper.group_exam(cargv[0], [cargv[1], ], [False, ])
 
     def do_where_is(self, arg):
         """ where_is id

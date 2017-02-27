@@ -135,31 +135,20 @@ class GrouperController:
         self.model.delete_group(group_id)
         self.storage_info()
 
-    def add_exam_to_group(self, exam_id, group_id):
-        """Add examination to group.
+    def group_exam(self, exam_id, group_ids, placed_in):
+        """Add and delete examination to and from groups.
 
         Parameters
         ----------
         exam_id : str
-            Examintion ID.
-        group_id : str
-            Group ID.
+            Examination identifier.
+        group_ids : list of str
+            Group identifiers.
+        placed_in : list of bool
+            True for examinations to be placed in groups. Length of group_ids must be equal to length of placed_in.
 
         """
-        self.model.add_exam_to_group(exam_id, group_id)
-
-    def delete_exam_from_group(self, exam_id, group_id):
-        """Delete examination from group.
-
-        Parameters
-        ----------
-        exam_id : str
-            Examintion ID.
-        group_id : str
-            Group ID.
-
-        """
-        self.model.delete_exam_from_group(exam_id, group_id)
+        self.model.group_exam(exam_id, group_ids, placed_in)
 
     def where_exam(self, exam_id):
         """Show information of groups where examination is.
