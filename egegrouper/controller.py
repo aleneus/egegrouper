@@ -121,7 +121,7 @@ class GrouperController:
 
         """
         self.model.insert_group(name, description)
-        self.storage_info_new()
+        self.storage_info()
 
     def delete_group(self, group_id):
         """Delete group.
@@ -133,7 +133,7 @@ class GrouperController:
 
         """
         self.model.delete_group(group_id)
-        self.storage_info_new()
+        self.storage_info()
 
     def add_exam_to_group(self, exam_id, group_id):
         """Add examination to group.
