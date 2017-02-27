@@ -24,6 +24,16 @@ class TableWidget(BaseWidget):
         self.item_opened = SimpleSignal()
         self.tree.bind("<Double-1>", self.item_opened.emit)
         self.tree.bind("<Return>", self.item_opened.emit)
+
+    def selected_item_text(self):
+        """Return text in selected item."""
+        try:
+            item = self.tree.selection()[0]
+            item_text = self.tree.item(item,"text")
+        except IndexError:
+            item_text = None
+        finally:
+            return item_text        
         
 class StorageInfoTable(TableWidget):
     """Table widget for stoarge info."""
@@ -50,4 +60,4 @@ class GroupingTable(TableWidget):
         self.tree.bind("<Button-1>", self.item_touched)
 
     def item_touched(self, *args):
-        print('grouping widget: item touched')
+        pass

@@ -76,22 +76,18 @@ class MainWindow:
         """Get and show information about examination in selected group."""
         if self.exams_window.master.state() == "withdrawn":
             self.exams_window.master.deiconify()
-        try:
-            item = self.storage_info_table.tree.selection()[0] # todo tree
-            self.controller.group_info(self.storage_info_table.tree.item(item,"text"))
-        except IndexError:
-            pass
+        group_id = self.storage_info_table.selected_item_text()
+        if group_id:
+            self.controller.group_info(group_id)
 
     def grouping(self):
         """Open grouping dialog stub."""
-        try:
-            item = self.exams_window.group_info_table.tree.selection()[0] # todo tree
-            grouping_dialog = GroupingDialog(controller, self.master, self.exams_window.group_info_table.tree.item(item,"text")) # todo tree
+        exam_id = self.exams_window.group_info_table.selected_item_text()
+        if exam_id:
+            grouping_dialog = GroupingDialog(controller, self.master, exam_id)
             grouping_dialog.master.transient(self.master)
             grouping_dialog.master.grab_set()
             grouping_dialog.master.wait_window(grouping_dialog.master)
-        except IndexError:
-            pass
         
     def close_db_and_exit(self):
         """Close data base and exit."""
@@ -117,11 +113,9 @@ class GroupInfoWindow:
 
     def plot_exam(self, *args):
         """Plot examination in separate matplotlib window."""
-        try:
-            item = self.group_info_table.tree.selection()[0]
-            self.controller.plot_exam(self.group_info_table.tree.item(item,"text"))
-        except IndexError:
-            pass
+        exam_id = self.group_info_table.selected_item_text()
+        if exam_id:
+            self.controller.plot_exam(exam_id)
         
     def on_destroy(self):
         """Do not destroy, but withdraw."""
@@ -130,7 +124,7 @@ class GroupInfoWindow:
 class GroupingDialog:
     """Dialog for grouping examinations."""
     
-    def __init__(self, controller, parent, item):
+    def __init__(self, controller, parent, exam_id):
         self.master = Toplevel(parent)
         self.grouping_widget = GroupingTable(self.master)
         self.save_button = Button(self.master, text="Save", width=15, command=self.on_save_button)
@@ -143,9 +137,8 @@ class GroupingDialog:
         self.controller = controller
         self.controller.view_where_exam = ViewWhereExamTk()
         self.controller.view_where_exam.set_widget(self.grouping_widget)
-
-        print(item)
-        self.controller.where_exam(item)
+        
+        self.controller.where_exam(exam_id)
 
     def on_save_button(self):
         """Save button handler."""
