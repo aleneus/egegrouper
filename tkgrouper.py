@@ -53,7 +53,7 @@ class FrameStorageInfo(Frame):
         self.storage_info_table = StorageInfoTable(root)
         self.storage_info_table.pack(side=LEFT, fill=BOTH, expand=True)
         self.storage_info_table.tkraise()
-        self.storage_info_table.signal_item_opened.connect(self.group_info)
+        self.storage_info_table.item_opened.connect(self.group_info)
         
         self.controller.view_storage = ViewTableTk()
         self.controller.view_group = ViewTableTk()        
@@ -106,7 +106,7 @@ class GroupInfoWindow:
         self.group_info_table = GroupInfoTable(self.master)
         self.group_info_table.pack(side=LEFT, fill=BOTH, expand=True)
         self.group_info_table.tkraise()
-        self.group_info_table.signal_item_opened.connect(self.plot_exam)
+        self.group_info_table.item_opened.connect(self.plot_exam)
 
         self.controller.view_group = ViewTableTk()
         self.controller.view_group.set_widget(self.group_info_table)

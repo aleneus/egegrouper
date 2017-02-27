@@ -21,9 +21,9 @@ class TableWidget(BaseWidget):
         self.tree.pack(side=LEFT, fill=BOTH, expand=True)
 
         # signals
-        self.signal_item_opened = SimpleSignal()
-        self.tree.bind("<Double-1>", self.signal_item_opened.emit)
-        self.tree.bind("<Return>", self.signal_item_opened.emit)
+        self.item_opened = SimpleSignal()
+        self.tree.bind("<Double-1>", self.item_opened.emit)
+        self.tree.bind("<Return>", self.item_opened.emit)
         
 class StorageInfoTable(TableWidget):
     """Table widget for stoarge info."""
