@@ -128,8 +128,13 @@ class GroupingDialog:
     
     def __init__(self, controller, parent):
         self.master = Toplevel(parent)
-        self.grouping_widget = WhereExam(self.master)
+        self.grouping_widget = GroupingTable(self.master)
+        self.save_button = Button(self.master, text="Save", width=15)
+        self.cancel_button = Button(self.master, text="Cancel", width=15, command=self.master.destroy)
+        
         self.grouping_widget.pack()
+        self.cancel_button.pack(side=RIGHT)
+        self.save_button.pack(side=RIGHT)
 
 if __name__ == '__main__':
     controller = GrouperController()
