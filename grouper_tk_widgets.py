@@ -46,4 +46,8 @@ class GroupingTable(TableWidget):
         Frame.__init__(self, parent)
         names = ["#0", "name", "in"]
         headers = ["ID", "Name", ""]
-        super().__init__(parent, names, headers)        
+        super().__init__(parent, names, headers)
+        self.tree.bind("<Button-1>", self.item_touched)
+
+    def item_touched(self, *args):
+        print('grouping widget: item touched')

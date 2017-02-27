@@ -127,14 +127,26 @@ class GroupingDialog:
     """Dialog for grouping examinations."""
     
     def __init__(self, controller, parent):
+        item = 1 #self.group_info_table.tree.selection()[0]
         self.master = Toplevel(parent)
         self.grouping_widget = GroupingTable(self.master)
-        self.save_button = Button(self.master, text="Save", width=15)
+        self.save_button = Button(self.master, text="Save", width=15, command=self.on_save_button)
         self.cancel_button = Button(self.master, text="Cancel", width=15, command=self.master.destroy)
         
         self.grouping_widget.pack()
         self.cancel_button.pack(side=RIGHT)
         self.save_button.pack(side=RIGHT)
+        
+        self.controller = controller
+        self.controller.view_where_exam = ViewWhereExamTk()
+        self.controller.view_where_exam.set_widget(self.grouping_widget)
+        
+        self.controller.where_exam(item)
+
+    def on_save_button(self):
+        """Save button handler."""
+        print('Stub: ask controller to save')
+        self.master.destroy()
 
 if __name__ == '__main__':
     controller = GrouperController()
