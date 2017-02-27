@@ -61,3 +61,7 @@ class GroupingTable(TableWidget):
 
     def item_touched(self, *args):
         pass
+
+    def checked_group_ids(self):
+        ids = []
+        return ids

@@ -139,10 +139,13 @@ class GroupingDialog:
         self.controller.view_where_exam.set_widget(self.grouping_widget)
         
         self.controller.where_exam(exam_id)
+        self.exam_id = exam_id
 
     def on_save_button(self):
         """Save button handler."""
-        print('Stub: ask controller to save')
+        # I have self.exam_id
+        # I need list of group ids
+        # Then I will ask controller to put exam to groups
         self.master.destroy()
 
 if __name__ == '__main__':
