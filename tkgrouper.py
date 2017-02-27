@@ -19,6 +19,7 @@ class MainWindow:
     def __init__(self, controller):
         self.controller = controller
         self.master = Tk()
+        self.master.title("EGEGrouper")
         
         menubar = Menu(self.master)
         
@@ -101,6 +102,7 @@ class GroupInfoWindow:
     def __init__(self, controller, parent):
         self.controller = controller
         self.master = Toplevel(parent)
+        self.master.title("Examinations")
         self.master.protocol('WM_DELETE_WINDOW', self.on_destroy)
         self.group_info_table = GroupInfoTable(self.master)
         self.group_info_table.pack(side=LEFT, fill=BOTH, expand=True)
@@ -126,6 +128,7 @@ class GroupingDialog:
     
     def __init__(self, controller, parent, exam_id):
         self.master = Toplevel(parent)
+        self.master.title("Grouping")
         self.grouping_widget = GroupingTable(self.master)
         self.save_button = Button(self.master, text="Save", width=15, command=self.on_save_button)
         self.cancel_button = Button(self.master, text="Cancel", width=15, command=self.master.destroy)
