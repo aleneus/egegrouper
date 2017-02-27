@@ -13,17 +13,15 @@ from egegrouper.view_exam_plot import *
 from grouper_tk_widgets import *
 from simple_signal import *
 
-class FrameStorageInfo(Frame):
-    """Frame to show groups and do operations over them."""
-    group_master = None
-    group_frame = None
+class MainWindow:
+    """Main window. Shows groups and provide operations via main menu."""
     
-    def __init__(self, controller, master=None):
-        super().__init__(master)
-        
+    def __init__(self, controller):
         self.controller = controller
-
-        menubar = Menu(root)
+        self.master = Tk()
+        
+        menubar = Menu(self.master)
+        
         filemenu = Menu(menubar, tearoff=0)
         filemenu.add_command(label="Open storage", command=self.open_storage)
         filemenu.add_separator()
@@ -48,9 +46,9 @@ class FrameStorageInfo(Frame):
         exammenu.add_command(label="Export to JSON", command=None)
         menubar.add_cascade(label="Exam", menu=exammenu)
         
-        root.config(menu=menubar)
+        self.master.config(menu=menubar)
 
-        self.storage_info_table = StorageInfoTable(root)
+        self.storage_info_table = StorageInfoTable(self.master)
         self.storage_info_table.pack(side=LEFT, fill=BOTH, expand=True)
         self.storage_info_table.tkraise()
         self.storage_info_table.item_opened.connect(self.group_info)
@@ -59,7 +57,7 @@ class FrameStorageInfo(Frame):
         self.controller.view_group = ViewTableTk()        
         self.controller.view_storage.set_widget(self.storage_info_table)
 
-        self.group_frame = GroupInfoWindow(self.controller, self.master)
+        self.exams_window = GroupInfoWindow(self.controller, self.master)
 
     def open_storage(self):
         """Open storage and show groups in it."""
@@ -76,8 +74,8 @@ class FrameStorageInfo(Frame):
 
     def group_info(self, *args):
         """Get and show information about examination in selected group."""
-        if self.group_frame.master.state() == "withdrawn":
-            self.group_frame.master.deiconify()
+        if self.exams_window.master.state() == "withdrawn":
+            self.exams_window.master.deiconify()
         try:
             item = self.storage_info_table.tree.selection()[0]
             self.controller.group_info(self.storage_info_table.tree.item(item,"text"))
@@ -93,7 +91,7 @@ class FrameStorageInfo(Frame):
     def close_db_and_exit(self):
         """Close data base and exit."""
         self.controller.close_storage()
-        root.quit()
+        self.master.quit()
 
 class GroupInfoWindow:
     """Window for show examinations of group and do operations over them."""
@@ -125,9 +123,7 @@ class GroupInfoWindow:
         self.master.withdraw()
 
 if __name__ == '__main__':
-    root = Tk()
     controller = GrouperController()
     controller.set_model(GrouperModelSqlite3())
-    frame_storage = FrameStorageInfo(controller, root)
-    frame_storage.controller = controller
-    frame_storage.mainloop()
+    main_window = MainWindow(controller)
+    main_window.master.mainloop()
