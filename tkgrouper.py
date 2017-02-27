@@ -72,6 +72,7 @@ class MainWindow:
             return
         self.controller.open_or_create_storage(file_name)
         self.controller.storage_info()
+        self.exams_window.group_info_table.clear()
 
     def group_info(self, *args):
         """Get and show information about examination in selected group."""

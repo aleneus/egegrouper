@@ -33,7 +33,11 @@ class TableWidget(BaseWidget):
         except IndexError:
             item_text = None
         finally:
-            return item_text        
+            return item_text
+
+    def clear(self):
+        """Clear all items."""
+        self.tree.delete(*self.tree.get_children())
         
 class StorageInfoTable(TableWidget):
     """Table widget for stoarge info."""

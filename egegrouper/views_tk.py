@@ -10,10 +10,11 @@ class ViewTableTk(ViewTable):
         """Fill table with data."""
         rows, headers = self.data
         tree = self.widget.tree
-        tree.delete(*tree.get_children())
+        self.widget.clear()
         for row in rows:
             tree.insert("", END, text=str(row[0]), values=row[1:])
         # todo: work with headers
+        # todo incapsulation of tree
 
     def set_widget(self, widget):
         """Set widget."""
@@ -26,7 +27,7 @@ class ViewWhereExamTk(ViewWhereExam):
         group_records, headers, placed_in = self.data
         rows = [(gr[0], gr[1], 'X' if p else '') for p, gr in zip(placed_in, group_records)]
         headers_ext = headers + ('', )
-        tree = self.widget.tree
+        self.widget.clear()
         tree.delete(*tree.get_children())
         for row in rows:
             tree.insert("", END, text=str(row[0]), values=row[1:])
