@@ -1,26 +1,42 @@
-def connect(signal, slot):
-    signal[0] = slot
+class Signal:
+    def __init__(self):
+        self.slots = []
 
-def disconnect(signal):
-    signal[0] = None
+    def emit(self, *args):
+        for s in self.slots:
+            if s:
+                s(args)
+
+    def connect(self, slot):
+        for i in range(len(self.slots)):
+            if self.slots[i] == None:
+                self.slots[i] = slot
+                return
+        self.slots.append(slot)
+
+    def disconnect(self, slot):
+        for i in range(len(self.slots)):
+            if self.slots[i] == slot:
+                self.slots[i] = None
 
 class A:
-    some_signal = [None]
-
-    def emit_some_signal(self):
-        if not self.some_signal[0]:
-            return
-        self.some_signal[0]()
+    some_signal = Signal()
 
 class B:
-    def some_slot(self):
+    def some_slot(self, *args):
         print('Slot in class B')
+        print('Arguments:', args)
+
+class C:
+    def some_slot(self, *args):
+        print('Slot in class C')
+        print('Arguments:', args)
+    
 
 b = B()
 a = A()
+c = C()
 
-connect(a.some_signal, b.some_slot)
-a.emit_some_signal()
-
-disconnect(a.some_signal)
-a.emit_some_signal()
+a.some_signal.connect(b.some_slot)
+a.some_signal.connect(c.some_slot)
+a.some_signal.emit(1, 2, 3)
