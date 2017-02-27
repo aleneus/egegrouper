@@ -41,5 +41,12 @@ c = C()
 
 a.some_signal.connect(b.some_slot)
 a.some_signal.connect(c.some_slot)
+a.some_signal.emit(1, 2, 3)
 
+print()
+a.some_signal.disconnect(b.some_slot)
+a.some_signal.emit(1, 2, 3)
+
+print()
+a.some_signal.connect(b.some_slot)
 a.some_signal.emit(1, 2, 3)
