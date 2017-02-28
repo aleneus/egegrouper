@@ -221,6 +221,8 @@ class GrouperModelSqlite3(GrouperModel):
             Description for new group.
 
         """
+        if not self.state()['storage_opened']:
+            return
         self.c.execute("""
         INSERT INTO egeg_group (name, description)
         VALUES (?, ?) """, [name, description, ])
@@ -238,6 +240,7 @@ class GrouperModelSqlite3(GrouperModel):
         DELETE FROM egeg_group
         WHERE group_id = ? """, [group_id, ])
         self.conn.commit()
+        #self.state['active_group'] = None # TODO
 
     def group_exam(self, exam_id, group_ids, placed_in):
         """Add and delete examination to and from groups.

@@ -36,7 +36,7 @@ class MainWindow:
         groupmenu = Menu(menubar, tearoff=0)
         groupmenu.add_command(label="Add", command=self.add_group)
         groupmenu.add_command(label="Edit", command=None)
-        groupmenu.add_command(label="Delete", command=None)
+        groupmenu.add_command(label="Delete", command=self.delete_group)
         menubar.add_cascade(label="Group", menu=groupmenu)
 
         exammenu = Menu(menubar, tearoff=0)
@@ -97,10 +97,17 @@ class MainWindow:
         
     def add_group(self):
         """Add new group."""
-        group_record_dialog = GroupRecordDialog(self.master, None)
+        group_record_dialog = GroupRecordDialog(self.master)
         group_record_dialog.master.transient(self.master)
         group_record_dialog.master.grab_set()
         group_record_dialog.master.wait_window(group_record_dialog.master)
+
+    def delete_group(self):
+        """Delete selected group."""
+        group_id = self.storage_table.selected_item_text()
+        if group_id:
+            controller.delete_group(group_id)
+            controller.storage_info()
                 
     def close_db_and_exit(self):
         """Close data base and exit."""
@@ -158,16 +165,28 @@ class GroupingDialog:
 class GroupRecordDialog:
     """Dialog for edit group record."""
     
-    def __init__(self, parent, group_record):
+    def __init__(self, parent):
         self.master = Toplevel(parent)
         self.master.title("Edit group")
+        self.label1 = Label(self.master, width = 10, text='Name')
+        self.label2 = Label(self.master, width = 10, text='Description')
+        self.name_entry = Entry(self.master, width = 20)
+        self.description_entry = Entry(self.master, width = 20)
         self.save_button = Button(self.master, text="Save", width=15, command=self.on_save_button)
         self.cancel_button = Button(self.master, text="Cancel", width=15, command=self.master.destroy)
+        self.label1.pack(side=TOP)
+        self.name_entry.pack(side=TOP)
+        self.label2.pack(side=TOP)
+        self.description_entry.pack(side=TOP)
         self.cancel_button.pack(side=RIGHT)
         self.save_button.pack(side=RIGHT)
 
     def on_save_button(self):
         """Save button handler."""
+        name = self.name_entry.get()
+        description = self.description_entry.get()
+        controller.insert_group(name, description)
+        controller.storage_info()
         self.master.destroy()    
 
 if __name__ == '__main__':
