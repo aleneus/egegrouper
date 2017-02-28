@@ -16,8 +16,7 @@ from simple_signal import *
 class MainWindow:
     """Main window. Shows groups and provide operations via main menu."""
     
-    def __init__(self, controller):
-        self.controller = controller
+    def __init__(self):
         self.master = Tk()
         self.master.title("EGEGrouper")
         
@@ -54,11 +53,11 @@ class MainWindow:
         self.storage_table.tkraise()
         self.storage_table.item_opened.connect(self.group_info)
         
-        self.controller.view_storage = ViewTableTk()
-        self.controller.view_group = ViewTableTk()
-        self.controller.view_storage.set_widget(self.storage_table)
+        controller.view_storage = ViewTableTk()
+        controller.view_group = ViewTableTk()
+        controller.view_storage.set_widget(self.storage_table)
 
-        self.group_window = GroupWindow(self.controller, self.master)
+        self.group_window = GroupWindow(self.master)
 
     def open_storage(self):
         """Open storage and show groups in it."""
@@ -70,9 +69,9 @@ class MainWindow:
         file_name = filedialog.askopenfilename()
         if not file_name:
             return
-        self.controller.open_or_create_storage(file_name)
-        self.controller.storage_info()
-        self.group_window.group_table.clear()
+        controller.open_or_create_storage(file_name)
+        controller.storage_info()
+        group_window.group_table.clear()
 
     def group_info(self, *args):
         """Get and show information about examination in selected group."""
@@ -80,32 +79,30 @@ class MainWindow:
             self.group_window.master.deiconify()
         group_id = self.storage_table.selected_item_text()
         if group_id:
-            self.controller.group_info(group_id)
+            controller.group_info(group_id)
 
     def grouping(self):
         """Open grouping dialog stub."""
         exam_id = self.group_window.group_table.selected_item_text()
         if exam_id:
-            grouping_dialog = GroupingDialog(controller, self.master, exam_id)
+            grouping_dialog = GroupingDialog(self.master, exam_id)
             grouping_dialog.master.transient(self.master)
             grouping_dialog.master.grab_set()
             grouping_dialog.master.wait_window(grouping_dialog.master)
-            self.controller.storage_info()
-            group_id = self.controller.active_group()
+            controller.storage_info()
+            group_id = controller.active_group()
             if group_id:
-                self.controller.group_info(group_id)
+                controller.group_info(group_id)
         
     def close_db_and_exit(self):
         """Close data base and exit."""
-        self.controller.close_storage()
+        controller.close_storage()
         self.master.quit()
 
 class GroupWindow:
     """Window for show examinations of group and do operations over them."""
-    controller = None
     
-    def __init__(self, controller, parent):
-        self.controller = controller
+    def __init__(self, parent):
         self.master = Toplevel(parent)
         self.master.title("Examinations")
         self.master.protocol('WM_DELETE_WINDOW', self.on_destroy)
@@ -113,15 +110,15 @@ class GroupWindow:
         self.group_table.pack(side=LEFT, fill=BOTH, expand=True)
         self.group_table.tkraise()
         self.group_table.item_opened.connect(self.plot_exam)
-        self.controller.view_group = ViewTableTk()
-        self.controller.view_group.set_widget(self.group_table)
-        self.controller.view_exam_plot = ViewExamPlot()
+        controller.view_group = ViewTableTk()
+        controller.view_group.set_widget(self.group_table)
+        controller.view_exam_plot = ViewExamPlot()
 
     def plot_exam(self, *args):
         """Plot examination in separate matplotlib window."""
         exam_id = self.group_table.selected_item_text()
         if exam_id:
-            self.controller.plot_exam(exam_id)
+            controller.plot_exam(exam_id)
         
     def on_destroy(self):
         """Do not destroy, but withdraw."""
@@ -130,7 +127,7 @@ class GroupWindow:
 class GroupingDialog:
     """Dialog for grouping examinations."""
     
-    def __init__(self, controller, parent, exam_id):
+    def __init__(self, parent, exam_id):
         self.master = Toplevel(parent)
         self.master.title("Grouping")
         self.grouping_widget = GroupingTable(self.master)
@@ -141,21 +138,20 @@ class GroupingDialog:
         self.cancel_button.pack(side=RIGHT)
         self.save_button.pack(side=RIGHT)
         
-        self.controller = controller
-        self.controller.view_where_exam = ViewWhereExamTk()
-        self.controller.view_where_exam.set_widget(self.grouping_widget)
+        controller.view_where_exam = ViewWhereExamTk()
+        controller.view_where_exam.set_widget(self.grouping_widget)
         
-        self.controller.where_exam(exam_id)
+        controller.where_exam(exam_id)
         self.exam_id = exam_id
 
     def on_save_button(self):
         """Save button handler."""
         group_ids, placed_in = self.grouping_widget.checked_group_ids()
-        self.controller.group_exam(self.exam_id, group_ids, placed_in)
+        controller.group_exam(self.exam_id, group_ids, placed_in)
         self.master.destroy()
 
 if __name__ == '__main__':
     controller = GrouperController()
     controller.set_model(GrouperModelSqlite3())
-    main_window = MainWindow(controller)
+    main_window = MainWindow()
     main_window.master.mainloop()
