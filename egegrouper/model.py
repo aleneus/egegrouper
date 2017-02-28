@@ -6,8 +6,10 @@ class GrouperModel():
     """Model in MVC. Base class."""
     
     def __init__(self):
-        pass
-
+        self._storage_opened = False
+        """Storage opened flag."""
+        self._active_group = None
+        """Active group identifier."""
 
     # Common work with storage
 
@@ -26,9 +28,8 @@ class GrouperModel():
 
     # Model state
 
-    _storage_opened = False
-    """Storage opened flag."""
-    
+    # TODO: use dictionary for model state
+
     def set_storage_opened(self, value):
         """Set value to storage opened flag."""
         self._storage_opened = value
@@ -36,7 +37,14 @@ class GrouperModel():
     def storage_opened(self):
         """Check if storage is opened."""
         return self._storage_opened
-    
+
+    def set_active_group(self, group_id):
+        """Set active group identifier."""
+        self._active_group = group_id
+
+    def active_group(self):
+        """Return active group identifier."""
+        return self._active_group
 
     # Mapping
     

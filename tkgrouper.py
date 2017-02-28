@@ -90,6 +90,10 @@ class MainWindow:
             grouping_dialog.master.transient(self.master)
             grouping_dialog.master.grab_set()
             grouping_dialog.master.wait_window(grouping_dialog.master)
+            self.controller.storage_info()
+            group_id = self.controller.active_group()
+            if group_id:
+                self.controller.group_info(group_id)
         
     def close_db_and_exit(self):
         """Close data base and exit."""
@@ -109,6 +113,8 @@ class GroupInfoWindow:
         self.group_info_table.pack(side=LEFT, fill=BOTH, expand=True)
         self.group_info_table.tkraise()
         self.group_info_table.item_opened.connect(self.plot_exam)
+
+        self.group_id = None
 
         self.controller.view_group = ViewTableTk()
         self.controller.view_group.set_widget(self.group_info_table)

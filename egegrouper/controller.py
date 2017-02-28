@@ -283,3 +283,7 @@ class GrouperController:
         # TODO exceptions
         self.view_message.set_data('Done')
         self.view_message.show_data()
+
+    def active_group(self):
+        """Return active group."""
+        return self.model.active_group()

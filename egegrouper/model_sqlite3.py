@@ -44,13 +44,16 @@ class GrouperModelSqlite3(GrouperModel):
         self.conn = sqlite3.connect(file_name)
         self.c = self.conn.cursor()
         self.c.execute("pragma foreign_keys=on")
+        # model state
         self.set_storage_opened(True)
+        self.set_active_group(None)
 
     def close_storage(self):
         """Close data base."""
         if self.storage_opened():
             self.conn.close()
         self.set_storage_opened(False)
+        self.set_active_group(None)
 
     def get_examination(self, exam_id):
         """Return examination from data base.
@@ -203,6 +206,9 @@ class GrouperModelSqlite3(GrouperModel):
             """, [group_id, ]))
 
         headers = tuple(map(lambda x: x[0], self.c.description))
+        
+        # model state
+        self.set_active_group(group_id)
 
         return data, headers
 
