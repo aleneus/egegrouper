@@ -9,10 +9,6 @@ class GrouperModel():
         self._state = {}
         self._state['storage_opened'] = False
         self._state['active_group'] = None
-        # self._storage_opened = False
-        # """Storage opened flag."""
-        # self._active_group = None
-        # """Active group identifier."""
 
     # Common work with storage
 
@@ -35,25 +31,9 @@ class GrouperModel():
         """Set model state."""
         self._state[key] = value
 
-    def state():
+    def state(self):
         """Return model state."""
         return self._state
-
-    # def set_storage_opened(self, value):
-    #     """Set value to storage opened flag."""
-    #     self._storage_opened = value
-        
-    # def storage_opened(self):
-    #     """Check if storage is opened."""
-    #     return self._storage_opened
-
-    # def set_active_group(self, group_id):
-    #     """Set active group identifier."""
-    #     self._active_group = group_id
-
-    # def active_group(self):
-    #     """Return active group identifier."""
-    #     return self._active_group
 
     # Mapping
     
