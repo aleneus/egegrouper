@@ -97,6 +97,8 @@ class MainWindow:
         
     def add_group(self):
         """Add new group."""
+        if not controller.storage_opened():
+            return
         group_record_dialog = GroupRecordDialog(self.master)
         group_record_dialog.master.transient(self.master)
         group_record_dialog.master.grab_set()
@@ -104,6 +106,8 @@ class MainWindow:
 
     def delete_group(self):
         """Delete selected group."""
+        if not controller.storage_opened():
+            return
         group_id = self.storage_table.selected_item_text()
         if group_id:
             controller.delete_group(group_id)
@@ -155,6 +159,7 @@ class GroupingDialog:
         controller.view_where_exam = ViewWhereExamTk()
         controller.view_where_exam.set_widget(self.grouping_widget)
         controller.where_exam(exam_id)
+        self.exam_id = exam_id
 
     def on_save_button(self):
         """Save button handler."""
@@ -170,8 +175,8 @@ class GroupRecordDialog:
         self.master.title("Edit group")
         self.label1 = Label(self.master, width = 10, text='Name')
         self.label2 = Label(self.master, width = 10, text='Description')
-        self.name_entry = Entry(self.master, width = 20)
-        self.description_entry = Entry(self.master, width = 20)
+        self.name_entry = Entry(self.master, width = 30)
+        self.description_entry = Entry(self.master, width = 30)
         self.save_button = Button(self.master, text="Save", width=15, command=self.on_save_button)
         self.cancel_button = Button(self.master, text="Cancel", width=15, command=self.master.destroy)
         self.label1.pack(side=TOP)
@@ -183,11 +188,9 @@ class GroupRecordDialog:
 
     def on_save_button(self):
         """Save button handler."""
-        name = self.name_entry.get()
-        description = self.description_entry.get()
-        controller.insert_group(name, description)
+        controller.insert_group(self.name_entry.get(), self.description_entry.get())
         controller.storage_info()
-        self.master.destroy()    
+        self.master.destroy()
 
 if __name__ == '__main__':
     controller = GrouperController()

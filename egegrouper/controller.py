@@ -287,3 +287,7 @@ class GrouperController:
     def active_group(self):
         """Return active group."""
         return self.model.state()['active_group']
+
+    def storage_opened(self):
+        """Return True if storage is opened, False overwise."""
+        return self.model.state()['storage_opened']
