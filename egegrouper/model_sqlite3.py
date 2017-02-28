@@ -196,14 +196,12 @@ class GrouperModelSqlite3(GrouperModel):
             SELECT exam_id, name, diagnosis, age, gender
             FROM examination
             WHERE exam_id NOT IN (SELECT exam_id FROM group_element) 
-            ORDER BY exam_id
             """, []))
         else:
             data = list(self.c.execute("""
             SELECT E.exam_id, E.name, E.diagnosis, E.age, E.gender
             FROM examination AS E, group_element AS GE
             WHERE GE.exam_id = E.exam_id AND GE.group_id = ?
-            ORDER BY E.exam_id
             """, [group_id, ]))
 
         headers = tuple(map(lambda x: x[0], self.c.description))
@@ -261,7 +259,7 @@ class GrouperModelSqlite3(GrouperModel):
             if p:
                 try:
                     self.c.execute("""
-                    INSERT OR REPLACE INTO group_element
+                    INSERT OR IGNORE INTO group_element
                     VALUES (?, ?) """, [exam_id, group_id, ])
                 except sqlite3.IntegrityError:
                     pass
