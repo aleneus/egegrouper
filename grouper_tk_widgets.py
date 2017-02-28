@@ -39,7 +39,7 @@ class TableWidget(BaseWidget):
         """Clear all items."""
         self.tree.delete(*self.tree.get_children())
         
-class StorageInfoTable(TableWidget):
+class StorageTable(TableWidget):
     """Table widget for stoarge info."""
     def __init__(self, parent):
         names = ["#0", "name", "description", "number"]
@@ -47,7 +47,7 @@ class StorageInfoTable(TableWidget):
         widths = [50, 100, 200, 50]
         super().__init__(parent, names, headers, widths)
         
-class GroupInfoTable(TableWidget):
+class GroupTable(TableWidget):
     """Table widget for stoarge info."""
     def __init__(self, parent):
         names = ["#0", "name", "age", "sex", "diagnosis"]

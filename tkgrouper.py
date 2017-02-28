@@ -49,16 +49,16 @@ class MainWindow:
         
         self.master.config(menu=menubar)
 
-        self.storage_info_table = StorageInfoTable(self.master)
-        self.storage_info_table.pack(side=LEFT, fill=BOTH, expand=True)
-        self.storage_info_table.tkraise()
-        self.storage_info_table.item_opened.connect(self.group_info)
+        self.storage_table = StorageTable(self.master)
+        self.storage_table.pack(side=LEFT, fill=BOTH, expand=True)
+        self.storage_table.tkraise()
+        self.storage_table.item_opened.connect(self.group_info)
         
         self.controller.view_storage = ViewTableTk()
-        self.controller.view_group = ViewTableTk()        
-        self.controller.view_storage.set_widget(self.storage_info_table)
+        self.controller.view_group = ViewTableTk()
+        self.controller.view_storage.set_widget(self.storage_table)
 
-        self.exams_window = GroupInfoWindow(self.controller, self.master)
+        self.group_window = GroupWindow(self.controller, self.master)
 
     def open_storage(self):
         """Open storage and show groups in it."""
@@ -72,19 +72,19 @@ class MainWindow:
             return
         self.controller.open_or_create_storage(file_name)
         self.controller.storage_info()
-        self.exams_window.group_info_table.clear()
+        self.group_window.group_table.clear()
 
     def group_info(self, *args):
         """Get and show information about examination in selected group."""
-        if self.exams_window.master.state() == "withdrawn":
-            self.exams_window.master.deiconify()
-        group_id = self.storage_info_table.selected_item_text()
+        if self.group_window.master.state() == "withdrawn":
+            self.group_window.master.deiconify()
+        group_id = self.storage_table.selected_item_text()
         if group_id:
             self.controller.group_info(group_id)
 
     def grouping(self):
         """Open grouping dialog stub."""
-        exam_id = self.exams_window.group_info_table.selected_item_text()
+        exam_id = self.group_window.group_table.selected_item_text()
         if exam_id:
             grouping_dialog = GroupingDialog(controller, self.master, exam_id)
             grouping_dialog.master.transient(self.master)
@@ -100,7 +100,7 @@ class MainWindow:
         self.controller.close_storage()
         self.master.quit()
 
-class GroupInfoWindow:
+class GroupWindow:
     """Window for show examinations of group and do operations over them."""
     controller = None
     
@@ -109,20 +109,17 @@ class GroupInfoWindow:
         self.master = Toplevel(parent)
         self.master.title("Examinations")
         self.master.protocol('WM_DELETE_WINDOW', self.on_destroy)
-        self.group_info_table = GroupInfoTable(self.master)
-        self.group_info_table.pack(side=LEFT, fill=BOTH, expand=True)
-        self.group_info_table.tkraise()
-        self.group_info_table.item_opened.connect(self.plot_exam)
-
-        self.group_id = None
-
+        self.group_table = GroupTable(self.master)
+        self.group_table.pack(side=LEFT, fill=BOTH, expand=True)
+        self.group_table.tkraise()
+        self.group_table.item_opened.connect(self.plot_exam)
         self.controller.view_group = ViewTableTk()
-        self.controller.view_group.set_widget(self.group_info_table)
+        self.controller.view_group.set_widget(self.group_table)
         self.controller.view_exam_plot = ViewExamPlot()
 
     def plot_exam(self, *args):
         """Plot examination in separate matplotlib window."""
-        exam_id = self.group_info_table.selected_item_text()
+        exam_id = self.group_table.selected_item_text()
         if exam_id:
             self.controller.plot_exam(exam_id)
         
