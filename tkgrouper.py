@@ -34,8 +34,9 @@ class MainWindow:
         menubar.add_cascade(label="File", menu=filemenu)
 
         groupmenu = Menu(menubar, tearoff=0)
-        groupmenu.add_command(label="Delete", command=None)
+        groupmenu.add_command(label="Add", command=self.add_group)
         groupmenu.add_command(label="Edit", command=None)
+        groupmenu.add_command(label="Delete", command=None)
         menubar.add_cascade(label="Group", menu=groupmenu)
 
         exammenu = Menu(menubar, tearoff=0)
@@ -71,7 +72,7 @@ class MainWindow:
             return
         controller.open_or_create_storage(file_name)
         controller.storage_info()
-        group_window.group_table.clear()
+        self.group_window.group_table.clear()
 
     def group_info(self, *args):
         """Get and show information about examination in selected group."""
@@ -94,6 +95,13 @@ class MainWindow:
             if group_id:
                 controller.group_info(group_id)
         
+    def add_group(self):
+        """Add new group."""
+        group_record_dialog = GroupRecordDialog(self.master, None)
+        group_record_dialog.master.transient(self.master)
+        group_record_dialog.master.grab_set()
+        group_record_dialog.master.wait_window(group_record_dialog.master)
+                
     def close_db_and_exit(self):
         """Close data base and exit."""
         controller.close_storage()
@@ -133,22 +141,34 @@ class GroupingDialog:
         self.grouping_widget = GroupingTable(self.master)
         self.save_button = Button(self.master, text="Save", width=15, command=self.on_save_button)
         self.cancel_button = Button(self.master, text="Cancel", width=15, command=self.master.destroy)
-        
         self.grouping_widget.pack()
         self.cancel_button.pack(side=RIGHT)
         self.save_button.pack(side=RIGHT)
         
         controller.view_where_exam = ViewWhereExamTk()
         controller.view_where_exam.set_widget(self.grouping_widget)
-        
         controller.where_exam(exam_id)
-        self.exam_id = exam_id
 
     def on_save_button(self):
         """Save button handler."""
         group_ids, placed_in = self.grouping_widget.checked_group_ids()
         controller.group_exam(self.exam_id, group_ids, placed_in)
         self.master.destroy()
+
+class GroupRecordDialog:
+    """Dialog for edit group record."""
+    
+    def __init__(self, parent, group_record):
+        self.master = Toplevel(parent)
+        self.master.title("Edit group")
+        self.save_button = Button(self.master, text="Save", width=15, command=self.on_save_button)
+        self.cancel_button = Button(self.master, text="Cancel", width=15, command=self.master.destroy)
+        self.cancel_button.pack(side=RIGHT)
+        self.save_button.pack(side=RIGHT)
+
+    def on_save_button(self):
+        """Save button handler."""
+        self.master.destroy()    
 
 if __name__ == '__main__':
     controller = GrouperController()
