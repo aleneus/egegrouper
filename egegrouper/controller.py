@@ -286,4 +286,4 @@ class GrouperController:
 
     def active_group(self):
         """Return active group."""
-        return self.model.active_group()
+        return self.model.state()['active_group']
