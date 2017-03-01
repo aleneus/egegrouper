@@ -40,7 +40,7 @@ class MainWindow:
         menubar.add_cascade(label="Group", menu=self.group_menu)
         #self.group_menu.entryconfig("Edit",state=DISABLED) # to future
         self.exam_menu = Menu(menubar, tearoff=0)
-        self.exam_menu.add_command(label="Details", command=self.grouping, state=DISABLED)
+        self.exam_menu.add_command(label="Plot", command=self.plot_exam)
         self.exam_menu.add_command(label="Grouping", command=self.grouping)
         self.exam_menu.add_command(label="Delete", command=None, state=DISABLED)
         self.exam_menu.add_command(label="Merge with", command=None, state=DISABLED)
@@ -48,16 +48,16 @@ class MainWindow:
         menubar.add_cascade(label="Exam", menu=self.exam_menu)
         self.master.config(menu=menubar)
 
+        controller.view_storage = ViewTableTk()
+        controller.view_group = ViewTableTk()
         self.storage_table = StorageTable(self.master)
         self.storage_table.pack(side=LEFT, fill=BOTH, expand=True)
         self.storage_table.tkraise()
         self.storage_table.item_opened.connect(self.group_info)
-        
-        controller.view_storage = ViewTableTk()
-        controller.view_group = ViewTableTk()
         controller.view_storage.set_widget(self.storage_table)
 
         self.group_window = GroupWindow(self.master)
+        self.group_window.group_table.item_opened.connect(self.plot_exam)
 
     def open_storage(self):
         """Open storage and show groups in it."""
@@ -125,6 +125,12 @@ class MainWindow:
         if group_id:
             controller.delete_group(group_id)
             controller.storage_info()
+
+    def plot_exam(self, *args):
+        """Plot examination in separate matplotlib window."""
+        exam_id = self.group_window.group_table.selected_item_text()
+        if exam_id:
+            controller.plot_exam(exam_id)
                 
     def close_db_and_exit(self):
         """Close data base and exit."""
@@ -132,7 +138,7 @@ class MainWindow:
         self.master.quit()
 
 class GroupWindow:
-    """Window for show examinations of group and do operations over them."""
+    """Window for show and select examinations."""
     
     def __init__(self, parent):
         self.master = Toplevel(parent)
@@ -141,17 +147,10 @@ class GroupWindow:
         self.group_table = GroupTable(self.master)
         self.group_table.pack(side=LEFT, fill=BOTH, expand=True)
         self.group_table.tkraise()
-        self.group_table.item_opened.connect(self.plot_exam)
         controller.view_group = ViewTableTk()
         controller.view_group.set_widget(self.group_table)
         controller.view_exam_plot = ViewExamPlot()
 
-    def plot_exam(self, *args):
-        """Plot examination in separate matplotlib window."""
-        exam_id = self.group_table.selected_item_text()
-        if exam_id:
-            controller.plot_exam(exam_id)
-        
     def on_destroy(self):
         """Do not destroy, but withdraw."""
         self.master.withdraw()
