@@ -209,7 +209,7 @@ class GrouperShell(cmd.Cmd):
         grouper.add_exam_from_json_folder(cargv[0])
 
     def do_export_json(self, arg):
-        """ export_json folder_name
+        """ export_json exam_id folder_name
 
         Export examination to json forder.
 

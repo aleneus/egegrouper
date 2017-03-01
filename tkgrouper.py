@@ -25,26 +25,27 @@ class MainWindow:
         filemenu = Menu(menubar, tearoff=0)
         filemenu.add_command(label="Open storage", command=self.open_storage)
         filemenu.add_separator()
-        filemenu.add_command(label="Add SME sqlite3 DB", command=None)
-        filemenu.add_command(label="Add JSON exam", command=None)
-        filemenu.add_command(label="Add Gastroscan sqlite3 DB", command=None)
-        filemenu.add_command(label="Add Gastroscan TXT export", command=None)
+        filemenu.add_command(label="Add SME sqlite3 DB", command=None, state=DISABLED)
+        filemenu.add_command(label="Add JSON exam", command=None, state=DISABLED)
+        filemenu.add_command(label="Add Gastroscan sqlite3 DB", command=None, state=DISABLED)
+        filemenu.add_command(label="Add Gastroscan TXT export", command=None, state=DISABLED)
         filemenu.add_separator()
         filemenu.add_command(label="Exit", command=self.close_db_and_exit)
         menubar.add_cascade(label="File", menu=filemenu)
 
         groupmenu = Menu(menubar, tearoff=0)
         groupmenu.add_command(label="Add", command=self.add_group)
-        groupmenu.add_command(label="Edit", command=None)
+        groupmenu.add_command(label="Edit", command=None, state=DISABLED)
+        #groupmenu.entryconfig("Edit",state=DISABLED) # to future
         groupmenu.add_command(label="Delete", command=self.delete_group)
         menubar.add_cascade(label="Group", menu=groupmenu)
 
         exammenu = Menu(menubar, tearoff=0)
         exammenu.add_command(label="Grouping", command=self.grouping)
-        exammenu.add_command(label="Delete", command=None)
-        exammenu.add_command(label="Merge with", command=None)
+        exammenu.add_command(label="Delete", command=None, state=DISABLED)
+        exammenu.add_command(label="Merge with", command=None, state=DISABLED)
         exammenu.add_separator()
-        exammenu.add_command(label="Export to JSON", command=None)
+        exammenu.add_command(label="Export to JSON", command=self.export_json)
         menubar.add_cascade(label="Exam", menu=exammenu)
         
         self.master.config(menu=menubar)
@@ -62,12 +63,12 @@ class MainWindow:
 
     def open_storage(self):
         """Open storage and show groups in it."""
-        self.file_opt = options = {}
-        options['defaultextension'] = '.sme.sqlite'
-        options['filetypes'] = [('all files', '.*'), ('sme db files', '.sme.sqlite')]
-        options['parent'] = self.master
-        options['title'] = 'Open storage'
-        file_name = filedialog.askopenfilename()
+        file_name = filedialog.askopenfilename(
+            title='Open storage',
+            defaultextension = '.sme.sqlite',
+            filetypes = [('sme db files', '.sme.sqlite'), ('all files', '.*')],
+            parent = self.master,
+        )
         if not file_name:
             return
         controller.open_or_create_storage(file_name)
@@ -95,6 +96,19 @@ class MainWindow:
             group_id = self.storage_table.last_group_id
             if group_id:
                 controller.group_info(group_id)
+
+    def export_json(self):
+        """Export selected examination to json forder."""
+        exam_id = self.group_window.group_table.selected_item_text()
+        if not exam_id:
+            return
+        folder_name = filedialog.askdirectory(
+            parent = self.master,
+            title = 'JSON folder name',
+        )
+        if not folder_name:
+            return
+        controller.export_as_json_folder(exam_id, folder_name)
         
     def add_group(self):
         """Add new group."""
@@ -196,5 +210,6 @@ class GroupRecordDialog:
 if __name__ == '__main__':
     controller = GrouperController()
     controller.set_model(GrouperModelSqlite3())
+    controller.view_message = ViewMessageTk()
     main_window = MainWindow()
     main_window.master.mainloop()

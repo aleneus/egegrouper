@@ -1,6 +1,13 @@
 from egegrouper.views import *
 from tkinter import *
 from tkinter import ttk
+from tkinter import messagebox
+
+class ViewMessageTk(ViewMessage):
+    """Text message view."""
+    def show_data(self):
+        """Print message."""
+        messagebox.showinfo("Message", self.data)
 
 class ViewTableTk(ViewTable):
     """Tk view to show tabular data."""
