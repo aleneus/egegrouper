@@ -46,6 +46,7 @@ class StorageTable(TableWidget):
         headers = ["ID", "Name", "Description", "Num"]
         widths = [50, 100, 200, 50]
         super().__init__(parent, names, headers, widths)
+        self.last_group_id = None
         
 class GroupTable(TableWidget):
     """Table widget for stoarge info."""

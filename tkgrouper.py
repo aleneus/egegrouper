@@ -81,6 +81,7 @@ class MainWindow:
         group_id = self.storage_table.selected_item_text()
         if group_id:
             controller.group_info(group_id)
+            self.storage_table.last_group_id = group_id
 
     def grouping(self):
         """Open grouping dialog stub."""
@@ -91,7 +92,7 @@ class MainWindow:
             grouping_dialog.master.grab_set()
             grouping_dialog.master.wait_window(grouping_dialog.master)
             controller.storage_info()
-            group_id = controller.active_group()
+            group_id = self.storage_table.last_group_id
             if group_id:
                 controller.group_info(group_id)
         

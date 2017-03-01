@@ -45,14 +45,12 @@ class GrouperModelSqlite3(GrouperModel):
         self.c = self.conn.cursor()
         self.c.execute("pragma foreign_keys=on")
         self.set_state('storage_opened', True)
-        self.set_state('active_group', None)
 
     def close_storage(self):
         """Close data base."""
         if self.state()['storage_opened']:
             self.conn.close()
         self.set_state('storage_opened', False)
-        self.set_state('active_group', None)
 
     def get_examination(self, exam_id):
         """Return examination from data base.
@@ -206,8 +204,6 @@ class GrouperModelSqlite3(GrouperModel):
 
         headers = tuple(map(lambda x: x[0], self.c.description))
         
-        self.set_state('active_group', group_id)
-
         return data, headers
 
     def insert_group(self, name, description):
@@ -240,7 +236,6 @@ class GrouperModelSqlite3(GrouperModel):
         DELETE FROM egeg_group
         WHERE group_id = ? """, [group_id, ])
         self.conn.commit()
-        #self.state['active_group'] = None # TODO
 
     def group_exam(self, exam_id, group_ids, placed_in):
         """Add and delete examination to and from groups.
