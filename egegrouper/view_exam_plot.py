@@ -18,7 +18,7 @@ class ViewExamPlot(ViewExam):
             for s in m.ss:
                 i = i + 1
                 plt.subplot(n*100 + 10 + i)
-                plt.plot(s.x)
+                plt.plot(s.x, 'b', linewidth=1)
                 plt.xlim(0,len(s.x))
                 plt.grid(True)
                 plt.title(t)
