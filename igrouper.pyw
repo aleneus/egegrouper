@@ -1,14 +1,36 @@
 #! /usr/bin/env python3
 #
 
-import cmd, sys, argparse
+import cmd, sys, argparse, readline
+from collections import OrderedDict
 
-from egegrouper.model_sqlite3 import *
+from egegrouper.models.sqlite3 import *
 from egegrouper.views_text import *
 from egegrouper.view_exam_plot import *
 from egegrouper.controller import *
 
-from dialog import *
+class DialogText:
+    """Text dialog for input fields values."""
+    
+    data_dict = None
+    
+    def __init__(self, data_dict):
+        self.data_dict = data_dict
+
+    def set_data_dict(data_dict):
+        self.data_dict = data_dict        
+    
+    def input(self):
+        for key in self.data_dict:
+            self.data_dict[key] = self.rlineinput(key + ': ', self.data_dict[key])
+            
+    def rlineinput(self, prompt, prefill=''):
+        readline.set_startup_hook(lambda: readline.insert_text(prefill))
+        try:
+            return input(prompt)
+        finally:
+            readline.set_startup_hook()
+            
 
 class GrouperShell(cmd.Cmd):
     """CLI interface to EGEGrouper."""

@@ -8,7 +8,7 @@ from tkinter import filedialog
 from tkinter import messagebox
 
 from egegrouper.controller import *
-from egegrouper.model_sqlite3 import *
+from egegrouper.models.sqlite3 import *
 from egegrouper.views_tk import *
 from egegrouper.view_exam_plot import *
 from grouper_tk_widgets import *
