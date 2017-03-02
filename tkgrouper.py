@@ -23,7 +23,7 @@ class MainWindow:
         self.main_menu = Menu(self.master)
         self.storage_menu = Menu(self.main_menu, tearoff=0)
         self.storage_menu.add_command(label="Open", command=self.open_storage)
-        self.storage_menu.add_command(label="TODO: Create", command=None)
+        self.storage_menu.add_command(label="Create", command=self.create_storage)
         self.storage_menu.add_command(label="Close", command=self.close_storage)
         self.add_data_submenu = Menu(self.storage_menu, tearoff=0)
         self.add_data_submenu.add_command(label="TODO: Add SME sqlite3 DB", command=None)
@@ -65,16 +65,8 @@ class MainWindow:
         self.group_window.group_table.item_opened.connect(self.plot_exam)
         self.group_window.group_table.item_selected.connect(self.exam_selected)
 
-    def open_storage(self):
-        """Open storage and show groups in it."""
-        file_name = filedialog.askopenfilename(
-            title='Open storage',
-            defaultextension = '.sme.sqlite',
-            filetypes = [('sme db files', '.sme.sqlite'), ('all files', '.*')],
-            parent = self.master,
-        )
-        if not file_name:
-            return
+    def open_or_create_storage(self, file_name):
+        """Common things for open and create storage."""
         controller.open_or_create_storage(file_name)
         controller.storage_info()
         # menu
@@ -86,8 +78,32 @@ class MainWindow:
         self.group_menu.entryconfig("todo: Delete", state=DISABLED)
         self.main_menu.entryconfig("Exam", state=DISABLED)
 
+    def open_storage(self):
+        """Open storage and show groups in it."""
+        file_name = filedialog.askopenfilename(
+            title='Open storage',
+            defaultextension = '.sme.sqlite',
+            filetypes = [('sme db files', '.sme.sqlite'), ('all files', '.*')],
+            parent = self.master,
+        )
+        if not file_name:
+            return
+        self.open_or_create_storage(file_name)
+        
+    def create_storage(self):
+        """Create storage."""
+        file_name = filedialog.asksaveasfilename(
+            title='Open storage',
+            defaultextension = '.sme.sqlite',
+            filetypes = [('sme db files', '.sme.sqlite'), ('all files', '.*')],
+            parent = self.master,
+        )
+        if not file_name:
+            return
+        self.open_or_create_storage(file_name)
+
     def close_storage(self):
-        """Close storage."""
+        """Close storage and clear widgets."""
         controller.close_storage()
         self.group_window.group_table.clear()
         self.storage_table.clear()
