@@ -173,6 +173,8 @@ class GrouperController:
 
         """
         self.model.add_sme_db(file_name)
+        self.view_message.set_data('Done.')
+        self.view_message.show_data()
 
     def add_gs_db(self, file_name):
         """Add GS sqlite3 data base to current storage.
@@ -184,6 +186,8 @@ class GrouperController:
 
         """
         self.model.add_gs_db(file_name)
+        self.view_message.set_data('Done.')
+        self.view_message.show_data()
 
     def add_exam_from_json_folder(self, folder_name):
         """Add examination from JSON folder to current storage.
@@ -283,7 +287,3 @@ class GrouperController:
         # TODO exceptions
         self.view_message.set_data('Done')
         self.view_message.show_data()
-
-    def storage_opened(self):
-        """Return True if storage is opened, False overwise."""
-        return self.model.state()['storage_opened']

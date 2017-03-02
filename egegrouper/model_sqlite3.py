@@ -29,6 +29,7 @@ class GrouperModelSqlite3(GrouperModel):
         self.c.executescript(sqlite3_scripts.create_sme_db)
         self.conn.commit()
         self.set_state('storage_opened', True)
+        self.set_state('file_name', file_name)
 
     def open_storage(self, file_name):
         """Open data base.
@@ -45,12 +46,14 @@ class GrouperModelSqlite3(GrouperModel):
         self.c = self.conn.cursor()
         self.c.execute("pragma foreign_keys=on")
         self.set_state('storage_opened', True)
+        self.set_state('file_name', file_name)
 
     def close_storage(self):
         """Close data base."""
         if self.state()['storage_opened']:
             self.conn.close()
         self.set_state('storage_opened', False)
+        self.set_state('file_name', None)
 
     def get_examination(self, exam_id):
         """Return examination from data base.
@@ -311,7 +314,7 @@ class GrouperModelSqlite3(GrouperModel):
 
         """
         source_name = file_name
-        dest_name = self.file_name
+        dest_name = self.state()['file_name']
         if self.state()['storage_opened']:
             self.close_storage()
         SMEDBImporter().DBimport(dest_name, source_name)
@@ -327,7 +330,7 @@ class GrouperModelSqlite3(GrouperModel):
 
         """
         source_name = file_name
-        dest_name = self.file_name
+        dest_name = self.state()['file_name']
         if self.state()['storage_opened']:
             self.close_storage()
         GSDBImporter().DBimport(dest_name, source_name)

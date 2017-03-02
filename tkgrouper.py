@@ -26,7 +26,7 @@ class MainWindow:
         self.storage_menu.add_command(label="Create", command=self.create_storage)
         self.storage_menu.add_command(label="Close", command=self.close_storage)
         self.add_data_submenu = Menu(self.storage_menu, tearoff=0)
-        self.add_data_submenu.add_command(label="TODO: Add SME sqlite3 DB", command=None)
+        self.add_data_submenu.add_command(label="TODO: Add SME sqlite3 DB", command=self.add_sme)
         self.add_data_submenu.add_command(label="TODO: Add JSON exam", command=None)
         self.add_data_submenu.add_command(label="TODO: Add Gastroscan sqlite3 DB", command=None)
         self.add_data_submenu.add_command(label="TODO: Add Gastroscan TXT export", command=None)
@@ -64,6 +64,9 @@ class MainWindow:
         self.group_window = GroupWindow(self.master)
         self.group_window.group_table.item_opened.connect(self.plot_exam)
         self.group_window.group_table.item_selected.connect(self.exam_selected)
+        controller.view_group = ViewTableTk()
+        controller.view_group.set_widget(self.group_window.group_table)
+        controller.view_exam_plot = ViewExamPlot()
 
     def open_or_create_storage(self, file_name):
         """Common things for open and create storage."""
@@ -82,7 +85,6 @@ class MainWindow:
         """Open storage and show groups in it."""
         file_name = filedialog.askopenfilename(
             title='Open storage',
-            defaultextension = '.sme.sqlite',
             filetypes = [('sme db files', '.sme.sqlite'), ('all files', '.*')],
             parent = self.master,
         )
@@ -111,6 +113,18 @@ class MainWindow:
         self.storage_menu.entryconfig("Close", state=DISABLED)
         self.main_menu.entryconfig("Group", state=DISABLED)
         self.main_menu.entryconfig("Exam", state=DISABLED)
+
+    def add_sme(self):
+        "Add records from sqlite3 data base in SME format."
+        file_name = filedialog.askopenfilename(
+            title='Open storage',
+            filetypes = [('sme db files', '.sme.sqlite'), ('all files', '.*')],
+            parent = self.master,
+        )
+        if not file_name:
+            return
+        controller.add_sme_db(file_name)
+        controller.storage_info()
 
     def group_selected(self, *args):
         """Group selected slot. Enable some menu items."""
@@ -160,8 +174,6 @@ class MainWindow:
         
     def add_group(self):
         """Add new group."""
-        if not controller.storage_opened():
-            return
         group_record_dialog = GroupRecordDialog(self.master)
         group_record_dialog.master.transient(self.master)
         group_record_dialog.master.grab_set()
@@ -169,8 +181,6 @@ class MainWindow:
 
     def delete_group(self):
         """Delete selected group."""
-        if not controller.storage_opened():
-            return
         group_id = self.storage_table.selected_item_text()
         if group_id:
             controller.delete_group(group_id)
@@ -197,9 +207,6 @@ class GroupWindow:
         self.group_table = GroupTable(self.master)
         self.group_table.pack(side=LEFT, fill=BOTH, expand=True)
         self.group_table.tkraise()
-        controller.view_group = ViewTableTk()
-        controller.view_group.set_widget(self.group_table)
-        controller.view_exam_plot = ViewExamPlot()
 
     def on_destroy(self):
         """Do not destroy, but withdraw."""

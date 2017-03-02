@@ -8,6 +8,7 @@ class GrouperModel():
     def __init__(self):
         self._state = {}
         self._state['storage_opened'] = False
+        self._state['file_name'] = None
 
     # Common work with storage
 
