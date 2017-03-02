@@ -421,5 +421,5 @@ class GrouperModelSqlite3(GrouperModel):
             """, (attr['name'], attr['description'], group_id, ))
             self.conn.commit()
             return True
-        except Exceprtion:
+        except Exception:
             return False

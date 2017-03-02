@@ -120,7 +120,7 @@ class GrouperController:
             Description of new group.
 
         """
-        self.model.insert_group(name, description)
+        self.model.insert_group(name, description) # TODO: OrderedDict
         self.storage_info()
 
     def delete_group(self, group_id):
@@ -285,5 +285,3 @@ class GrouperController:
         """
         self.model.update_group_record(group_id, attr)
         # TODO exceptions
-        self.view_message.set_data('Done')
-        self.view_message.show_data()

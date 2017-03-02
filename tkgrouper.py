@@ -202,13 +202,14 @@ class MainWindow:
         """Add new group."""
         group_record_dialog = GroupRecordDialog(
             self.master,
-            group_record = OrderedDict([('Name',''), ('Description','')])
+            group_record = OrderedDict([('name',''), ('description','')])
         )
         group_record_dialog.master.transient(self.master)
         group_record_dialog.master.grab_set()
         group_record_dialog.master.wait_window(group_record_dialog.master)
 
     def edit_group(self):
+        """Edit group."""
         group_id = self.storage_table.selected_item_text()
         if not group_id:
             return
@@ -284,6 +285,7 @@ class GroupRecordDialog:
     
     def __init__(self, parent, group_record, group_id = None):
         self.group_id = group_id
+        self.group_record = group_record
         self.master = Toplevel(parent)
         self.master.title("Edit group")
         self.labels = []
@@ -304,13 +306,12 @@ class GroupRecordDialog:
 
     def on_save_button(self):
         """Save button handler."""
-        group_record = OrderedDict()
-        group_record['name'] = self.entries[0].get()
-        group_record['description'] = self.entries[1].get()
+        for (key, e) in zip(self.group_record, self.entries):
+            self.group_record[key] = e.get()
         if not self.group_id:
-            controller.insert_group(group_record['name'], group_record['description'])
+            controller.insert_group(self.group_record['name'], self.group_record['description'])
         else:
-            controller.update_group_record(self.group_id, group_record)
+            controller.update_group_record(self.group_id, self.group_record)
         controller.storage_info()
         self.master.destroy()
 
