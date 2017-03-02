@@ -176,8 +176,7 @@ class MainWindow:
         exam_id = self.group_table.selected_item_text()
         if not exam_id:
             return
-        answer = messagebox.askquestion("Delete examination", "Are You shure?", icon='warning')
-        if answer == 'no':
+        if messagebox.askquestion("Delete examination", "Are You shure?", icon='warning') == 'no':
             return
         controller.delete_exam(exam_id)        
         controller.storage_info()
@@ -224,8 +223,7 @@ class MainWindow:
         group_id = self.storage_table.selected_item_text()
         if not group_id:
             return
-        answer = messagebox.askquestion("Delete", "Are You shure?", icon='warning')
-        if answer == 'no':
+        if messagebox.askquestion("Delete", "Are You shure?", icon='warning') == 'no':
             return
         controller.delete_group(group_id)
         controller.storage_info()
@@ -260,6 +258,7 @@ class GroupingDialog:
     """Dialog for grouping examinations."""
     
     def __init__(self, parent, exam_id):
+        self.exam_id = exam_id
         self.master = Toplevel(parent)
         self.master.title("Grouping")
         self.grouping_widget = GroupingTable(self.master)
@@ -272,7 +271,6 @@ class GroupingDialog:
         controller.view_where_exam = ViewWhereExamTk()
         controller.view_where_exam.set_widget(self.grouping_widget)
         controller.where_exam(exam_id)
-        self.exam_id = exam_id
 
     def on_save_button(self):
         """Save button handler."""
