@@ -24,7 +24,7 @@ class MainWindow:
         self.storage_menu = Menu(self.main_menu, tearoff=0)
         self.storage_menu.add_command(label="Open", command=self.open_storage)
         self.storage_menu.add_command(label="TODO: Create", command=None)
-        self.storage_menu.add_command(label="TODO: Close", command=None)
+        self.storage_menu.add_command(label="Close", command=self.close_storage)
         self.add_data_submenu = Menu(self.storage_menu, tearoff=0)
         self.add_data_submenu.add_command(label="TODO: Add SME sqlite3 DB", command=None)
         self.add_data_submenu.add_command(label="TODO: Add JSON exam", command=None)
@@ -47,7 +47,8 @@ class MainWindow:
         self.main_menu.add_cascade(label="Exam", menu=self.exam_menu)
         self.master.config(menu=self.main_menu)
 
-        self.storage_menu.entryconfig("Add data",state=DISABLED)
+        self.storage_menu.entryconfig("Add data", state=DISABLED)
+        self.storage_menu.entryconfig("Close", state=DISABLED)
         self.main_menu.entryconfig("Group", state=DISABLED)
         self.main_menu.entryconfig("Exam", state=DISABLED)
 
@@ -78,10 +79,21 @@ class MainWindow:
         controller.storage_info()
         # menu
         self.storage_menu.entryconfig("Add data", state=NORMAL)
+        self.storage_menu.entryconfig("Close", state=NORMAL)
         self.group_window.group_table.clear()
         self.main_menu.entryconfig("Group", state=NORMAL)
         self.group_menu.entryconfig("TODO: Edit", state=DISABLED)
         self.group_menu.entryconfig("todo: Delete", state=DISABLED)
+        self.main_menu.entryconfig("Exam", state=DISABLED)
+
+    def close_storage(self):
+        """Close storage."""
+        controller.close_storage()
+        self.group_window.group_table.clear()
+        self.storage_table.clear()
+        self.storage_menu.entryconfig("Add data", state=DISABLED)
+        self.storage_menu.entryconfig("Close", state=DISABLED)
+        self.main_menu.entryconfig("Group", state=DISABLED)
         self.main_menu.entryconfig("Exam", state=DISABLED)
 
     def group_selected(self, *args):
