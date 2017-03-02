@@ -26,10 +26,10 @@ class MainWindow:
         self.storage_menu.add_command(label="Create", command=self.create_storage)
         self.storage_menu.add_command(label="Close", command=self.close_storage)
         self.add_data_submenu = Menu(self.storage_menu, tearoff=0)
-        self.add_data_submenu.add_command(label="TODO: Add SME sqlite3 DB", command=self.add_sme)
-        self.add_data_submenu.add_command(label="TODO: Add JSON exam", command=None)
-        self.add_data_submenu.add_command(label="TODO: Add Gastroscan sqlite3 DB", command=None)
-        self.add_data_submenu.add_command(label="TODO: Add Gastroscan TXT export", command=None)
+        self.add_data_submenu.add_command(label="Add SME sqlite3 DB", command=self.add_sme)
+        self.add_data_submenu.add_command(label="Add JSON exam", command=self.add_json)
+        #self.add_data_submenu.add_command(label="TODO: Add Gastroscan sqlite3 DB", command=None)
+        #self.add_data_submenu.add_command(label="TODO: Add Gastroscan TXT export", command=None)
         self.storage_menu.add_cascade(label="Add data", menu=self.add_data_submenu)
         self.storage_menu.add_command(label="Exit", command=self.close_db_and_exit)
         self.main_menu.add_cascade(label="Storage", menu=self.storage_menu)
@@ -124,6 +124,17 @@ class MainWindow:
         if not file_name:
             return
         controller.add_sme_db(file_name)
+        controller.storage_info()
+
+    def add_json(self):
+        """Add examination from json forder."""
+        folder_name = filedialog.askdirectory(
+            parent = self.master,
+            title = 'JSON folder name',
+        )
+        if not folder_name:
+            return
+        controller.add_exam_from_json_folder(folder_name)
         controller.storage_info()
 
     def group_selected(self, *args):
