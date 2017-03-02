@@ -9,7 +9,7 @@ from tkinter import messagebox
 
 from egegrouper.controller import *
 from egegrouper.models.sqlite3 import *
-from egegrouper.views_tk import *
+from egegrouper.views.tk import *
 from egegrouper.view_exam_plot import *
 from grouper_tk_widgets import *
 from simple_signal import *
