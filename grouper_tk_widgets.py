@@ -25,6 +25,9 @@ class TableWidget(BaseWidget):
         self.tree.bind("<Double-1>", self.item_opened.emit)
         self.tree.bind("<Return>", self.item_opened.emit)
 
+        self.item_selected = SimpleSignal()
+        self.tree.bind("<<TreeviewSelect>>", self.item_selected.emit)
+
     def selected_item_text(self):
         """Return text in selected item."""
         try:

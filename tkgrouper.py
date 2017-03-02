@@ -20,33 +20,36 @@ class MainWindow:
         self.master = Tk()
         self.master.title("EGEGrouper")
         
-        menubar = Menu(self.master)
-        self.storage_menu = Menu(menubar, tearoff=0)
+        self.main_menu = Menu(self.master)
+        self.storage_menu = Menu(self.main_menu, tearoff=0)
         self.storage_menu.add_command(label="Open", command=self.open_storage)
-        self.storage_menu.add_command(label="Create", command=None, state=DISABLED)
-        self.storage_menu.add_command(label="Close", command=None, state=DISABLED)
+        self.storage_menu.add_command(label="TODO: Create", command=None)
+        self.storage_menu.add_command(label="TODO: Close", command=None)
         self.add_data_submenu = Menu(self.storage_menu, tearoff=0)
-        self.add_data_submenu.add_command(label="Add SME sqlite3 DB", command=None, state=DISABLED)
-        self.add_data_submenu.add_command(label="Add JSON exam", command=None, state=DISABLED)
-        self.add_data_submenu.add_command(label="Add Gastroscan sqlite3 DB", command=None, state=DISABLED)
-        self.add_data_submenu.add_command(label="Add Gastroscan TXT export", command=None, state=DISABLED)
+        self.add_data_submenu.add_command(label="TODO: Add SME sqlite3 DB", command=None)
+        self.add_data_submenu.add_command(label="TODO: Add JSON exam", command=None)
+        self.add_data_submenu.add_command(label="TODO: Add Gastroscan sqlite3 DB", command=None)
+        self.add_data_submenu.add_command(label="TODO: Add Gastroscan TXT export", command=None)
         self.storage_menu.add_cascade(label="Add data", menu=self.add_data_submenu)
         self.storage_menu.add_command(label="Exit", command=self.close_db_and_exit)
-        menubar.add_cascade(label="Storage", menu=self.storage_menu)
-        self.group_menu = Menu(menubar, tearoff=0)
+        self.main_menu.add_cascade(label="Storage", menu=self.storage_menu)
+        self.group_menu = Menu(self.main_menu, tearoff=0)
         self.group_menu.add_command(label="Add", command=self.add_group)
-        self.group_menu.add_command(label="Edit", command=None, state=DISABLED)
-        self.group_menu.add_command(label="Delete", command=self.delete_group)
-        menubar.add_cascade(label="Group", menu=self.group_menu)
-        #self.group_menu.entryconfig("Edit",state=DISABLED) # to future
-        self.exam_menu = Menu(menubar, tearoff=0)
+        self.group_menu.add_command(label="TODO: Edit", command=None)
+        self.group_menu.add_command(label="todo: Delete", command=self.delete_group)
+        self.main_menu.add_cascade(label="Group", menu=self.group_menu)
+        self.exam_menu = Menu(self.main_menu, tearoff=0)
         self.exam_menu.add_command(label="Plot", command=self.plot_exam)
         self.exam_menu.add_command(label="Grouping", command=self.grouping)
-        self.exam_menu.add_command(label="Delete", command=None, state=DISABLED)
-        self.exam_menu.add_command(label="Merge with", command=None, state=DISABLED)
+        self.exam_menu.add_command(label="TODO: Delete", command=None)
+        self.exam_menu.add_command(label="TODO?:Merge with", command=None)
         self.exam_menu.add_command(label="Export to JSON", command=self.export_json)
-        menubar.add_cascade(label="Exam", menu=self.exam_menu)
-        self.master.config(menu=menubar)
+        self.main_menu.add_cascade(label="Exam", menu=self.exam_menu)
+        self.master.config(menu=self.main_menu)
+
+        self.storage_menu.entryconfig("Add data",state=DISABLED)
+        self.main_menu.entryconfig("Group", state=DISABLED)
+        self.main_menu.entryconfig("Exam", state=DISABLED)
 
         controller.view_storage = ViewTableTk()
         controller.view_group = ViewTableTk()
@@ -54,10 +57,12 @@ class MainWindow:
         self.storage_table.pack(side=LEFT, fill=BOTH, expand=True)
         self.storage_table.tkraise()
         self.storage_table.item_opened.connect(self.group_info)
+        self.storage_table.item_selected.connect(self.group_selected)
         controller.view_storage.set_widget(self.storage_table)
 
         self.group_window = GroupWindow(self.master)
         self.group_window.group_table.item_opened.connect(self.plot_exam)
+        self.group_window.group_table.item_selected.connect(self.exam_selected)
 
     def open_storage(self):
         """Open storage and show groups in it."""
@@ -71,7 +76,22 @@ class MainWindow:
             return
         controller.open_or_create_storage(file_name)
         controller.storage_info()
+        # menu
+        self.storage_menu.entryconfig("Add data", state=NORMAL)
         self.group_window.group_table.clear()
+        self.main_menu.entryconfig("Group", state=NORMAL)
+        self.group_menu.entryconfig("TODO: Edit", state=DISABLED)
+        self.group_menu.entryconfig("todo: Delete", state=DISABLED)
+        self.main_menu.entryconfig("Exam", state=DISABLED)
+
+    def group_selected(self, *args):
+        """Group selected slot. Enable some menu items."""
+        self.group_menu.entryconfig("TODO: Edit", state=NORMAL)
+        self.group_menu.entryconfig("todo: Delete", state=NORMAL)
+
+    def exam_selected(self, *args):
+        """Exam selected slot. Enable some menu items."""
+        self.main_menu.entryconfig("Exam", state=NORMAL)
 
     def group_info(self, *args):
         """Get and show information about examination in selected group."""
@@ -81,6 +101,8 @@ class MainWindow:
         if group_id:
             controller.group_info(group_id)
             self.storage_table.last_group_id = group_id
+        # menu
+        self.main_menu.entryconfig("Exam", state=DISABLED)
 
     def grouping(self):
         """Open grouping dialog stub."""
