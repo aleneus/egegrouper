@@ -6,7 +6,7 @@ from collections import OrderedDict
 
 from egegrouper.models.sqlite3 import *
 from egegrouper.views.text import *
-from egegrouper.view_exam_plot import *
+from egegrouper.views.exam_plot import *
 from egegrouper.controller import *
 
 class DialogText:
