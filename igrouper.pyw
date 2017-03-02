@@ -5,7 +5,7 @@ import cmd, sys, argparse, readline
 from collections import OrderedDict
 
 from egegrouper.models.sqlite3 import *
-from egegrouper.views_text import *
+from egegrouper.views.text import *
 from egegrouper.view_exam_plot import *
 from egegrouper.controller import *
 

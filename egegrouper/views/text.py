@@ -1,6 +1,6 @@
 from tabulate import tabulate
 
-from egegrouper.views import *
+from egegrouper.view import *
 
 class ViewMessageText(ViewMessage):
     """Text message view."""

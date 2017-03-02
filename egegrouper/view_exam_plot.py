@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-from egegrouper.views import *
+from egegrouper.view import *
 
 class ViewExamPlot(ViewExam):
     """Plot view to show details of examination."""
