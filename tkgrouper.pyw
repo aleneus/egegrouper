@@ -293,7 +293,10 @@ class GroupRecordDialog:
             label.pack(side=TOP)
             entry = Entry(self.master, width = 30)
             entry.delete(0, END)
-            entry.insert(0, group_record[key])
+            if group_record[key]:
+                entry.insert(0, group_record[key])
+            else:
+                entry.insert(0, '')
             entry.pack(side=TOP)
             self.labels.append(label)
             self.entries.append(entry)
