@@ -35,7 +35,7 @@ class MainWindow:
         self.main_menu.add_cascade(label="Storage", menu=self.storage_menu)
         self.group_menu = Menu(self.main_menu, tearoff=0)
         self.group_menu.add_command(label="Add", command=self.add_group)
-        #self.group_menu.add_command(label="TODO: Edit", command=)
+        self.group_menu.add_command(label="Edit", command=self.edit_group)
         self.group_menu.add_command(label="Delete", command=self.delete_group)
         self.main_menu.add_cascade(label="Group", menu=self.group_menu)
         self.exam_menu = Menu(self.main_menu, tearoff=0)
@@ -78,7 +78,7 @@ class MainWindow:
         self.storage_menu.entryconfig("Close", state=NORMAL)
         self.group_table.clear()
         self.main_menu.entryconfig("Group", state=NORMAL)
-        #self.group_menu.entryconfig("TODO: Edit", state=DISABLED)
+        self.group_menu.entryconfig("Edit", state=DISABLED)
         self.group_menu.entryconfig("Delete", state=DISABLED)
         self.main_menu.entryconfig("Exam", state=DISABLED)
 
@@ -140,7 +140,7 @@ class MainWindow:
 
     def group_selected(self, *args):
         """Group selected slot. Enable some menu items."""
-        #self.group_menu.entryconfig("TODO: Edit", state=NORMAL)
+        self.group_menu.entryconfig("Edit", state=NORMAL)
         self.group_menu.entryconfig("Delete", state=NORMAL)
 
     def exam_selected(self, *args):
@@ -200,7 +200,20 @@ class MainWindow:
         
     def add_group(self):
         """Add new group."""
-        group_record_dialog = GroupRecordDialog(self.master)
+        group_record_dialog = GroupRecordDialog(
+            self.master,
+            group_record = OrderedDict([('Name',''), ('Description','')])
+        )
+        group_record_dialog.master.transient(self.master)
+        group_record_dialog.master.grab_set()
+        group_record_dialog.master.wait_window(group_record_dialog.master)
+
+    def edit_group(self):
+        group_id = self.storage_table.selected_item_text()
+        if not group_id:
+            return
+        data = controller.group_record(group_id)
+        group_record_dialog = GroupRecordDialog(self.master, data, group_id)
         group_record_dialog.master.transient(self.master)
         group_record_dialog.master.grab_set()
         group_record_dialog.master.wait_window(group_record_dialog.master)
@@ -269,25 +282,35 @@ class GroupingDialog:
 class GroupRecordDialog:
     """Dialog for edit group record."""
     
-    def __init__(self, parent):
+    def __init__(self, parent, group_record, group_id = None):
+        self.group_id = group_id
         self.master = Toplevel(parent)
         self.master.title("Edit group")
-        self.label1 = Label(self.master, width = 10, text='Name')
-        self.label2 = Label(self.master, width = 10, text='Description')
-        self.name_entry = Entry(self.master, width = 30)
-        self.description_entry = Entry(self.master, width = 30)
+        self.labels = []
+        self.entries = []
+        for key in group_record:
+            label = Label(self.master, width = 10, text=key)
+            label.pack(side=TOP)
+            entry = Entry(self.master, width = 30)
+            entry.delete(0, END)
+            entry.insert(0, group_record[key])
+            entry.pack(side=TOP)
+            self.labels.append(label)
+            self.entries.append(entry)
         self.save_button = Button(self.master, text="Save", width=15, command=self.on_save_button)
         self.cancel_button = Button(self.master, text="Cancel", width=15, command=self.master.destroy)
-        self.label1.pack(side=TOP)
-        self.name_entry.pack(side=TOP)
-        self.label2.pack(side=TOP)
-        self.description_entry.pack(side=TOP)
         self.cancel_button.pack(side=RIGHT)
         self.save_button.pack(side=RIGHT)
 
     def on_save_button(self):
         """Save button handler."""
-        controller.insert_group(self.name_entry.get(), self.description_entry.get())
+        group_record = OrderedDict()
+        group_record['name'] = self.entries[0].get()
+        group_record['description'] = self.entries[1].get()
+        if not self.group_id:
+            controller.insert_group(group_record['name'], group_record['description'])
+        else:
+            controller.update_group_record(self.group_id, group_record)
         controller.storage_info()
         self.master.destroy()
 
