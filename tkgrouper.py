@@ -30,7 +30,6 @@ class MainWindow:
         self.add_data_submenu.add_command(label="Add SME sqlite3 DB", command=self.add_sme)
         self.add_data_submenu.add_command(label="Add JSON folder", command=self.add_json)
         #self.add_data_submenu.add_command(label="TODO: Add Gastroscan sqlite3 DB", command=)
-        #self.add_data_submenu.add_command(label="TODO: Add Gastroscan TXT export", command=)
         self.storage_menu.add_cascade(label="Add data", menu=self.add_data_submenu)
         self.storage_menu.add_command(label="Exit", command=self.close_db_and_exit)
         self.main_menu.add_cascade(label="Storage", menu=self.storage_menu)
@@ -63,10 +62,11 @@ class MainWindow:
         controller.view_storage.set_widget(self.storage_table)
 
         self.group_window = GroupWindow(self.master)
-        self.group_window.group_table.item_opened.connect(self.plot_exam)
-        self.group_window.group_table.item_selected.connect(self.exam_selected)
+        self.group_table = self.group_window.group_table
+        self.group_table.item_opened.connect(self.plot_exam)
+        self.group_table.item_selected.connect(self.exam_selected)
         controller.view_group = ViewTableTk()
-        controller.view_group.set_widget(self.group_window.group_table)
+        controller.view_group.set_widget(self.group_table)
         controller.view_exam_plot = ViewExamPlot()
 
     def open_or_create_storage(self, file_name):
@@ -76,7 +76,7 @@ class MainWindow:
         # menu
         self.storage_menu.entryconfig("Add data", state=NORMAL)
         self.storage_menu.entryconfig("Close", state=NORMAL)
-        self.group_window.group_table.clear()
+        self.group_table.clear()
         self.main_menu.entryconfig("Group", state=NORMAL)
         #self.group_menu.entryconfig("TODO: Edit", state=DISABLED)
         self.group_menu.entryconfig("Delete", state=DISABLED)
@@ -108,7 +108,7 @@ class MainWindow:
     def close_storage(self):
         """Close storage and clear widgets."""
         controller.close_storage()
-        self.group_window.group_table.clear()
+        self.group_table.clear()
         self.storage_table.clear()
         self.storage_menu.entryconfig("Add data", state=DISABLED)
         self.storage_menu.entryconfig("Close", state=DISABLED)
@@ -160,7 +160,7 @@ class MainWindow:
 
     def grouping(self):
         """Open grouping dialog stub."""
-        exam_id = self.group_window.group_table.selected_item_text()
+        exam_id = self.group_table.selected_item_text()
         if not exam_id:
             return
         grouping_dialog = GroupingDialog(self.master, exam_id)
@@ -173,7 +173,7 @@ class MainWindow:
 
     def delete_exam(self):
         """Delete exam from storage."""
-        exam_id = self.group_window.group_table.selected_item_text()
+        exam_id = self.group_table.selected_item_text()
         if not exam_id:
             return
         answer = messagebox.askquestion("Delete examination", "Are You shure?", icon='warning')
@@ -186,7 +186,7 @@ class MainWindow:
 
     def export_json(self):
         """Export selected examination to json forder."""
-        exam_id = self.group_window.group_table.selected_item_text()
+        exam_id = self.group_table.selected_item_text()
         if not exam_id:
             return
         folder_name = filedialog.asksaveasfilename(
@@ -218,7 +218,7 @@ class MainWindow:
 
     def plot_exam(self, *args):
         """Plot examination in separate matplotlib window."""
-        exam_id = self.group_window.group_table.selected_item_text()
+        exam_id = self.group_table.selected_item_text()
         if exam_id:
             controller.plot_exam(exam_id)
                 
