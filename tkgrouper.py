@@ -28,7 +28,7 @@ class MainWindow:
         self.storage_menu.add_command(label="Close", command=self.close_storage)
         self.add_data_submenu = Menu(self.storage_menu, tearoff=0)
         self.add_data_submenu.add_command(label="Add SME sqlite3 DB", command=self.add_sme)
-        self.add_data_submenu.add_command(label="Add JSON exam", command=self.add_json)
+        self.add_data_submenu.add_command(label="Add JSON folder", command=self.add_json)
         #self.add_data_submenu.add_command(label="TODO: Add Gastroscan sqlite3 DB", command=None)
         #self.add_data_submenu.add_command(label="TODO: Add Gastroscan TXT export", command=None)
         self.storage_menu.add_cascade(label="Add data", menu=self.add_data_submenu)
@@ -42,8 +42,8 @@ class MainWindow:
         self.exam_menu = Menu(self.main_menu, tearoff=0)
         self.exam_menu.add_command(label="Plot", command=self.plot_exam)
         self.exam_menu.add_command(label="Grouping", command=self.grouping)
-        self.exam_menu.add_command(label="TODO: Delete", command=None)
-        self.exam_menu.add_command(label="TODO?:Merge with", command=None)
+        self.exam_menu.add_command(label="Delete forever", command=self.delete_exam)
+        #self.exam_menu.add_command(label="TODO?:Merge with", command=None)
         self.exam_menu.add_command(label="Export to JSON", command=self.export_json)
         self.main_menu.add_cascade(label="Exam", menu=self.exam_menu)
         self.master.config(menu=self.main_menu)
@@ -161,15 +161,28 @@ class MainWindow:
     def grouping(self):
         """Open grouping dialog stub."""
         exam_id = self.group_window.group_table.selected_item_text()
-        if exam_id:
-            grouping_dialog = GroupingDialog(self.master, exam_id)
-            grouping_dialog.master.transient(self.master)
-            grouping_dialog.master.grab_set()
-            grouping_dialog.master.wait_window(grouping_dialog.master)
-            controller.storage_info()
-            group_id = self.storage_table.last_group_id
-            if group_id:
-                controller.group_info(group_id)
+        if not exam_id:
+            return
+        grouping_dialog = GroupingDialog(self.master, exam_id)
+        grouping_dialog.master.transient(self.master)
+        grouping_dialog.master.grab_set()
+        grouping_dialog.master.wait_window(grouping_dialog.master)
+        controller.storage_info()
+        group_id = self.storage_table.last_group_id
+        controller.group_info(group_id)
+
+    def delete_exam(self):
+        """Delete exam from storage."""
+        exam_id = self.group_window.group_table.selected_item_text()
+        if not exam_id:
+            return
+        answer = messagebox.askquestion("Delete examination", "Are You shure?", icon='warning')
+        if answer == 'no':
+            return
+        controller.delete_exam(exam_id)        
+        controller.storage_info()
+        group_id = self.storage_table.last_group_id
+        controller.group_info(group_id)
 
     def export_json(self):
         """Export selected examination to json forder."""
@@ -194,9 +207,11 @@ class MainWindow:
     def delete_group(self):
         """Delete selected group."""
         group_id = self.storage_table.selected_item_text()
-        if not group_id: return
+        if not group_id:
+            return
         answer = messagebox.askquestion("Delete", "Are You shure?", icon='warning')
-        if answer == 'no': return
+        if answer == 'no':
+            return
         controller.delete_group(group_id)
         controller.storage_info()
 
