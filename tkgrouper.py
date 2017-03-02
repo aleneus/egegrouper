@@ -5,6 +5,7 @@
 
 from tkinter import *
 from tkinter import filedialog
+from tkinter import messagebox
 
 from egegrouper.controller import *
 from egegrouper.model_sqlite3 import *
@@ -35,8 +36,8 @@ class MainWindow:
         self.main_menu.add_cascade(label="Storage", menu=self.storage_menu)
         self.group_menu = Menu(self.main_menu, tearoff=0)
         self.group_menu.add_command(label="Add", command=self.add_group)
-        self.group_menu.add_command(label="TODO: Edit", command=None)
-        self.group_menu.add_command(label="todo: Delete", command=self.delete_group)
+        #self.group_menu.add_command(label="TODO: Edit", command=None)
+        self.group_menu.add_command(label="Delete", command=self.delete_group)
         self.main_menu.add_cascade(label="Group", menu=self.group_menu)
         self.exam_menu = Menu(self.main_menu, tearoff=0)
         self.exam_menu.add_command(label="Plot", command=self.plot_exam)
@@ -77,8 +78,8 @@ class MainWindow:
         self.storage_menu.entryconfig("Close", state=NORMAL)
         self.group_window.group_table.clear()
         self.main_menu.entryconfig("Group", state=NORMAL)
-        self.group_menu.entryconfig("TODO: Edit", state=DISABLED)
-        self.group_menu.entryconfig("todo: Delete", state=DISABLED)
+        #self.group_menu.entryconfig("TODO: Edit", state=DISABLED)
+        self.group_menu.entryconfig("Delete", state=DISABLED)
         self.main_menu.entryconfig("Exam", state=DISABLED)
 
     def open_storage(self):
@@ -139,8 +140,8 @@ class MainWindow:
 
     def group_selected(self, *args):
         """Group selected slot. Enable some menu items."""
-        self.group_menu.entryconfig("TODO: Edit", state=NORMAL)
-        self.group_menu.entryconfig("todo: Delete", state=NORMAL)
+        #self.group_menu.entryconfig("TODO: Edit", state=NORMAL)
+        self.group_menu.entryconfig("Delete", state=NORMAL)
 
     def exam_selected(self, *args):
         """Exam selected slot. Enable some menu items."""
@@ -193,9 +194,11 @@ class MainWindow:
     def delete_group(self):
         """Delete selected group."""
         group_id = self.storage_table.selected_item_text()
-        if group_id:
-            controller.delete_group(group_id)
-            controller.storage_info()
+        if not group_id: return
+        answer = messagebox.askquestion("Delete", "Are You shure?", icon='warning')
+        if answer == 'no': return
+        controller.delete_group(group_id)
+        controller.storage_info()
 
     def plot_exam(self, *args):
         """Plot examination in separate matplotlib window."""
