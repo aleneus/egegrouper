@@ -29,14 +29,14 @@ class MainWindow:
         self.add_data_submenu = Menu(self.storage_menu, tearoff=0)
         self.add_data_submenu.add_command(label="Add SME sqlite3 DB", command=self.add_sme)
         self.add_data_submenu.add_command(label="Add JSON folder", command=self.add_json)
-        #self.add_data_submenu.add_command(label="TODO: Add Gastroscan sqlite3 DB", command=None)
-        #self.add_data_submenu.add_command(label="TODO: Add Gastroscan TXT export", command=None)
+        #self.add_data_submenu.add_command(label="TODO: Add Gastroscan sqlite3 DB", command=)
+        #self.add_data_submenu.add_command(label="TODO: Add Gastroscan TXT export", command=)
         self.storage_menu.add_cascade(label="Add data", menu=self.add_data_submenu)
         self.storage_menu.add_command(label="Exit", command=self.close_db_and_exit)
         self.main_menu.add_cascade(label="Storage", menu=self.storage_menu)
         self.group_menu = Menu(self.main_menu, tearoff=0)
         self.group_menu.add_command(label="Add", command=self.add_group)
-        #self.group_menu.add_command(label="TODO: Edit", command=None)
+        #self.group_menu.add_command(label="TODO: Edit", command=)
         self.group_menu.add_command(label="Delete", command=self.delete_group)
         self.main_menu.add_cascade(label="Group", menu=self.group_menu)
         self.exam_menu = Menu(self.main_menu, tearoff=0)
@@ -189,9 +189,10 @@ class MainWindow:
         exam_id = self.group_window.group_table.selected_item_text()
         if not exam_id:
             return
-        folder_name = filedialog.askdirectory(
+        folder_name = filedialog.asksaveasfilename(
             parent = self.master,
             title = 'JSON folder name',
+            defaultextension = '',
         )
         if not folder_name:
             return
