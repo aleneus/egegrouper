@@ -7,10 +7,10 @@ from tkinter import *
 from tkinter import filedialog
 from tkinter import messagebox
 
-from egegrouper.controller import *
-from egegrouper.models.sqlite3 import *
-from egegrouper.views.tk import *
-from egegrouper.views.exam_plot import *
+from egegmvc.controller import *
+from egegmvc.models.sqlite3 import *
+from egegmvc.views.tk import *
+from egegmvc.views.exam_plot import *
 from grouper_tk_widgets import *
 from simple_signal import *
 

@@ -4,7 +4,7 @@ import json
 import os
 from collections import OrderedDict
 
-from egegrouper.sme import *
+from egegmvc.sme import *
 
 def get_exam_from_folder(folder_name):
     """Get examination object from folder with file info.json.

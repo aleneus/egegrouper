@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
 
-from egegrouper.view import *
+from egegmvc.view import *
 
 class ViewMessageTk(ViewMessage):
     """Text message view."""

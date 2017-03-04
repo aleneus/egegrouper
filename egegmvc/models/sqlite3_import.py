@@ -1,5 +1,5 @@
 import sqlite3
-from egegrouper.models import sqlite3_scripts
+from egegmvc.models import sqlite3_scripts
 
 class DBImporter:
     def DBimport(self, dest_filename, source_filename):

@@ -1,5 +1,5 @@
 import os.path # TODO: remove from here (?)
-from egegrouper import sme
+from egegmvc import sme
 
 class GrouperController:
     """Controller in MVC."""

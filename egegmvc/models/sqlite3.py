@@ -2,12 +2,12 @@ import sqlite3
 import numpy as np
 from collections import OrderedDict
 
-from egegrouper.model import *
-from egegrouper.models import sqlite3_scripts
+from egegmvc.model import *
+from egegmvc.models import sqlite3_scripts
 
-from egegrouper.sme import *
-from egegrouper.models.sqlite3_import import *
-from egegrouper.sme_json_folders import *
+from egegmvc.sme import *
+from egegmvc.models.sqlite3_import import *
+from egegmvc.sme_json_folders import *
 
 class GrouperModelSqlite3(GrouperModel):
     """Model implementation for SQLite3 SME data base."""

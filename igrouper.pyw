@@ -4,10 +4,10 @@
 import cmd, sys, argparse, readline
 from collections import OrderedDict
 
-from egegrouper.models.sqlite3 import *
-from egegrouper.views.text import *
-from egegrouper.views.exam_plot import *
-from egegrouper.controller import *
+from egegmvc.models.sqlite3 import *
+from egegmvc.views.text import *
+from egegmvc.views.exam_plot import *
+from egegmvc.controller import *
 
 class DialogText:
     """Text dialog for input fields values."""
