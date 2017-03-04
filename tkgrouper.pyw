@@ -20,7 +20,8 @@ class MainWindow:
     def __init__(self):
         self.master = Tk()
         self.master.title("EGEGrouper")
-        
+
+        # menu
         self.main_menu = Menu(self.master)
         self.storage_menu = Menu(self.main_menu, tearoff=0)
         self.storage_menu.add_command(label="Open", command=self.open_storage)
@@ -79,10 +80,10 @@ class MainWindow:
         if not file_name:
             return
         controller.open_storage(file_name)
+        self.group_table.clear()
         # menu
         self.storage_menu.entryconfig("Add data", state=NORMAL)
         self.storage_menu.entryconfig("Close", state=NORMAL)
-        self.group_table.clear()
         self.main_menu.entryconfig("Group", state=NORMAL)
         self.group_menu.entryconfig("Edit", state=DISABLED)
         self.group_menu.entryconfig("Delete", state=DISABLED)
@@ -99,10 +100,10 @@ class MainWindow:
         if not file_name:
             return
         controller.create_storage(file_name)
+        self.group_table.clear()
         # menu
         self.storage_menu.entryconfig("Add data", state=NORMAL)
         self.storage_menu.entryconfig("Close", state=NORMAL)
-        self.group_table.clear()
         self.main_menu.entryconfig("Group", state=NORMAL)
         self.group_menu.entryconfig("Edit", state=DISABLED)
         self.group_menu.entryconfig("Delete", state=DISABLED)
@@ -113,6 +114,7 @@ class MainWindow:
         controller.close_storage()
         self.group_table.clear()
         self.storage_table.clear()
+        # menu
         self.storage_menu.entryconfig("Add data", state=DISABLED)
         self.storage_menu.entryconfig("Close", state=DISABLED)
         self.main_menu.entryconfig("Group", state=DISABLED)
@@ -143,11 +145,13 @@ class MainWindow:
 
     def group_selected(self, *args):
         """Group selected slot. Enable some menu items."""
+        # menu
         self.group_menu.entryconfig("Edit", state=NORMAL)
         self.group_menu.entryconfig("Delete", state=NORMAL)
 
     def exam_selected(self, *args):
         """Exam selected slot. Enable some menu items."""
+        # menu
         self.main_menu.entryconfig("Exam", state=NORMAL)
 
     def group_info(self, *args):
