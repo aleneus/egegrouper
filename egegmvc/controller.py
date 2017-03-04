@@ -1,4 +1,3 @@
-import os.path # TODO: remove from here (?)
 from egegmvc import sme
 
 class GrouperController:
@@ -47,10 +46,7 @@ class GrouperController:
             File name.
 
         """
-        if os.path.isfile(file_name):
-            self.model.open_storage(file_name)
-        else:
-            self.model.create_storage(file_name)
+        self.model.open_or_create_storage(file_name)
 
     def close_storage(self):
         """Close storage."""

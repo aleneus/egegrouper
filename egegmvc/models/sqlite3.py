@@ -59,6 +59,17 @@ class GrouperModelSqlite3(GrouperModel):
         self.set_state('storage_opened', False)
         self.set_state('file_name', None)
 
+    def storage_exists(self, file_name):
+        """Check if storage exists.
+
+        Returns
+        -------
+        : bool
+            True if exists, False overwise.
+
+        """
+        return os.path.isfile(file_name)
+    
     def get_examination(self, exam_id):
         """Return examination from data base.
 

@@ -20,6 +20,30 @@ class GrouperModel():
         """Close current storage."""
         pass
 
+    def storage_exists(self, name):
+        """Check if storage exists.
+
+        Returns
+        -------
+        : bool
+            True if exists, False overwise.
+
+        """
+        pass
+
+    def open_or_create_storage(self, name):
+        """Open or create storage (if stoarge not exists).
+        
+        Parameters
+        ----------
+        name : str
+            Name of storage.
+        
+        """
+        if self.storage_exists(name):
+            self.open_storage(name)
+        else:
+            self.create_storage(name)
 
     # Model state
 
