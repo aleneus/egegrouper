@@ -1,5 +1,5 @@
 class Widget:
-    def set_data(self, data):
+    def update_data(self, data):
         print(data)
 
 class View:
@@ -10,7 +10,7 @@ class View:
         self.data = data
 
     def show_data(self):
-        self.widget.set_data(self.data)
+        self.widget.update_data(self.data)
 
 w = Widget()
 v = View()

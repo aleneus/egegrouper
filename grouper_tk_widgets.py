@@ -2,7 +2,9 @@ from tkinter import *
 from simple_signal import *
 
 class BaseWidget(Frame):
-    pass
+    def update_data(self, *args):
+        """Set data so user can see them."""
+        pass
 
 class TableWidget(BaseWidget):
     """Table widget."""
@@ -24,7 +26,6 @@ class TableWidget(BaseWidget):
         self.item_opened = SimpleSignal()
         self.tree.bind("<Double-1>", self.item_opened.emit)
         self.tree.bind("<Return>", self.item_opened.emit)
-
         self.item_selected = SimpleSignal()
         self.tree.bind("<<TreeviewSelect>>", self.item_selected.emit)
 
@@ -37,6 +38,13 @@ class TableWidget(BaseWidget):
             item_text = None
         finally:
             return item_text
+
+    def update_data(self, rows, headers):
+        """Fill table with data."""
+        self.clear()
+        tree = self.tree
+        for row in rows:
+            tree.insert("", END, text=str(row[0]), values=row[1:])
 
     def clear(self):
         """Clear all items."""
