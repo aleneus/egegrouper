@@ -35,6 +35,30 @@ class GrouperController:
         """
         self.model = model
 
+    def open_storage(self, file_name):
+        """Open storage.
+
+        Parameters
+        ----------
+        file_name : str
+            File name.
+
+        """
+        self.model.open_storage(file_name)
+        self.storage_info()
+
+    def create_storage(self, file_name):
+        """Create storage.
+
+        Parameters
+        ----------
+        file_name : str
+            File name.
+
+        """
+        self.model.create_storage(file_name)
+        self.storage_info()
+        
     def open_or_create_storage(self, file_name):
         """Open or create storage.
 
@@ -47,6 +71,7 @@ class GrouperController:
 
         """
         self.model.open_or_create_storage(file_name)
+        self.storage_info()
 
     def close_storage(self):
         """Close storage."""

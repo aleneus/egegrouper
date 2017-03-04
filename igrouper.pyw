@@ -35,7 +35,6 @@ class DialogText:
 class GrouperShell(cmd.Cmd):
     """CLI interface to EGEGrouper."""
     
-    intro = 'Welcome to the Grouper shell.   Type help or ? to list commands.\n'
     prompt = 'igrouper> '
 
     def __init__(self):

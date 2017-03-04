@@ -69,19 +69,6 @@ class MainWindow:
         controller.view_group.set_widget(self.group_table)
         controller.view_exam_plot = ViewExamPlot()
 
-    def open_or_create_storage(self, file_name):
-        """Common things for open and create storage."""
-        controller.open_or_create_storage(file_name)
-        controller.storage_info()
-        # menu
-        self.storage_menu.entryconfig("Add data", state=NORMAL)
-        self.storage_menu.entryconfig("Close", state=NORMAL)
-        self.group_table.clear()
-        self.main_menu.entryconfig("Group", state=NORMAL)
-        self.group_menu.entryconfig("Edit", state=DISABLED)
-        self.group_menu.entryconfig("Delete", state=DISABLED)
-        self.main_menu.entryconfig("Exam", state=DISABLED)
-
     def open_storage(self):
         """Open storage and show groups in it."""
         file_name = filedialog.askopenfilename(
@@ -91,7 +78,15 @@ class MainWindow:
         )
         if not file_name:
             return
-        self.open_or_create_storage(file_name)
+        controller.open_storage(file_name)
+        # menu
+        self.storage_menu.entryconfig("Add data", state=NORMAL)
+        self.storage_menu.entryconfig("Close", state=NORMAL)
+        self.group_table.clear()
+        self.main_menu.entryconfig("Group", state=NORMAL)
+        self.group_menu.entryconfig("Edit", state=DISABLED)
+        self.group_menu.entryconfig("Delete", state=DISABLED)
+        self.main_menu.entryconfig("Exam", state=DISABLED)
         
     def create_storage(self):
         """Create storage."""
@@ -103,7 +98,15 @@ class MainWindow:
         )
         if not file_name:
             return
-        self.open_or_create_storage(file_name)
+        controller.create_storage(file_name)
+        # menu
+        self.storage_menu.entryconfig("Add data", state=NORMAL)
+        self.storage_menu.entryconfig("Close", state=NORMAL)
+        self.group_table.clear()
+        self.main_menu.entryconfig("Group", state=NORMAL)
+        self.group_menu.entryconfig("Edit", state=DISABLED)
+        self.group_menu.entryconfig("Delete", state=DISABLED)
+        self.main_menu.entryconfig("Exam", state=DISABLED)
 
     def close_storage(self):
         """Close storage and clear widgets."""
