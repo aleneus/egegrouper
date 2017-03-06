@@ -1,5 +1,5 @@
 ViewExamPlot
 ============
 
-.. automodule:: view_exam_plot
+.. automodule:: egegmvc.views.exam_plot
    :members:

@@ -13,21 +13,13 @@ SME model
 
    SME <sme>
       
-MVC
----
-
-.. toctree::
-
-   Used MVC pattern <mvc>
-
-   
 Base part
 ---------
 
 .. toctree::
 
    Model <model>
-   Views <views>
+   View <view>
    Controller <controller>
 
 Model implementations
@@ -35,16 +27,16 @@ Model implementations
 
 .. toctree::
    
-   Sqlite3 <model_sqlite3>
+   Sqlite3 <sqlite3>
 
 View implementations
 --------------------
 
 .. toctree::
    
-   Text views <views_text>
-   Tk views <views_tk>
-   Plot view <view_exam_plot>
+   Text <text>
+   Tk <tk>
+   Plot <exam_plot>
 
 User Interfaces
 ---------------

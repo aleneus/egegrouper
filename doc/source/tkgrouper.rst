@@ -1,5 +1,5 @@
-igrouper
-========
+tkgrouper
+=========
 
 .. automodule:: tkgrouper
    :members:

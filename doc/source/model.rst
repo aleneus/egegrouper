@@ -1,6 +1,6 @@
 GrouperModel
 ============
 
-.. automodule:: model
+.. automodule:: egegmvc.model
    :members:
 

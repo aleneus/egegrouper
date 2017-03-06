@@ -1,5 +1,5 @@
 GrouperView
 ===========
 
-.. automodule:: views
+.. automodule:: egegmvc.view
    :members:
