@@ -1,4 +1,4 @@
-from distutils.core import setup
+from setuptools import setup
 
 setup(
     name='EGEGrouper',
@@ -7,5 +7,15 @@ setup(
     author='Aleksandr Popov',
     author_email='aleneus@gmail.com',
     packages=['egegmvc', 'egegmvc.models', 'egegmvc.views'],
-    scripts=['igrouper', 'tkgrouper']
+    scripts=['tkgrouper.py'],
+    # install_requires = [
+    #     'matplotlib',
+    #     'tabulate',
+    #     'readline'
+    # ],
+    entry_points={
+        'gui_scripts': [
+            'tkgrouper = tkgrouper:main'
+        ]
+    },
 )

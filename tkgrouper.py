@@ -310,9 +310,13 @@ class GroupRecordDialog:
         controller.storage_info()
         self.master.destroy()
 
-if __name__ == '__main__':
-    controller = GrouperController()
-    controller.set_model(GrouperModelSqlite3())
-    controller.view_message = ViewMessageTk()
+controller = GrouperController()
+controller.set_model(GrouperModelSqlite3())
+controller.view_message = ViewMessageTk()
+
+def main():
     main_window = MainWindow()
     main_window.master.mainloop()
+
+if __name__ == '__main__':
+    main()

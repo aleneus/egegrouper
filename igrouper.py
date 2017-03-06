@@ -293,22 +293,20 @@ class GrouperShell(cmd.Cmd):
             return
         DialogText(data).input()
         grouper.update_group_record(group_id, data)
-        
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("fname", help="Name of data base")
     args = parser.parse_args()
-
+    
     grouper = GrouperController()
     grouper.set_model(GrouperModelSqlite3())
-
     grouper.view_message = ViewMessageText()
     grouper.view_storage = ViewTableText()
     grouper.view_group = ViewTableText()
     grouper.view_exam = ViewExamText()
     grouper.view_exam_plot = ViewExamPlot()
     grouper.view_where_exam = ViewWhereExamText()
-    
     grouper.open_or_create_storage(args.fname)
     
     gshell = GrouperShell()
