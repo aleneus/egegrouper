@@ -6,14 +6,13 @@
 from tkinter import *
 from tkinter import filedialog
 from tkinter import messagebox
-
 from egegmvc.controller import *
 from egegmvc.models.sqlite3 import *
 from egegmvc.views.tk import *
 from egegmvc.views.exam_plot import *
 
 class MainWindow:
-    """Main window. Shows groups and provide operations via main menu."""
+    """Main window. Shows groups and main menu."""
     
     def __init__(self):
         self.master = Tk()
@@ -51,18 +50,16 @@ class MainWindow:
         self.main_menu.entryconfig("Group", state=DISABLED)
         self.main_menu.entryconfig("Exam", state=DISABLED)
 
-        self.storage_table = ViewStorageTableTk(self.master)
-        self.storage_table.pack(side=LEFT, fill=BOTH, expand=True)
-        self.storage_table.tkraise()
-        self.storage_table.item_opened.connect(self.group_info)
-        self.storage_table.item_selected.connect(self.group_selected)
-        controller.view_storage = self.storage_table
-
+        self.view_storage = ViewStorageTk(self.master)
+        self.view_storage.pack(side=LEFT, fill=BOTH, expand=True)
+        self.view_storage.item_opened.connect(self.group_info)
+        self.view_storage.item_selected.connect(self.group_selected)
+        controller.view_storage = self.view_storage
         self.group_window = GroupWindow(self.master)
-        self.group_table = self.group_window.group_table
-        self.group_table.item_opened.connect(self.plot_exam)
-        self.group_table.item_selected.connect(self.exam_selected)
-        controller.view_group = self.group_table
+        self.view_group = self.group_window.view_group
+        self.view_group.item_opened.connect(self.plot_exam)
+        self.view_group.item_selected.connect(self.exam_selected)
+        controller.view_group = self.view_group
         controller.view_exam_plot = ViewExamPlot()
 
     def open_storage(self):
@@ -75,7 +72,7 @@ class MainWindow:
         if not file_name:
             return
         controller.open_storage(file_name)
-        self.group_table.clear()
+        self.view_group.clear()
         # menu
         self.storage_menu.entryconfig("Add data", state=NORMAL)
         self.storage_menu.entryconfig("Close", state=NORMAL)
@@ -95,7 +92,7 @@ class MainWindow:
         if not file_name:
             return
         controller.create_storage(file_name)
-        self.group_table.clear()
+        self.view_group.clear()
         # menu
         self.storage_menu.entryconfig("Add data", state=NORMAL)
         self.storage_menu.entryconfig("Close", state=NORMAL)
@@ -107,8 +104,8 @@ class MainWindow:
     def close_storage(self):
         """Close storage and clear widgets."""
         controller.close_storage()
-        self.group_table.clear()
-        self.storage_table.clear()
+        self.view_group.clear()
+        self.view_storage.clear()
         # menu
         self.storage_menu.entryconfig("Add data", state=DISABLED)
         self.storage_menu.entryconfig("Close", state=DISABLED)
@@ -153,16 +150,16 @@ class MainWindow:
         """Get and show information about examination in selected group."""
         if self.group_window.master.state() == "withdrawn":
             self.group_window.master.deiconify()
-        group_id = self.storage_table.selected_item_text()
+        group_id = self.view_storage.selected_item_text()
         if group_id:
             controller.group_info(group_id)
-            self.storage_table.last_group_id = group_id
+            self.view_storage.last_group_id = group_id
         # menu
         self.main_menu.entryconfig("Exam", state=DISABLED)
 
     def grouping(self):
         """Open grouping dialog stub."""
-        exam_id = self.group_table.selected_item_text()
+        exam_id = self.view_group.selected_item_text()
         if not exam_id:
             return
         grouping_dialog = GroupingDialog(self.master, exam_id)
@@ -170,24 +167,22 @@ class MainWindow:
         grouping_dialog.master.grab_set()
         grouping_dialog.master.wait_window(grouping_dialog.master)
         controller.storage_info()
-        group_id = self.storage_table.last_group_id
-        controller.group_info(group_id)
+        controller.group_info(self.view_storage.last_group_id)
 
     def delete_exam(self):
         """Delete exam from storage."""
-        exam_id = self.group_table.selected_item_text()
+        exam_id = self.view_group.selected_item_text()
         if not exam_id:
             return
         if messagebox.askquestion("Delete examination", "Are You shure?", icon='warning') == 'no':
             return
-        controller.delete_exam(exam_id)        
+        controller.delete_exam(exam_id)
         controller.storage_info()
-        group_id = self.storage_table.last_group_id
-        controller.group_info(group_id)
+        controller.group_info(self.view_storage.last_group_id)
 
     def export_json(self):
         """Export selected examination to json forder."""
-        exam_id = self.group_table.selected_item_text()
+        exam_id = self.view_group.selected_item_text()
         if not exam_id:
             return
         folder_name = filedialog.asksaveasfilename(
@@ -211,7 +206,7 @@ class MainWindow:
 
     def edit_group(self):
         """Edit group."""
-        group_id = self.storage_table.selected_item_text()
+        group_id = self.view_storage.selected_item_text()
         if not group_id:
             return
         data = controller.group_record(group_id)
@@ -222,7 +217,7 @@ class MainWindow:
 
     def delete_group(self):
         """Delete selected group."""
-        group_id = self.storage_table.selected_item_text()
+        group_id = self.view_storage.selected_item_text()
         if not group_id:
             return
         if messagebox.askquestion("Delete", "Are You shure?", icon='warning') == 'no':
@@ -232,7 +227,7 @@ class MainWindow:
 
     def plot_exam(self, *args):
         """Plot examination in separate matplotlib window."""
-        exam_id = self.group_table.selected_item_text()
+        exam_id = self.view_group.selected_item_text()
         if exam_id:
             controller.plot_exam(exam_id)
                 
@@ -248,9 +243,8 @@ class GroupWindow:
         self.master = Toplevel(parent)
         self.master.title("Examinations")
         self.master.protocol('WM_DELETE_WINDOW', self.on_destroy)
-        self.group_table = ViewGroupTableTk(self.master)
-        self.group_table.pack(side=LEFT, fill=BOTH, expand=True)
-        self.group_table.tkraise()
+        self.view_group = ViewGroupTk(self.master)
+        self.view_group.pack(side=LEFT, fill=BOTH, expand=True)
 
     def on_destroy(self):
         """Do not destroy, but withdraw."""
@@ -269,7 +263,6 @@ class GroupingDialog:
         self.grouping_widget.pack()
         self.cancel_button.pack(side=RIGHT)
         self.save_button.pack(side=RIGHT)
-        
         controller.view_where_exam = self.grouping_widget
         controller.where_exam(exam_id)
 

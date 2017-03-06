@@ -1,7 +1,6 @@
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
-
 from egegmvc.view import *
 
 
@@ -85,15 +84,7 @@ class TableWidget(Frame):
         self.tree.delete(*self.tree.get_children())
         
 
-class ViewTableTk(View, TableWidget):
-    """Tk view to show tabular data."""
-    def show_data(self, data):
-        """Fill table with data."""
-        rows, headers = data
-        self.update_data(rows, headers)
-        
-        
-class ViewStorageTableTk(ViewTableTk):
+class ViewStorageTk(View, TableWidget):
     """Table widget for stoarge info."""
     def __init__(self, parent):
         names = ["#0", "name", "description", "number"]
@@ -102,14 +93,22 @@ class ViewStorageTableTk(ViewTableTk):
         super().__init__(parent, names, headers, widths)
         self.last_group_id = None
         
+    def show_data(self, data):
+        """Fill table with data."""
+        rows, headers = data
+        self.update_data(rows, headers)        
 
-class ViewGroupTableTk(ViewTableTk):
+class ViewGroupTk(View, TableWidget):
     """Table widget for stoarge info."""
     def __init__(self, parent):
         names = ["#0", "name", "age", "sex", "diagnosis"]
         headers = ["ID", "Name", "Diagnosis", "Age", "Gender"]
         super().__init__(parent, names, headers)
-
+        
+    def show_data(self, data):
+        """Fill table with data."""
+        rows, headers = data
+        self.update_data(rows, headers)        
         
 class GroupingTable(TableWidget):
     """Table widget for grouping."""
