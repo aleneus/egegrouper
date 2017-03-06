@@ -2,24 +2,21 @@ from tabulate import tabulate
 
 from egegmvc.view import *
 
-class ViewMessageText(ViewMessage):
+class ViewMessageText(View):
     """Text message view."""
-    def show_data(self):
+    def show_data(self, data):
         """Print message."""
-        print(self.data)
+        print(data)
         
 
-class ViewTableText(ViewTable):
+class ViewTableText(View):
     """Text table view."""
-    def show_data(self):
-        # data = [rows, headers] or
-        # data = [rows]
-        rows = self.data[0]
-        if len(self.data) > 1:
-            headers = self.data[1]
+    def show_data(self, data):
+        rows = data[0]
+        if len(data) > 1:
+            headers = data[1]
         else:
             headers = None
-        
         t = []
         for row in rows:
             t_row = []
@@ -32,11 +29,11 @@ class ViewTableText(ViewTable):
             print('\n' + tabulate(t, tablefmt="orgtbl") + '\n')
        
 
-class ViewExamText(ViewExam):
+class ViewExamText(View):
     """Text view to show details of examination."""
-    def show_data(self):
+    def show_data(self, data):
         """Print information about examination."""
-        e = self.data
+        e = data
         s = '\nE: {} {} {} {}\n'.format(e.name, e.gender, e.age, e.diagnosis)
         for m in e.ms:
             s += '    M: {}\n'.format(m.time)
@@ -44,9 +41,9 @@ class ViewExamText(ViewExam):
 
 class ViewWhereExamText(View):
     """Text view to show groups in which selected examination placed."""
-    def show_data(self):
+    def show_data(self, data):
         """Show data."""
-        group_records, headers, placed_in = self.data
+        group_records, headers, placed_in = data
         rows = [('X' if p else '', gr[0], gr[1]) for p, gr in zip(placed_in, group_records)]
         headers_ext = ('', ) + headers
         print('\n' + tabulate(rows, headers=headers_ext, tablefmt="orgtbl") + '\n')

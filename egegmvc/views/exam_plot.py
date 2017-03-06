@@ -1,13 +1,13 @@
 import matplotlib.pyplot as plt
 from egegmvc.view import *
 
-class ViewExamPlot(ViewExam):
+class ViewExamPlot(View):
     """Plot view to show details of examination."""
-    def show_data(self):
+    def show_data(self, data):
         """Plot signals of examination with matplotlib."""
         plt.ion()
         plt.clf()
-        e = self.data
+        e = data
         n = 0
         for m in e.ms:
             for s in m.ss:

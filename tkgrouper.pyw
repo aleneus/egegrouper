@@ -11,8 +11,6 @@ from egegmvc.controller import *
 from egegmvc.models.sqlite3 import *
 from egegmvc.views.tk import *
 from egegmvc.views.exam_plot import *
-from grouper_tk_widgets import *
-from simple_signal import *
 
 class MainWindow:
     """Main window. Shows groups and provide operations via main menu."""
@@ -53,21 +51,18 @@ class MainWindow:
         self.main_menu.entryconfig("Group", state=DISABLED)
         self.main_menu.entryconfig("Exam", state=DISABLED)
 
-        controller.view_storage = ViewTableTk()
-        controller.view_group = ViewTableTk()
-        self.storage_table = StorageTable(self.master)
+        self.storage_table = ViewStorageTableTk(self.master)
         self.storage_table.pack(side=LEFT, fill=BOTH, expand=True)
         self.storage_table.tkraise()
         self.storage_table.item_opened.connect(self.group_info)
         self.storage_table.item_selected.connect(self.group_selected)
-        controller.view_storage.set_widget(self.storage_table)
+        controller.view_storage = self.storage_table
 
         self.group_window = GroupWindow(self.master)
         self.group_table = self.group_window.group_table
         self.group_table.item_opened.connect(self.plot_exam)
         self.group_table.item_selected.connect(self.exam_selected)
-        controller.view_group = ViewTableTk()
-        controller.view_group.set_widget(self.group_table)
+        controller.view_group = self.group_table
         controller.view_exam_plot = ViewExamPlot()
 
     def open_storage(self):
@@ -253,7 +248,7 @@ class GroupWindow:
         self.master = Toplevel(parent)
         self.master.title("Examinations")
         self.master.protocol('WM_DELETE_WINDOW', self.on_destroy)
-        self.group_table = GroupTable(self.master)
+        self.group_table = ViewGroupTableTk(self.master)
         self.group_table.pack(side=LEFT, fill=BOTH, expand=True)
         self.group_table.tkraise()
 
@@ -268,15 +263,14 @@ class GroupingDialog:
         self.exam_id = exam_id
         self.master = Toplevel(parent)
         self.master.title("Grouping")
-        self.grouping_widget = GroupingTable(self.master)
+        self.grouping_widget = ViewWhereExamTk(self.master)
         self.save_button = Button(self.master, text="Save", width=15, command=self.on_save_button)
         self.cancel_button = Button(self.master, text="Cancel", width=15, command=self.master.destroy)
         self.grouping_widget.pack()
         self.cancel_button.pack(side=RIGHT)
         self.save_button.pack(side=RIGHT)
         
-        controller.view_where_exam = ViewWhereExamTk()
-        controller.view_where_exam.set_widget(self.grouping_widget)
+        controller.view_where_exam = self.grouping_widget
         controller.where_exam(exam_id)
 
     def on_save_button(self):
