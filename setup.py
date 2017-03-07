@@ -12,7 +12,6 @@ setup(
         'numpy',
         'matplotlib',
         'tabulate',
-        'readline',
     ],
     entry_points={
         'console_scripts': [
