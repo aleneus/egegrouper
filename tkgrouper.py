@@ -311,10 +311,10 @@ class GroupRecordDialog:
         self.master.destroy()
 
 controller = GrouperController()
-controller.set_model(GrouperModelSqlite3())
 controller.view_message = ViewMessageTk()
 
 def main():
+    controller.set_model(GrouperModelSqlite3())
     main_window = MainWindow()
     main_window.master.mainloop()
 

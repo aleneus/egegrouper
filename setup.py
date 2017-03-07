@@ -7,13 +7,17 @@ setup(
     author='Aleksandr Popov',
     author_email='aleneus@gmail.com',
     packages=['egegmvc', 'egegmvc.models', 'egegmvc.views'],
-    scripts=['tkgrouper.py'],
-    # install_requires = [
-    #     'matplotlib',
-    #     'tabulate',
-    #     'readline'
-    # ],
+    scripts=['tkgrouper.py', 'igrouper.py'],
+    install_requires = [
+        'numpy',
+        'matplotlib',
+        'tabulate',
+        'readline',
+    ],
     entry_points={
+        'console_scripts': [
+            'igrouper = igrouper:main'
+        ],
         'gui_scripts': [
             'tkgrouper = tkgrouper:main'
         ]
