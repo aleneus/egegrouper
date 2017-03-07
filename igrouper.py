@@ -80,7 +80,7 @@ class GrouperShell(cmd.Cmd):
     def do_quit(self, arg):
         """ Close data base and exit.
         """
-        grouper.close_storage()
+        controller.close_storage()
         return True
 
     def do_db_info(self, arg):
@@ -88,7 +88,7 @@ class GrouperShell(cmd.Cmd):
 
         Aliases: d
         """
-        grouper.storage_info()
+        controller.storage_info()
 
     def do_group_info(self, arg):
         """ group_info id [hfa]
@@ -103,7 +103,7 @@ class GrouperShell(cmd.Cmd):
             return
         if self.parse(arg, 'hfa'):
             print('Calc quality stub')
-        grouper.group_info(cargv[0])
+        controller.group_info(cargv[0])
 
     def do_exam_info(self, arg):
         """ exam_info id
@@ -116,7 +116,7 @@ class GrouperShell(cmd.Cmd):
         if len(cargv) < 1:
             print('Few arguments')
             return
-        grouper.exam(cargv[0])
+        controller.exam(cargv[0])
 
     def do_plot_exam(self, arg):
         """ plot_exam id
@@ -129,7 +129,7 @@ class GrouperShell(cmd.Cmd):
         if len(cargv) < 1:
             print('Few arguments')
             return
-        grouper.plot_exam(cargv[0])
+        controller.plot_exam(cargv[0])
             
     def do_add_group(self, arg):
         """ add_group
@@ -140,7 +140,7 @@ class GrouperShell(cmd.Cmd):
         """
         data = OrderedDict([('Name', ''), ('Description', '')])
         DialogText(data).input()
-        grouper.insert_group(data['Name'], data['Description'])
+        controller.insert_group(data['Name'], data['Description'])
 
     def do_delete_group(self, arg):
         """ delete_group id
@@ -156,7 +156,7 @@ class GrouperShell(cmd.Cmd):
         answer = input('Are you shure? (yes/no/y/n): ')
         if answer not in ['yes', 'y']:
             return
-        grouper.delete_group(cargv[0])
+        controller.delete_group(cargv[0])
         
     def do_add_to_group(self, arg):
         """ add_to_group exam_id group_id
@@ -169,7 +169,7 @@ class GrouperShell(cmd.Cmd):
         if len(cargv) < 2:
             print('Few arguments')
             return
-        grouper.group_exam(cargv[0], [cargv[1], ], [True, ])
+        controller.group_exam(cargv[0], [cargv[1], ], [True, ])
 
     def do_delete_from_group(self, arg):
         """ delete_from_group exam_id group_id
@@ -182,7 +182,7 @@ class GrouperShell(cmd.Cmd):
         if len(cargv) < 2:
             print('Few arguments')
             return
-        grouper.group_exam(cargv[0], [cargv[1], ], [False, ])
+        controller.group_exam(cargv[0], [cargv[1], ], [False, ])
 
     def do_where_is(self, arg):
         """ where_is id
@@ -195,7 +195,7 @@ class GrouperShell(cmd.Cmd):
         if len(cargv) == 0:
             print('Few arguments')
             return
-        grouper.where_exam(cargv[0])
+        controller.where_exam(cargv[0])
 
     def do_add_sme(self, arg):
         """ add_sme file_name
@@ -206,7 +206,7 @@ class GrouperShell(cmd.Cmd):
         if len(cargv) == 0:
             print('Few arguments')
             return
-        grouper.add_sme_db(cargv[0])
+        controller.add_sme_db(cargv[0])
 
     def do_add_gs(self, arg):
         """ add_gs file_name
@@ -214,7 +214,7 @@ class GrouperShell(cmd.Cmd):
         Add records from Gastroscan sqlite data base.
         """
         cargv = arg.split()
-        grouper.add_gs_db(cargv[0])
+        controller.add_gs_db(cargv[0])
 
     def do_add_json(self, arg):
         """ add_json folder_name
@@ -227,7 +227,7 @@ class GrouperShell(cmd.Cmd):
         if len(cargv) == 0:
             print('Few arguments')
             return
-        grouper.add_exam_from_json_folder(cargv[0])
+        controller.add_exam_from_json_folder(cargv[0])
 
     def do_export_json(self, arg):
         """ export_json exam_id folder_name
@@ -242,7 +242,7 @@ class GrouperShell(cmd.Cmd):
             return
         exam_id = cargv[0]
         folder_name = cargv[1]
-        grouper.export_as_json_folder(exam_id, folder_name)
+        controller.export_as_json_folder(exam_id, folder_name)
 
     def do_delete_exam(self, arg):
         """ delete_exam id
@@ -261,7 +261,7 @@ class GrouperShell(cmd.Cmd):
             return
         
         exam_id = cargv[0]
-        grouper.delete_exam(exam_id)
+        controller.delete_exam(exam_id)
 
     def do_merge_exams(self, arg):
         """ merge_exams exam_id_1 exam_id_2
@@ -273,7 +273,7 @@ class GrouperShell(cmd.Cmd):
             return
         exam_id_1 = cargv[0]
         exam_id_2 = cargv[1]
-        grouper.merge_exams(exam_id_1, exam_id_2)
+        controller.merge_exams(exam_id_1, exam_id_2)
 
     def do_edit_group(self, arg):
         """edit_group group_id
@@ -287,27 +287,27 @@ class GrouperShell(cmd.Cmd):
             return
         group_id = cargv[0]
         
-        data = grouper.group_record(group_id)
+        data = controller.group_record(group_id)
         if not data:
             print('Something wrong')
             return
         DialogText(data).input()
-        grouper.update_group_record(group_id, data)
+        controller.update_group_record(group_id, data)
 
-grouper = GrouperController()
-grouper.view_message = ViewMessageText()
-grouper.view_storage = ViewTableText()
-grouper.view_group = ViewTableText()
-grouper.view_exam = ViewExamText()
-grouper.view_exam_plot = ViewExamPlot()
-grouper.view_where_exam = ViewWhereExamText()
+controller = GrouperController()
+controller.view_message = ViewMessageText()
+controller.view_storage = ViewTableText()
+controller.view_group = ViewTableText()
+controller.view_exam = ViewExamText()
+controller.view_exam_plot = ViewExamPlot()
+controller.view_where_exam = ViewWhereExamText()
         
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("fname", help="Name of data base")
     args = parser.parse_args()
-    grouper.set_model(GrouperModelSqlite3())
-    grouper.open_or_create_storage(args.fname)
+    controller.set_model(GrouperModelSqlite3())
+    controller.open_or_create_storage(args.fname)
     gshell = GrouperShell()
     gshell.cmdloop()
 
