@@ -23,11 +23,11 @@ from egegmvc.view import *
 
 class ViewExamPlot(View):
     """Plot view to show details of examination."""
-    def show_data(self, data):
+    def show_data(self, **kwargs):
         """Plot signals of examination with matplotlib."""
         plt.ion()
         plt.clf()
-        e = data
+        e = kwargs['exam']
         n = 0
         for m in e.ms:
             for s in m.ss:

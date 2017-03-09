@@ -54,9 +54,9 @@ class SimpleSignal:
 
 class ViewMessageTk(View):
     """Text message view."""
-    def show_data(self, data):
+    def show_data(self, **kwargs):
         """Print message."""
-        messagebox.showinfo("Message", data)
+        messagebox.showinfo("Message", kwargs['text'])
         
 
 class TableWidget(Frame):
@@ -113,9 +113,10 @@ class ViewStorageTk(View, TableWidget):
         super().__init__(parent, names, headers, widths)
         self.last_group_id = None
         
-    def show_data(self, data):
+    def show_data(self, **kwargs):
         """Fill table with data."""
-        rows, headers = data
+        rows = kwargs['data']
+        headers = kwargs['headers']
         self.update_data(rows, headers)        
 
 class ViewGroupTk(View, TableWidget):
@@ -125,9 +126,10 @@ class ViewGroupTk(View, TableWidget):
         headers = ["ID", "Name", "Diagnosis", "Age", "Gender"]
         super().__init__(parent, names, headers)
         
-    def show_data(self, data):
+    def show_data(self, **kwargs):
         """Fill table with data."""
-        rows, headers = data
+        rows = kwargs['data']
+        headers = kwargs['headers']
         self.update_data(rows, headers)        
         
 class GroupingTable(TableWidget):
@@ -160,9 +162,11 @@ class GroupingTable(TableWidget):
 class ViewWhereExamTk(View, GroupingTable):
     """Tk view to show groups where examination is."""
     
-    def show_data(self, data):
+    def show_data(self, **kwargs):
         """Show data."""
-        group_records, headers, placed_in = data
+        group_records = kwargs['group_records']
+        headers = kwargs['headers']
+        placed_in = kwargs['placed_in']
         rows = [
             (gr[0], gr[1], 'X' if p else '')
             for p, gr in zip(placed_in, group_records)

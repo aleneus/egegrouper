@@ -77,7 +77,7 @@ class GrouperModel():
     # Mapping
     
     def exam(self, exam_id):
-        """Return examination.
+        """Return examination object.
 
         Parameters
         ----------
@@ -88,6 +88,7 @@ class GrouperModel():
         -------
         sme.Examination
             Examination object.
+
         """
         pass
 
@@ -116,13 +117,35 @@ class GrouperModel():
     # Data Viewing
 
     def storage_info(self):
-        """Return common information about current storage."""
+        """Return common information about current storage.
+
+        Return
+        ------
+        data : list of tuples
+            Table with information about storage.
+        headers : tuple
+            Headers.
+
+        """
         pass
 
     def group_info(self, group_id):
-        """Return short information about examinations of selected group."""
-        pass
+        """Return information about examinations of selected group.
 
+        Parameters
+        ----------
+        group_id : str
+            Group ID
+
+        Returns
+        -------
+        data : list of tuple
+            Examination descriptions.
+        headers : tuple
+            Headers.
+
+        """
+        pass
 
     # Grouping
     

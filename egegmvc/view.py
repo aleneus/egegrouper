@@ -20,6 +20,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 class View:
     """View in MVC. Base class"""
-    def show_data(self, data):
+    def show_data(self, **kwargs):
         """Show data."""
         pass

@@ -24,19 +24,16 @@ from egegmvc.view import *
 
 class ViewMessageText(View):
     """Text message view."""
-    def show_data(self, data):
+    def show_data(self, **kwargs):
         """Print message."""
-        print(data)
+        print(kwargs['text'])
         
 
 class ViewTableText(View):
     """Text table view."""
-    def show_data(self, data):
-        rows = data[0]
-        if len(data) > 1:
-            headers = data[1]
-        else:
-            headers = None
+    def show_data(self, **kwargs):
+        rows = kwargs['data']
+        headers = kwargs['headers']
         t = []
         for row in rows:
             t_row = []
@@ -51,9 +48,9 @@ class ViewTableText(View):
 
 class ViewExamText(View):
     """Text view to show details of examination."""
-    def show_data(self, data):
+    def show_data(self, **kwargs):
         """Print information about examination."""
-        e = data
+        e = kwargs['exam']
         s = '\nE: {} {} {} {}\n'.format(e.name, e.gender, e.age, e.diagnosis)
         for m in e.ms:
             s += '    M: {}\n'.format(m.time)
@@ -61,9 +58,11 @@ class ViewExamText(View):
 
 class ViewWhereExamText(View):
     """Text view to show groups in which selected examination placed."""
-    def show_data(self, data):
+    def show_data(self, **kwargs):
         """Show data."""
-        group_records, headers, placed_in = data
+        group_records = kwargs['group_records']
+        headers = kwargs['headers']
+        placed_in = kwargs['placed_in']
         rows = [('X' if p else '', gr[0], gr[1]) for p, gr in zip(placed_in, group_records)]
         headers_ext = ('', ) + headers
         print('\n' + tabulate(rows, headers=headers_ext, tablefmt="orgtbl") + '\n')
