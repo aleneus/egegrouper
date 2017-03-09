@@ -36,6 +36,7 @@ class GrouperModelSqlite3(GrouperModel):
         super().__init__()
         self.conn = None
         self.c = None
+        self.set_state(storage_opened=False, file_name = None)
 
     def create_storage(self, file_name):
         """Create new data base.
@@ -52,8 +53,7 @@ class GrouperModelSqlite3(GrouperModel):
         self.c = self.conn.cursor()
         self.c.executescript(sqlite3_scripts.create_sme_db)
         self.conn.commit()
-        self.set_state('storage_opened', True)
-        self.set_state('file_name', file_name)
+        self.set_state(storage_opened=True, file_name = file_name)
 
     def open_storage(self, file_name):
         """Open data base.
@@ -69,15 +69,13 @@ class GrouperModelSqlite3(GrouperModel):
         self.conn = sqlite3.connect(file_name)
         self.c = self.conn.cursor()
         self.c.execute("pragma foreign_keys=on")
-        self.set_state('storage_opened', True)
-        self.set_state('file_name', file_name)
+        self.set_state(storage_opened=True, file_name=file_name)
 
     def close_storage(self):
         """Close data base."""
         if self.state()['storage_opened']:
             self.conn.close()
-        self.set_state('storage_opened', False)
-        self.set_state('file_name', None)
+        self.set_state(storage_opened=False, file_name=None)
 
     def storage_exists(self, file_name):
         """Check if storage exists.

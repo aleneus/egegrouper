@@ -23,8 +23,6 @@ class GrouperModel():
     
     def __init__(self):
         self._state = {}
-        self._state['storage_opened'] = False
-        self._state['file_name'] = None
 
     # Common work with storage
 
@@ -67,9 +65,10 @@ class GrouperModel():
 
     # Model state
 
-    def set_state(self, key, value):
+    def set_state(self, **kwargs):
         """Set model state."""
-        self._state[key] = value
+        for key in kwargs:
+            self._state[key] = kwargs[key]
 
     def state(self):
         """Return model state."""
