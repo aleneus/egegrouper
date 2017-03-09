@@ -64,13 +64,13 @@ class GSDBImporter(DBImporter):
         ind = []
         t = []
         for r in res:
-            if self._form_examination(r, t, ind):
-                exam_id, meas_id = self._insert_examination(t, ind, exam_id, meas_id)
+            if self._form_exam(r, t, ind):
+                exam_id, meas_id = self._insert_exam(t, ind, exam_id, meas_id)
                 t = []
                 ind = []
                 t.append(r)
                 ind.append(1)
-        self._insert_examination(t, ind, exam_id, meas_id)
+        self._insert_exam(t, ind, exam_id, meas_id)
         self._dconn.commit()
         
         self._sconn.close()
@@ -89,7 +89,7 @@ class GSDBImporter(DBImporter):
             meas_id = 0
         return (exam_id, meas_id)
 
-    def _insert_examination(self, t, ind, exam_id, meas_id):
+    def _insert_exam(self, t, ind, exam_id, meas_id):
         """
         Insert examination to destination DB. Data takes from temprorary lists t and ind.
         
@@ -124,7 +124,7 @@ class GSDBImporter(DBImporter):
             VALUES (?,?,?,?)',(t[ind.index(4)][5], dt, t[ind.index(4)][6],meas_id)) 
         return (exam_id, meas_id)
 
-    def _form_examination(self, r, t, ind):
+    def _form_exam(self, r, t, ind):
         """
         Form temprorary lists t and ind.
         

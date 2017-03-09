@@ -88,7 +88,7 @@ class GrouperModelSqlite3(GrouperModel):
         """
         return os.path.isfile(file_name)
     
-    def get_examination(self, exam_id):
+    def exam(self, exam_id):
         """Return examination from data base.
 
         Parameters
@@ -129,7 +129,7 @@ class GrouperModelSqlite3(GrouperModel):
         except Exception:
             return None
 
-    def insert_examination(self, e):
+    def insert_exam(self, e):
         """Insert examination into data base.
 
         Parameters
@@ -166,6 +166,21 @@ class GrouperModelSqlite3(GrouperModel):
                 INSERT INTO signal (data, dt, meas_id)
                 VALUES (?,?,?) """, (s.x.tobytes(), s.dt, meas_id) )
             
+        self.conn.commit()
+
+    def delete_exam(self, exam_id):
+        """Remove examination from data base.
+
+        Parameters
+        ----------
+        exam_id : str
+            Examination ID.
+
+        """
+        self.c.execute("""
+        DELETE FROM Examination
+        WHERE exam_id = ?
+        """,(exam_id, ))
         self.conn.commit()
 
     def storage_info(self):
@@ -380,7 +395,7 @@ class GrouperModelSqlite3(GrouperModel):
         """
         try:
             e = get_exam_from_folder(folder_name)
-            self.insert_examination(e)
+            self.insert_exam(e)
             return True
         except Exception: #FileNotFoundError:
             return False
@@ -394,22 +409,8 @@ class GrouperModelSqlite3(GrouperModel):
             Name of folder for export info.json and signals in txt format.
         
         """
-        e = self.get_examination(exam_id)
+        e = self.get_exam(exam_id)
         return put_exam_to_folder(e, folder_name)
-
-    def delete_exam(self, exam_id):
-        """Remove examination from data base.
-
-        Parameters
-        ----------
-        exam_id : str
-            Examination ID.
-        """
-        self.c.execute("""
-        DELETE FROM Examination
-        WHERE exam_id = ?
-        """,(exam_id, ))
-        self.conn.commit()
 
     def group_record(self, group_id):
         """Return attribute names and values of selected group.

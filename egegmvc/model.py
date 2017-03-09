@@ -76,15 +76,43 @@ class GrouperModel():
 
     # Mapping
     
-    def get_examination(self, exam_id):
-        """Return examination."""
+    def exam(self, exam_id):
+        """Return examination.
+
+        Parameters
+        ----------
+        exam_id : str
+            Examination ID.
+
+        Returns
+        -------
+        sme.Examination
+            Examination object.
+        """
         pass
 
-    def insert_examination(self, e):
-        """Add examination into current storage."""
+    def insert_exam(self, e):
+        """Add examination into current storage.
+
+        Parameters
+        ----------
+        e : sme.Examination
+            Examination object
+
+        """
         pass
 
+    def delete_exam(self, exam_id):
+        """Delete examination from current storage.
 
+        Parameters
+        ----------
+        exam_id : str
+            Examination ID.
+
+        """
+        pass
+    
     # Data Viewing
 
     def storage_info(self):
@@ -144,9 +172,3 @@ class GrouperModel():
         """Export examination fo JSON folder."""
         pass
 
-
-    # Other data manipulation
-
-    def delete_exam(self, exam_id):
-        """Delete examination from storage."""
-        pass

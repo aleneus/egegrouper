@@ -123,7 +123,7 @@ class GrouperController:
             Examination ID.
 
         """
-        e = self.model.get_examination(exam_id)
+        e = self.model.exam(exam_id)
         if not e:
             self.view_message.show_data('Something wrong')
             return
@@ -138,7 +138,7 @@ class GrouperController:
             Examination ID.
 
         """
-        e = self.model.get_examination(exam_id)
+        e = self.model.exam(exam_id)
         if not e:
             self.view_message.show_data('Something wrong')
             return
@@ -275,10 +275,10 @@ class GrouperController:
             Examination 2 ID.
 
         """
-        e1 = self.model.get_examination(exam_id_1)
-        e2 = self.model.get_examination(exam_id_2)
+        e1 = self.model.exam(exam_id_1)
+        e2 = self.model.exam(exam_id_2)
         e = sme.merge_exams(e1, e2)
-        self.model.insert_examination(e)
+        self.model.insert_exam(e)
         # todo exceptions
         self.view_message.show_data('Done')
 
