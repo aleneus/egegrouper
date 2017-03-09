@@ -314,6 +314,22 @@ class GrouperShell(cmd.Cmd):
         DialogText(data).input()
         controller.update_group_record(group_id, data)
 
+    def do_c(self, arg):
+        print("""
+        This program is free software: you can redistribute it and/or modify
+        it under the terms of the GNU General Public License as published by
+        the Free Software Foundation, either version 3 of the License, or
+        (at your option) any later version.
+        """)
+
+    def do_w(self, arg):
+        print("""
+        This program is distributed in the hope that it will be useful,
+        but WITHOUT ANY WARRANTY; without even the implied warranty of
+        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+        GNU General Public License for more details.
+        """)    
+
 controller = GrouperController()
 controller.view_message = ViewMessageText()
 controller.view_storage = ViewTableText()
@@ -323,6 +339,14 @@ controller.view_exam_plot = ViewExamPlot()
 controller.view_where_exam = ViewWhereExamText()
         
 def main():
+    print("""
+    EGEGrouper Copyright (C) 2017 Aleksandr Popov
+
+    This program comes with ABSOLUTELY NO WARRANTY; for details type `w'.
+    This is free software, and you are welcome to redistribute it
+    under certain conditions; type `c' for details.
+    """)
+    
     parser = argparse.ArgumentParser()
     parser.add_argument("fname", help="Name of data base")
     args = parser.parse_args()
@@ -333,4 +357,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
