@@ -63,6 +63,9 @@ class MainWindow:
         #self.exam_menu.add_command(label="TODO?:Merge with", command=None)
         self.exam_menu.add_command(label="Export to JSON", command=self.export_json)
         self.main_menu.add_cascade(label="Exam", menu=self.exam_menu)
+        self.help_menu = Menu(self.main_menu, tearoff=0)
+        self.help_menu.add_command(label="About", command=self.about)
+        self.main_menu.add_cascade(label="Help", menu=self.help_menu)
         self.master.config(menu=self.main_menu)
 
         self.storage_menu.entryconfig("Add data", state=DISABLED)
@@ -256,6 +259,13 @@ class MainWindow:
         controller.close_storage()
         self.master.quit()
 
+    def about(self):
+        """Show info about program."""
+        about_window = AboutWindow(self.master)
+        about_window.master.transient(self.master)
+        about_window.master.grab_set()
+        about_window.master.wait_window(about_window.master)
+
 class GroupWindow:
     """Window for show and select examinations."""
     
@@ -329,6 +339,22 @@ class GroupRecordDialog:
             controller.update_group_record(self.group_id, self.group_record)
         controller.storage_info()
         self.master.destroy()
+
+class AboutWindow:
+    """Window with short info about the program."""
+    def __init__(self, parent):
+        self.master = Toplevel(parent)
+        self.master.title("About EGEGrouper")
+        label = Label(self.master, text="""
+        EGEGrouper Copyright (C) 2017 Aleksandr Popov
+
+        This program comes with ABSOLUTELY NO WARRANTY.
+        This is free software, and you are welcome to redistribute it
+        under certain conditions.
+        """)
+        label.pack(side=TOP)
+        self.close_button = Button(self.master, text="Cancel", width=15, command=self.master.destroy)
+        self.close_button.pack(side=TOP)
 
 controller = GrouperController()
 controller.view_message = ViewMessageTk()
