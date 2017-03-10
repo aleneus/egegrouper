@@ -66,20 +66,14 @@ class ViewMessageTk:
 
 class TableWidget(Frame):
     """Table widget."""
-    def __init__(self, parent, names, headers, widths = []):
+    def __init__(self, parent, headers):
         Frame.__init__(self, parent)
         self.scrollbar = Scrollbar(self, orient=VERTICAL)
         self.tree = ttk.Treeview(self, yscrollcommand=self.scrollbar.set)
         self.scrollbar.config(command=self.tree.yview)
-        self.tree["columns"] = names[1:]
-        for (name, header) in zip(names, headers):
-            self.tree.heading(name, text=header)
-        if len(widths) == len(names):
-            for (name, width) in zip(names, widths):
-                self.tree.column(name, width=width)
         self.scrollbar.pack(side=RIGHT, fill=Y)
         self.tree.pack(side=LEFT, fill=BOTH, expand=True)
-
+        self.set_columns(headers)
         # signals
         self.item_opened = SimpleSignal()
         self.tree.bind("<Double-1>", self.item_opened.emit)
@@ -97,12 +91,18 @@ class TableWidget(Frame):
         finally:
             return item_text
 
+    def set_columns(self, headers):
+        """Set number of columns and headers."""
+        self.tree["columns"] = headers[1:]
+        self.tree.heading("#0", text=headers[0])
+        for header in headers[1:]:
+            self.tree.heading(header, text=header)
+
     def update_data(self, rows, headers):
         """Fill table with data."""
         self.clear()
-        tree = self.tree
         for row in rows:
-            tree.insert("", END, text=str(row[0]), values=row[1:])
+            self.tree.insert("", END, text=str(row[0]), values=row[1:])
 
     def clear(self):
         """Clear all items."""
@@ -112,10 +112,8 @@ class TableWidget(Frame):
 class ViewStorageTk(TableWidget):
     """Table widget for stoarge info."""
     def __init__(self, parent):
-        names = ["#0", "name", "description", "number"]
         headers = ["ID", "Name", "Description", "Num"]
-        widths = [50, 100, 200, 50]
-        super().__init__(parent, names, headers, widths)
+        super().__init__(parent, headers)
         self.last_group_id = None
         
     def show_data(self, data, headers):
@@ -134,9 +132,8 @@ class ViewStorageTk(TableWidget):
 class ViewGroupTk(TableWidget):
     """Table widget for stoarge info."""
     def __init__(self, parent):
-        names = ["#0", "name", "age", "sex", "diagnosis"]
         headers = ["ID", "Name", "Diagnosis", "Age", "Gender"]
-        super().__init__(parent, names, headers)
+        super().__init__(parent, headers)
         
     def show_data(self, data, headers):
         """Fill table with data.
@@ -155,9 +152,8 @@ class GroupingTable(TableWidget):
     """Table widget for grouping."""
     def __init__(self, parent):
         Frame.__init__(self, parent)
-        names = ["#0", "name", "in"]
-        headers = ["ID", "Name", ""]
-        super().__init__(parent, names, headers)
+        headers = ["ID", "Name", "Placed in"]
+        super().__init__(parent, headers)
         self.tree.bind("<Double-1>", self.toggle_item)
         self.tree.bind("<Return>", self.toggle_item)
 
