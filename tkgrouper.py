@@ -353,7 +353,7 @@ class AboutWindow:
         under certain conditions.
         """)
         label.pack(side=TOP)
-        self.close_button = Button(self.master, text="Cancel", width=15, command=self.master.destroy)
+        self.close_button = Button(self.master, text="Close", width=15, command=self.master.destroy)
         self.close_button.pack(side=TOP)
 
 controller = GrouperController()

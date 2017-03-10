@@ -100,7 +100,7 @@ class GrouperController:
     def storage_info(self):
         """Show common information about storage."""
         data, headers = self.model.storage_info()
-        self.view_storage.show_data(data=data, headers=headers)
+        self.view_storage.show_data(data, headers)
         
     def group_info(self, group_id):
         """Show list of examinations of group.
@@ -111,8 +111,8 @@ class GrouperController:
             Group ID.
 
         """
-        rows, headers = self.model.group_info(group_id)
-        self.view_group.show_data(data=rows, headers=headers)
+        data, headers = self.model.group_info(group_id)
+        self.view_group.show_data(data, headers)
 
     def exam(self, exam_id):
         """Show information about selected examination.
@@ -125,9 +125,9 @@ class GrouperController:
         """
         e = self.model.exam(exam_id)
         if not e:
-            self.view_message.show_data(text='Something wrong')
+            self.view_message.show_data('Something wrong')
             return
-        self.view_exam.show_data(exam=e)
+        self.view_exam.show_data(e)
 
     def plot_exam(self, exam_id):
         """Plot signals of examination.
@@ -140,9 +140,9 @@ class GrouperController:
         """
         e = self.model.exam(exam_id)
         if not e:
-            self.view_message.show_data(text='Something wrong')
+            self.view_message.show_data('Something wrong')
             return
-        self.view_exam_plot.show_data(exam=e)  
+        self.view_exam_plot.show_data(e)  
 
     def insert_group(self, name, description):
         """Add new group to current storage.
@@ -195,7 +195,7 @@ class GrouperController:
 
         """
         group_records, headers, placed_in = self.model.where_exam(exam_id)
-        self.view_where_exam.show_data(group_records=group_records, headers=headers, placed_in=placed_in)
+        self.view_where_exam.show_data(group_records, headers, placed_in)
         
     def add_sme_db(self, file_name):
         """Add SME sqlite3 data base to current storage.
@@ -207,7 +207,7 @@ class GrouperController:
 
         """
         self.model.add_sme_db(file_name)
-        self.view_message.show_data(text='Done.')
+        self.view_message.show_data('Done.')
 
     def add_gs_db(self, file_name):
         """Add GS sqlite3 data base to current storage.
@@ -219,7 +219,7 @@ class GrouperController:
 
         """
         self.model.add_gs_db(file_name)
-        self.view_message.show_data(text='Done.')
+        self.view_message.show_data('Done.')
 
     def add_exam_from_json_folder(self, folder_name):
         """Add examination from JSON folder to current storage.
@@ -231,9 +231,9 @@ class GrouperController:
         
         """
         if not self.model.add_exam_from_json_folder(folder_name):
-            self.view_message.show_data(text='Something wrong.')
+            self.view_message.show_data('Something wrong.')
             return
-        self.view_message.show_data(text='Done.')
+        self.view_message.show_data('Done.')
 
     def export_as_json_folder(self, exam_id, folder_name):
         """Export examination to JSON folder.
@@ -247,9 +247,9 @@ class GrouperController:
 
         """
         if self.model.export_as_json_folder(exam_id, folder_name):
-            self.view_message.show_data(text='Done.')
+            self.view_message.show_data('Done.')
         else:
-            self.view_message.show_data(text='Something wrong.')
+            self.view_message.show_data('Something wrong.')
 
     def delete_exam(self, exam_id):
         """Delete examination from storage.
@@ -280,7 +280,7 @@ class GrouperController:
         e = sme.merge_exams(e1, e2)
         self.model.insert_exam(e)
         # todo exceptions
-        self.view_message.show_data(text='Done')
+        self.view_message.show_data('Done')
 
     def group_record(self, group_id):
         """Return group record.

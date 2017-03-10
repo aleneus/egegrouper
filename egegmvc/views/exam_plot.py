@@ -19,21 +19,27 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 import matplotlib.pyplot as plt
-from egegmvc.view import *
 
-class ViewExamPlot(View):
+class ViewExamPlot:
     """Plot view to show details of examination."""
-    def show_data(self, **kwargs):
-        """Plot signals of examination with matplotlib."""
+    
+    def show_data(self, exam):
+        """Plot signals of examination with matplotlib.
+
+        Parameters
+        ----------
+        exam: sme.Examination
+            SME examination object.
+
+        """
         plt.ion()
         plt.clf()
-        e = kwargs['exam']
         n = 0
-        for m in e.ms:
+        for m in exam.ms:
             for s in m.ss:
                 n = n + 1
         i = 0
-        for m in e.ms:
+        for m in exam.ms:
             t = m.time
             for s in m.ss:
                 i = i + 1

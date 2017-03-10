@@ -21,8 +21,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
-from egegmvc.view import *
-
 
 class SimpleSignal:
     """Provides simple signals and slots mechanism for interconnection with self-made widgets."""
@@ -30,7 +28,7 @@ class SimpleSignal:
         self.slots = []
 
     def emit(self, *args):
-        """Emit signals"""
+        """Emit signal."""
         for s in self.slots:
             if s:
                 s(args)
@@ -52,11 +50,18 @@ class SimpleSignal:
                 self.slots[i] = None
 
 
-class ViewMessageTk(View):
+class ViewMessageTk:
     """Text message view."""
-    def show_data(self, **kwargs):
-        """Print message."""
-        messagebox.showinfo("Message", kwargs['text'])
+    def show_data(self, text):
+        """ Show message box.
+
+        Parameters
+        ----------
+        text : str
+            Message text.
+
+        """
+        messagebox.showinfo("Message", text)
         
 
 class TableWidget(Frame):
@@ -104,7 +109,7 @@ class TableWidget(Frame):
         self.tree.delete(*self.tree.get_children())
         
 
-class ViewStorageTk(View, TableWidget):
+class ViewStorageTk(TableWidget):
     """Table widget for stoarge info."""
     def __init__(self, parent):
         names = ["#0", "name", "description", "number"]
@@ -113,24 +118,38 @@ class ViewStorageTk(View, TableWidget):
         super().__init__(parent, names, headers, widths)
         self.last_group_id = None
         
-    def show_data(self, **kwargs):
-        """Fill table with data."""
-        rows = kwargs['data']
-        headers = kwargs['headers']
-        self.update_data(rows, headers)        
+    def show_data(self, data, headers):
+        """Fill table with data.
 
-class ViewGroupTk(View, TableWidget):
+        Parameters
+        ----------
+        data: list of tuples
+            Tabular data.
+        headers: tuple
+            Headers.
+
+        """
+        self.update_data(data, headers)        
+
+class ViewGroupTk(TableWidget):
     """Table widget for stoarge info."""
     def __init__(self, parent):
         names = ["#0", "name", "age", "sex", "diagnosis"]
         headers = ["ID", "Name", "Diagnosis", "Age", "Gender"]
         super().__init__(parent, names, headers)
         
-    def show_data(self, **kwargs):
-        """Fill table with data."""
-        rows = kwargs['data']
-        headers = kwargs['headers']
-        self.update_data(rows, headers)        
+    def show_data(self, data, headers):
+        """Fill table with data.
+
+        Parameters
+        ----------
+        data: list of tuples
+            Tabular data.
+        headers: tuple
+            Headers.
+
+        """
+        self.update_data(data, headers)        
         
 class GroupingTable(TableWidget):
     """Table widget for grouping."""
@@ -159,14 +178,22 @@ class GroupingTable(TableWidget):
         return group_ids, placed_in
     
         
-class ViewWhereExamTk(View, GroupingTable):
+class ViewWhereExamTk(GroupingTable):
     """Tk view to show groups where examination is."""
     
-    def show_data(self, **kwargs):
-        """Show data."""
-        group_records = kwargs['group_records']
-        headers = kwargs['headers']
-        placed_in = kwargs['placed_in']
+    def show_data(self, group_records, headers, placed_in):
+        """Show data.
+
+        Parameters
+        ----------
+        group_records : list of tuple
+            Attributes of groups.
+        headers : tuple
+            Names of group attributes.
+        placed_in : list of bool
+            Indicators. True if examination placed in appropriate group, False overwise.
+
+        """
         rows = [
             (gr[0], gr[1], 'X' if p else '')
             for p, gr in zip(placed_in, group_records)

@@ -20,22 +20,35 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from tabulate import tabulate
 
-from egegmvc.view import *
-
-class ViewMessageText(View):
+class ViewMessageText:
     """Text message view."""
-    def show_data(self, **kwargs):
-        """Print message."""
-        print(kwargs['text'])
+    def show_data(self, text):
+        """Print message.
+        
+        Parameters
+        ----------
+        text : str
+            Text for printing.
+
+        """
+        print(text)
         
 
-class ViewTableText(View):
+class ViewTableText:
     """Text table view."""
-    def show_data(self, **kwargs):
-        rows = kwargs['data']
-        headers = kwargs['headers']
+    def show_data(self, data, headers):
+        """Show table with headers.
+
+        Parameters
+        ----------
+        data: list of tuples
+            Tabular data.
+        headers: tuple
+            Headers.
+ 
+        """
         t = []
-        for row in rows:
+        for row in data:
             t_row = []
             for record in row:
                 t_row.append(str(record)[:40])
@@ -46,23 +59,37 @@ class ViewTableText(View):
             print('\n' + tabulate(t, tablefmt="orgtbl") + '\n')
        
 
-class ViewExamText(View):
+class ViewExamText:
     """Text view to show details of examination."""
-    def show_data(self, **kwargs):
-        """Print information about examination."""
-        e = kwargs['exam']
-        s = '\nE: {} {} {} {}\n'.format(e.name, e.gender, e.age, e.diagnosis)
-        for m in e.ms:
+    def show_data(self, exam):
+        """Print information about examination.
+        
+        Parameters
+        ----------
+        exam: sme.Examination
+            SME examination object.
+
+        """
+        s = '\nE: {} {} {} {}\n'.format(exam.name, exam.gender, exam.age, exam.diagnosis)
+        for m in exam.ms:
             s += '    M: {}\n'.format(m.time)
         print(s)
 
-class ViewWhereExamText(View):
+class ViewWhereExamText:
     """Text view to show groups in which selected examination placed."""
-    def show_data(self, **kwargs):
-        """Show data."""
-        group_records = kwargs['group_records']
-        headers = kwargs['headers']
-        placed_in = kwargs['placed_in']
+    def show_data(self, group_records, headers, placed_in):
+        """Show all groups and indicate where the object is located.
+
+        Parameters
+        ----------
+        group_records : list of tuple
+            Attributes of groups.
+        headers : tuple
+            Names of group attributes.
+        placed_in : list of bool
+            Indicators. True if examination placed in appropriate group, False overwise.
+
+        """
         rows = [('X' if p else '', gr[0], gr[1]) for p, gr in zip(placed_in, group_records)]
         headers_ext = ('', ) + headers
         print('\n' + tabulate(rows, headers=headers_ext, tablefmt="orgtbl") + '\n')
