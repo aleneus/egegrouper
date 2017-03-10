@@ -1,6 +1,6 @@
 model_sqlite3
 =============
 
-.. automodule:: egegmvc.models.sqlite3
+.. automodule:: egegmvc.sqlite3_model
    :members:
    

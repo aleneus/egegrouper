@@ -29,18 +29,7 @@ from collections import OrderedDict
 import egegmvc.controller
 import egegmvc.views.text
 import egegmvc.views.exam_plot
-import egegmvc.models.sqlite3
-
-""" TODO:
-
-controller.Controller()
-views.text.ExamView()
-views.plot.ExamView()
-views.text.MessageView()
-models.sqlite3.Model()
-
-"""
-
+import egegmvc.sqlite3_model
 
 class DialogText:
     """Text dialog for input fields values."""
@@ -363,7 +352,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("fname", help="Name of data base")
     args = parser.parse_args()
-    controller.set_model(egegmvc.models.sqlite3.GrouperModelSqlite3())
+    controller.set_model(egegmvc.sqlite3_model.GrouperModelSqlite3())
     controller.open_or_create_storage(args.fname)
     gshell = GrouperShell()
     gshell.cmdloop()

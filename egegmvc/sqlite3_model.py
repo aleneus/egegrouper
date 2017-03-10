@@ -23,10 +23,8 @@ import numpy as np
 from collections import OrderedDict
 
 from egegmvc.model import *
-from egegmvc.models import sqlite3_scripts
 
 from egegmvc.sme import *
-from egegmvc.models.sqlite3_import import *
 from egegmvc.sme_json_folders import *
 
 class GrouperModelSqlite3(GrouperModel):
@@ -51,7 +49,7 @@ class GrouperModelSqlite3(GrouperModel):
             self.close_storage()
         self.conn = sqlite3.connect(file_name)
         self.c = self.conn.cursor()
-        self.c.executescript(sqlite3_scripts.create_sme_db)
+        self.c.executescript(create_sme_db_script)
         self.conn.commit()
         self.set_state(storage_opened=True, file_name = file_name)
 
@@ -457,3 +455,201 @@ class GrouperModelSqlite3(GrouperModel):
             return True
         except Exception:
             return False
+
+
+class DBImporter:
+    def DBimport(self, dest_filename, source_filename):
+        """
+        Import data.
+        """	
+        self._source_filename = source_filename
+        self._dest_filename = dest_filename
+        self.run()
+
+class SMEDBImporter(DBImporter):
+    def run(self):
+        self._dconn = sqlite3.connect(self._dest_filename)
+        self._sconn = sqlite3.connect(self._source_filename)
+        
+        self._dest_c = self._dconn.cursor()
+        self._src_c = self._sconn.cursor()
+        self._dest_c.execute("attach database ? as 'source';", (self._source_filename,))
+        self._dest_c.executescript(add_sme_db_script)
+        self._dest_c.execute("detach database source;")
+        self._dest_c.execute('drop table variable;')
+        self._dconn.commit()
+        
+        self._sconn.close()
+        self._dconn.close()
+
+class GSDBImporter(DBImporter):
+    def run(self):
+        self._dconn = sqlite3.connect(self._dest_filename)
+        self._sconn = sqlite3.connect(self._source_filename)
+        
+        self._dest_c = self._dconn.cursor()
+        self._src_c = self._sconn.cursor()
+		
+        res = self._src_c.execute('\
+        SELECT name, diagnosis, age, sex, date, signal, edited \
+        FROM record as r, waveform as w\
+        WHERE r.id = w.record_id\
+        ')
+        
+        exam_id, meas_id = self._get_last_ids()
+        ind = []
+        t = []
+        for r in res:
+            if self._form_exam(r, t, ind):
+                exam_id, meas_id = self._insert_exam(t, ind, exam_id, meas_id)
+                t = []
+                ind = []
+                t.append(r)
+                ind.append(1)
+        self._insert_exam(t, ind, exam_id, meas_id)
+        self._dconn.commit()
+        
+        self._sconn.close()
+        self._dconn.close()
+        
+    def _get_last_ids(self):
+        """
+        Get during (last) measurement's and examination's id.
+        
+        """
+        exam_id = list(self._dest_c.execute('SELECT max(exam_id) FROM examination'))[0][0]
+        meas_id = list(self._dest_c.execute('SELECT max(meas_id) FROM measurement'))[0][0]
+        if not exam_id:
+            exam_id = 0
+        if not meas_id:
+            meas_id = 0
+        return (exam_id, meas_id)
+
+    def _insert_exam(self, t, ind, exam_id, meas_id):
+        """
+        Insert examination to destination DB. Data takes from temprorary lists t and ind.
+        
+        """
+        dt = 0.5
+        self._dest_c.execute('\
+        INSERT INTO examination (name, diagnosis, age, gender)\
+        VALUES (?,?,?,?)',(t[0][0],t[0][1],t[0][2],t[0][3]))
+        exam_id += 1
+        meas_id += 1
+        self._dest_c.execute('\
+        INSERT INTO measurement(time, exam_id)\
+        VALUES (?,?)',(t[0][4],exam_id))
+        self._dest_c.execute('\
+        INSERT INTO signal(data, dt, edited,meas_id)\
+        VALUES (?,?,?,?)',(t[0][5], dt, t[0][6],meas_id)) 
+        if 2 in ind:
+            self._dest_c.execute('\
+            INSERT INTO signal(data, dt, edited,meas_id)\
+            VALUES (?,?,?,?)',(t[ind.index(2)][5], dt, t[ind.index(2)][6],meas_id)) 
+        if 3 in ind:
+            self._dest_c.execute('\
+            INSERT INTO measurement(time, exam_id)\
+            VALUES (?,?)',(t[ind.index(3)][4],exam_id))
+            meas_id += 1
+            self._dest_c.execute('\
+            INSERT INTO signal(data, dt, edited, meas_id)\
+            VALUES (?,?,?,?)',(t[ind.index(3)][5], dt, t[ind.index(3)][6],meas_id)) 
+        if 4 in ind:
+            self._dest_c.execute('\
+            INSERT INTO signal(data, dt, edited, meas_id)\
+            VALUES (?,?,?,?)',(t[ind.index(4)][5], dt, t[ind.index(4)][6],meas_id)) 
+        return (exam_id, meas_id)
+
+    def _form_exam(self, r, t, ind):
+        """
+        Form temprorary lists t and ind.
+        
+        """
+        if len(t) == 0:
+            t.append(r)
+            ind.append(1)
+        else:
+            if t[-1][0] == r[0] and t[-1][2] == r[2] and t[-1][3] == r[3] and t[-1][4][:9] == r[4][:9]:
+                if ind[-1] == 1 and t[-1][4] == r[4]:
+                    ind.append(2)
+                elif ind[-1] == 1 or ind[-1] == 2:
+                    ind.append(3)
+                elif ind[-1] == 3:
+                    ind.append(4)
+                t.append(r)
+                return False
+            else:
+                return True
+
+
+#---------------------------------------
+# sqlite3 scripts
+#---------------------------------------
+
+# create new SME data base 
+create_sme_db_script = """
+pragma foreign_keys=1;
+
+create table signal(
+	signal_id integer,
+	data blob,
+	dt real,
+	edited integer, 
+	meas_id integer references measurement(meas_id) on delete cascade, 
+	primary key(signal_id)
+);
+
+create table measurement(
+	meas_id integer, 
+	time text, 
+	exam_id integer references examination(exam_id) on delete cascade, 
+	primary key(meas_id)
+);
+
+create table examination(
+	exam_id integer, 
+	name text,
+	diagnosis text, 
+	age integer, 
+	gender text, 
+	primary key(exam_id)
+);
+
+create table egeg_group(
+	group_id integer, 
+	name text, 
+	description text,
+	primary key(group_id)		
+);
+
+create table group_element(
+	exam_id integer references examination(exam_id) on delete cascade, 
+	group_id integer references egeg_group(group_id) on delete cascade, 
+	primary key(exam_id, group_id)
+);
+"""
+
+# import SME data base
+add_sme_db_script = """
+-- Create temporary table for variables and store max values of SMEP entities from nation db.
+drop table if exists variable;
+create table variable(name text primary key, value integer);
+insert into variable(name, value) values('max_exam_id', (select coalesce(max(exam_id),0) from examination));
+insert into variable(name, value) values('max_meas_id', (select coalesce(max(meas_id),0) from measurement));
+insert into variable(name, value) values('max_group_id', (select coalesce(max(group_id),0) from egeg_group));
+
+-- Paste groups with increased id to onation DB from source DB
+insert into egeg_group(group_id, name, description) select group_id + (select value from variable where name = 'max_group_id'), name, description from source.egeg_group;
+
+-- Paste examinations
+insert into examination(exam_id, name, diagnosis, age, gender) select exam_id + (select value from variable where name = 'max_exam_id'), name, diagnosis,age,gender from source.examination;
+
+-- Paste measurements
+insert into measurement(meas_id, time, exam_id) select meas_id + (select value from variable where name = 'max_meas_id'), time, exam_id + (select value from variable where name = 'max_exam_id') from source.measurement;
+
+-- Paste signals
+insert into signal(data, dt, meas_id, edited) select data, dt, meas_id + (select value from variable where name = 'max_meas_id'), edited from source.signal;
+
+-- Connect SMEP and groups
+insert into group_element(exam_id, group_id) select exam_id+(select value from variable where name = 'max_exam_id'), group_id + (select value from variable where name = 'max_group_id') from source.group_element;
+"""

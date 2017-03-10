@@ -27,7 +27,7 @@ from tkinter import *
 from tkinter import filedialog
 from tkinter import messagebox
 from egegmvc.controller import *
-from egegmvc.models.sqlite3 import *
+from egegmvc.sqlite3_model import *
 from egegmvc.views.tk import *
 from egegmvc.views.exam_plot import *
 
