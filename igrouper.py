@@ -26,10 +26,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import cmd, sys, argparse, readline
 from collections import OrderedDict
 
-from egegmvc.models.sqlite3 import *
-from egegmvc.views.text import *
-from egegmvc.views.exam_plot import *
-from egegmvc.controller import *
+import egegmvc.controller
+import egegmvc.views.text
+import egegmvc.views.exam_plot
+import egegmvc.models.sqlite3
+
+""" TODO:
+
+controller.Controller()
+views.text.ExamView()
+views.plot.ExamView()
+views.text.MessageView()
+models.sqlite3.Model()
+
+"""
+
 
 class DialogText:
     """Text dialog for input fields values."""
@@ -332,13 +343,13 @@ class GrouperShell(cmd.Cmd):
         GNU General Public License for more details.
         """)    
 
-controller = GrouperController()
-controller.view_message = ViewMessageText()
-controller.view_storage = ViewTableText()
-controller.view_group = ViewTableText()
-controller.view_exam = ViewExamText()
-controller.view_exam_plot = ViewExamPlot()
-controller.view_where_exam = ViewWhereExamText()
+controller = egegmvc.controller.Controller()
+controller.view_message = egegmvc.views.text.ViewMessageText()
+controller.view_storage = egegmvc.views.text.ViewTableText()
+controller.view_group = egegmvc.views.text.ViewTableText()
+controller.view_exam = egegmvc.views.text.ViewExamText()
+controller.view_where_exam = egegmvc.views.text.ViewWhereExamText()
+controller.view_exam_plot = egegmvc.views.exam_plot.ViewExamPlot()
         
 def main():
     print("""
@@ -352,7 +363,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("fname", help="Name of data base")
     args = parser.parse_args()
-    controller.set_model(GrouperModelSqlite3())
+    controller.set_model(egegmvc.models.sqlite3.GrouperModelSqlite3())
     controller.open_or_create_storage(args.fname)
     gshell = GrouperShell()
     gshell.cmdloop()

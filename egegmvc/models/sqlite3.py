@@ -409,7 +409,7 @@ class GrouperModelSqlite3(GrouperModel):
             Name of folder for export info.json and signals in txt format.
         
         """
-        e = self.get_exam(exam_id)
+        e = self.exam(exam_id)
         return put_exam_to_folder(e, folder_name)
 
     def group_record(self, group_id):

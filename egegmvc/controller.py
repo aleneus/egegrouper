@@ -315,3 +315,7 @@ class GrouperController:
         """
         self.model.update_group_record(group_id, attr)
         # TODO exceptions
+
+class Controller(GrouperController):
+    pass
+# TODO: refact
