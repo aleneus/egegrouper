@@ -205,8 +205,12 @@ class MainWindow:
         if messagebox.askquestion("Delete examination", "Are You shure?", icon='warning') == 'no':
             return
         controller.delete_exam(exam_id)
+        self.view_storage.remember_selection()
+        self.view_group.remember_selection()
         controller.storage_info()
         controller.group_info(self.view_storage.last_group_id)
+        self.view_storage.restore_selection()
+        self.view_group.restore_selection()
 
     def export_json(self):
         """Export selected examination to json forder."""
@@ -252,10 +256,14 @@ class MainWindow:
         group_id = self.view_storage.selected_item_text()
         if not group_id:
             return
+        if group_id=='0':
+            return
         if messagebox.askquestion("Delete", "Are You shure?", icon='warning') == 'no':
             return
+        self.view_storage.remember_selection()
         controller.delete_group(group_id)
         controller.storage_info()
+        self.view_storage.restore_selection()
 
     def plot_exam(self, *args):
         """Plot examination in separate matplotlib window."""
