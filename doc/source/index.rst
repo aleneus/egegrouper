@@ -19,7 +19,6 @@ Base part
 .. toctree::
 
    Model <model>
-   View <view>
    Controller <controller>
 
 Model implementations
@@ -29,8 +28,8 @@ Model implementations
    
    Sqlite3 <sqlite3>
 
-View implementations
---------------------
+Views
+-----
 
 .. toctree::
    
