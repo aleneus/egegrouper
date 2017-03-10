@@ -101,12 +101,22 @@ class TableWidget(Frame):
     def update_data(self, rows, headers):
         """Fill table with data."""
         self.clear()
-        for row in rows:
-            self.tree.insert("", END, text=str(row[0]), values=row[1:])
+        for (i, row) in zip(range(len(rows)), rows):
+            self.tree.insert("", END, iid = str(i), text=str(row[0]), values=row[1:])
 
     def clear(self):
         """Clear all items."""
         self.tree.delete(*self.tree.get_children())
+
+    def remember_selection(self):
+        """Remember selection."""
+        self._selected_item = self.tree.selection()[0]
+        
+    def restore_selection(self):
+        """Restore selection."""
+        if not self.tree.exists(self._selected_item):
+            return
+        self.tree.selection_set(self._selected_item)
         
 
 class ViewStorageTk(TableWidget):
@@ -127,7 +137,7 @@ class ViewStorageTk(TableWidget):
             Headers.
 
         """
-        self.update_data(data, headers)        
+        self.update_data(data, headers)
 
 class ViewGroupTk(TableWidget):
     """Table widget for stoarge info."""
@@ -146,7 +156,7 @@ class ViewGroupTk(TableWidget):
             Headers.
 
         """
-        self.update_data(data, headers)        
+        self.update_data(data, headers)
         
 class GroupingTable(TableWidget):
     """Table widget for grouping."""

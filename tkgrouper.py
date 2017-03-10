@@ -185,13 +185,18 @@ class MainWindow:
         exam_id = self.view_group.selected_item_text()
         if not exam_id:
             return
+
+        self.view_storage.remember_selection()
+        self.view_group.remember_selection()
         grouping_dialog = GroupingDialog(self.master, exam_id)
         grouping_dialog.master.transient(self.master)
         grouping_dialog.master.grab_set()
         grouping_dialog.master.wait_window(grouping_dialog.master)
         controller.storage_info()
         controller.group_info(self.view_storage.last_group_id)
-
+        self.view_storage.restore_selection()
+        self.view_group.restore_selection()
+        
     def delete_exam(self):
         """Delete exam from storage."""
         exam_id = self.view_group.selected_item_text()
@@ -232,11 +237,15 @@ class MainWindow:
         group_id = self.view_storage.selected_item_text()
         if not group_id:
             return
+        if group_id=='0':
+            return
+        self.view_storage.remember_selection()
         data = controller.group_record(group_id)
         group_record_dialog = GroupRecordDialog(self.master, data, group_id)
         group_record_dialog.master.transient(self.master)
         group_record_dialog.master.grab_set()
         group_record_dialog.master.wait_window(group_record_dialog.master)
+        self.view_storage.restore_selection()
 
     def delete_group(self):
         """Delete selected group."""
