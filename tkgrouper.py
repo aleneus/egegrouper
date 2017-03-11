@@ -374,11 +374,10 @@ class AboutWindow:
         self.close_button = Button(self.master, text="Close", width=15, command=self.master.destroy)
         self.close_button.pack(side=TOP)
 
-controller = egegmvc.controller.Controller()
+controller = egegmvc.controller.Controller(egegmvc.sqlite3_model.Model())
 controller.view_message = egegmvc.tk_views.Message()
 
 def main():
-    controller.set_model(egegmvc.sqlite3_model.Model())
     main_window = MainWindow()
     main_window.master.mainloop()
 

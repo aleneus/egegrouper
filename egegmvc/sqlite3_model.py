@@ -44,14 +44,25 @@ class Model(BaseModel):
         file_name : str
             File name.
 
+        Return
+        ------
+        : bool
+            True if storage was created, False overwise.
+
         """
         if self.state()['storage_opened']:
             self.close_storage()
-        self.conn = sqlite3.connect(file_name)
-        self.c = self.conn.cursor()
-        self.c.executescript(create_sme_db_script)
-        self.conn.commit()
-        self.set_state(storage_opened=True, file_name = file_name)
+        if os.path.isfile(file_name):
+            os.remove(file_name)
+        try:
+            self.conn = sqlite3.connect(file_name)
+            self.c = self.conn.cursor()
+            self.c.executescript(create_sme_db_script)
+            self.conn.commit()
+            self.set_state(storage_opened=True, file_name = file_name)
+            return True
+        except Exception:
+            return False
 
     def open_storage(self, file_name):
         """Open data base.
@@ -68,6 +79,7 @@ class Model(BaseModel):
         self.c = self.conn.cursor()
         self.c.execute("pragma foreign_keys=on")
         self.set_state(storage_opened=True, file_name=file_name)
+        return True
 
     def close_storage(self):
         """Close data base."""

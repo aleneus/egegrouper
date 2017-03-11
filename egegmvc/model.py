@@ -59,9 +59,9 @@ class BaseModel():
         
         """
         if self.storage_exists(name):
-            self.open_storage(name)
+            return self.open_storage(name)
         else:
-            self.create_storage(name)
+            return self.create_storage(name)
 
     # Model state
 

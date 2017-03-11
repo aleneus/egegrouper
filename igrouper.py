@@ -332,7 +332,7 @@ class GrouperShell(cmd.Cmd):
         GNU General Public License for more details.
         """)    
 
-controller = egegmvc.controller.Controller()
+controller = egegmvc.controller.Controller(egegmvc.sqlite3_model.Model())
 controller.view_message = egegmvc.text_views.Message()
 controller.view_storage = egegmvc.text_views.Table()
 controller.view_group = egegmvc.text_views.Table()
@@ -352,8 +352,9 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("fname", help="Name of data base")
     args = parser.parse_args()
-    controller.set_model(egegmvc.sqlite3_model.Model())
-    controller.open_or_create_storage(args.fname)
+    if not controller.open_or_create_storage(args.fname):
+        print("Can't open storage\nExit...\n")
+        return
     gshell = GrouperShell()
     gshell.cmdloop()
 
