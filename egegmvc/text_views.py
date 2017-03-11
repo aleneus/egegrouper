@@ -20,7 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from tabulate import tabulate
 
-class ViewMessageText:
+class Message:
     """Text message view."""
     def show_data(self, text):
         """Print message.
@@ -34,7 +34,7 @@ class ViewMessageText:
         print(text)
         
 
-class ViewTableText:
+class Table:
     """Text table view."""
     def show_data(self, data, headers):
         """Show table with headers.
@@ -59,7 +59,7 @@ class ViewTableText:
             print('\n' + tabulate(t, tablefmt="orgtbl") + '\n')
        
 
-class ViewExamText:
+class Exam:
     """Text view to show details of examination."""
     def show_data(self, exam):
         """Print information about examination.
@@ -75,7 +75,7 @@ class ViewExamText:
             s += '    M: {}\n'.format(m.time)
         print(s)
 
-class ViewWhereExamText:
+class WhereExam:
     """Text view to show groups in which selected examination placed."""
     def show_data(self, group_records, headers, placed_in):
         """Show all groups and indicate where the object is located.

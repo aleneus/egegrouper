@@ -35,7 +35,7 @@ Views
    
    Text <text>
    Tk <tk>
-   Plot <exam_plot>
+   Plot <plot>
 
 User Interfaces
 ---------------

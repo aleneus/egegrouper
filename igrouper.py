@@ -26,10 +26,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import cmd, sys, argparse, readline
 from collections import OrderedDict
 
-import egegmvc.controller
-import egegmvc.views.text
-import egegmvc.views.exam_plot
 import egegmvc.sqlite3_model
+import egegmvc.text_views
+import egegmvc.plot_views
+import egegmvc.controller
 
 class DialogText:
     """Text dialog for input fields values."""
@@ -333,12 +333,12 @@ class GrouperShell(cmd.Cmd):
         """)    
 
 controller = egegmvc.controller.Controller()
-controller.view_message = egegmvc.views.text.ViewMessageText()
-controller.view_storage = egegmvc.views.text.ViewTableText()
-controller.view_group = egegmvc.views.text.ViewTableText()
-controller.view_exam = egegmvc.views.text.ViewExamText()
-controller.view_where_exam = egegmvc.views.text.ViewWhereExamText()
-controller.view_exam_plot = egegmvc.views.exam_plot.ViewExamPlot()
+controller.view_message = egegmvc.text_views.Message()
+controller.view_storage = egegmvc.text_views.Table()
+controller.view_group = egegmvc.text_views.Table()
+controller.view_exam = egegmvc.text_views.Exam()
+controller.view_where_exam = egegmvc.text_views.WhereExam()
+controller.view_exam_plot = egegmvc.plot_views.Exam()
         
 def main():
     print("""
@@ -352,7 +352,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("fname", help="Name of data base")
     args = parser.parse_args()
-    controller.set_model(egegmvc.sqlite3_model.GrouperModelSqlite3())
+    controller.set_model(egegmvc.sqlite3_model.Model())
     controller.open_or_create_storage(args.fname)
     gshell = GrouperShell()
     gshell.cmdloop()

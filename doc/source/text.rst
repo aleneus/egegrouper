@@ -1,5 +1,5 @@
 Text views
 ==========
 
-.. automodule:: egegmvc.views.text
+.. automodule:: egegmvc.text_views
    :members:

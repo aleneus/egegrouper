@@ -22,12 +22,12 @@ import sqlite3
 import numpy as np
 from collections import OrderedDict
 
-from egegmvc.model import *
+import egegmvc.model
 
 from egegmvc.sme import *
 from egegmvc.sme_json_folders import *
 
-class GrouperModelSqlite3(GrouperModel):
+class Model(egegmvc.model.BaseModel):
     """Model implementation for SQLite3 SME data base."""
     
     def __init__(self):

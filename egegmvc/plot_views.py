@@ -20,7 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import matplotlib.pyplot as plt
 
-class ViewExamPlot:
+class Exam:
     """Plot view to show details of examination."""
     
     def show_data(self, exam):

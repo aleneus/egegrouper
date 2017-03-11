@@ -20,7 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from egegmvc import sme
 
-class GrouperController:
+class Controller:
     """Controller in MVC."""
     
     model = None
@@ -315,7 +315,3 @@ class GrouperController:
         """
         self.model.update_group_record(group_id, attr)
         # TODO exceptions
-
-class Controller(GrouperController):
-    pass
-# TODO: refact

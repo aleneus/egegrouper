@@ -18,7 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 """
 
-class GrouperModel():
+class BaseModel():
     """Model in MVC. Base class."""
     
     def __init__(self):

@@ -1,5 +1,5 @@
 Tk views
 ========
 
-.. automodule:: egegmvc.views.tk
+.. automodule:: egegmvc.tk_views
    :members:

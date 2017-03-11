@@ -50,7 +50,7 @@ class SimpleSignal:
                 self.slots[i] = None
 
 
-class ViewMessageTk:
+class Message:
     """Text message view."""
     def show_data(self, text):
         """ Show message box.
@@ -119,7 +119,7 @@ class TableWidget(Frame):
         self.tree.selection_set(self._selected_item)
         
 
-class ViewStorageTk(TableWidget):
+class Storage(TableWidget):
     """Table widget for stoarge info."""
     def __init__(self, parent):
         headers = ["ID", "Name", "Description", "Num"]
@@ -139,7 +139,7 @@ class ViewStorageTk(TableWidget):
         """
         self.update_data(data, headers)
 
-class ViewGroupTk(TableWidget):
+class Group(TableWidget):
     """Table widget for stoarge info."""
     def __init__(self, parent):
         headers = ["ID", "Name", "Diagnosis", "Age", "Gender"]
@@ -184,7 +184,7 @@ class GroupingTable(TableWidget):
         return group_ids, placed_in
     
         
-class ViewWhereExamTk(GroupingTable):
+class WhereExam(GroupingTable):
     """Tk view to show groups where examination is."""
     
     def show_data(self, group_records, headers, placed_in):

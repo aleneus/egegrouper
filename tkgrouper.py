@@ -26,10 +26,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from tkinter import *
 from tkinter import filedialog
 from tkinter import messagebox
-from egegmvc.controller import *
-from egegmvc.sqlite3_model import *
-from egegmvc.views.tk import *
-from egegmvc.views.exam_plot import *
+
+import egegmvc.controller
+import egegmvc.sqlite3_model
+import egegmvc.tk_views
+import egegmvc.plot_views
 
 class MainWindow:
     """Main window. Shows groups and main menu."""
@@ -73,7 +74,7 @@ class MainWindow:
         self.main_menu.entryconfig("Group", state=DISABLED)
         self.main_menu.entryconfig("Exam", state=DISABLED)
 
-        self.view_storage = ViewStorageTk(self.master)
+        self.view_storage = egegmvc.tk_views.Storage(self.master)
         self.view_storage.pack(side=LEFT, fill=BOTH, expand=True)
         self.view_storage.item_opened.connect(self.group_info)
         self.view_storage.item_selected.connect(self.group_selected)
@@ -83,7 +84,7 @@ class MainWindow:
         self.view_group.item_opened.connect(self.plot_exam)
         self.view_group.item_selected.connect(self.exam_selected)
         controller.view_group = self.view_group
-        controller.view_exam_plot = ViewExamPlot()
+        controller.view_exam_plot = egegmvc.plot_views.Exam()
 
     def open_storage(self):
         """Open storage and show groups in it."""
@@ -290,7 +291,7 @@ class GroupWindow:
         self.master = Toplevel(parent)
         self.master.title("Examinations")
         self.master.protocol('WM_DELETE_WINDOW', self.on_destroy)
-        self.view_group = ViewGroupTk(self.master)
+        self.view_group = egegmvc.tk_views.Group(self.master)
         self.view_group.pack(side=LEFT, fill=BOTH, expand=True)
 
     def on_destroy(self):
@@ -304,7 +305,7 @@ class GroupingDialog:
         self.exam_id = exam_id
         self.master = Toplevel(parent)
         self.master.title("Grouping")
-        self.grouping_widget = ViewWhereExamTk(self.master)
+        self.grouping_widget = egegmvc.tk_views.WhereExam(self.master)
         self.save_button = Button(self.master, text="Save", width=15, command=self.on_save_button)
         self.cancel_button = Button(self.master, text="Cancel", width=15, command=self.master.destroy)
         self.grouping_widget.pack()
@@ -373,11 +374,11 @@ class AboutWindow:
         self.close_button = Button(self.master, text="Close", width=15, command=self.master.destroy)
         self.close_button.pack(side=TOP)
 
-controller = GrouperController()
-controller.view_message = ViewMessageTk()
+controller = egegmvc.controller.Controller()
+controller.view_message = egegmvc.tk_views.Message()
 
 def main():
-    controller.set_model(GrouperModelSqlite3())
+    controller.set_model(egegmvc.sqlite3_model.Model())
     main_window = MainWindow()
     main_window.master.mainloop()
 
