@@ -21,13 +21,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import sqlite3
 import numpy as np
 from collections import OrderedDict
+import os
 
-import egegmvc.model
+from egegmvc.model import BaseModel
+import egegmvc.sme as sme
+import egegmvc.sme_json_folders as jsme
 
-from egegmvc.sme import *
-from egegmvc.sme_json_folders import *
-
-class Model(egegmvc.model.BaseModel):
+class Model(BaseModel):
     """Model implementation for SQLite3 SME data base."""
     
     def __init__(self):
@@ -101,7 +101,7 @@ class Model(egegmvc.model.BaseModel):
 
         """
         try:
-            e = Examination()
+            e = sme.Examination()
             e.name, e.diagnosis, e.age, e.gender = list(self.c.execute("""
             SELECT E.name, E.diagnosis, E.age, E.gender FROM examination AS E
             WHERE exam_id = ? """, [exam_id, ]))[0]
@@ -111,14 +111,14 @@ class Model(egegmvc.model.BaseModel):
             WHERE exam_id = ?
             ORDER BY meas_id """, [exam_id, ]))
             for m_sql in ms_sql:
-                m = Measurement()
+                m = sme.Measurement()
                 m_id, m.time = m_sql
                 m.ss = []
                 ss_sql = list(self.c.execute("""
                 SELECT S.dt, S.data FROM signal AS S
                 WHERE meas_id = ? """, [m_id, ]))
                 for s_sql in ss_sql:
-                    s = Signal()
+                    s = sme.Signal()
                     s.dt = s_sql[0]
                     s.x = np.array(np.frombuffer(s_sql[1]))
                     m.ss.append(s)
@@ -392,7 +392,7 @@ class Model(egegmvc.model.BaseModel):
         
         """
         try:
-            e = get_exam_from_folder(folder_name)
+            e = jsme.get_exam_from_folder(folder_name)
             self.insert_exam(e)
             return True
         except Exception: #FileNotFoundError:
@@ -408,7 +408,7 @@ class Model(egegmvc.model.BaseModel):
         
         """
         e = self.exam(exam_id)
-        return put_exam_to_folder(e, folder_name)
+        return jsme.put_exam_to_folder(e, folder_name)
 
     def group_record(self, group_id):
         """Return attribute names and values of selected group.

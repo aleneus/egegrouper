@@ -21,10 +21,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """Mapping examinations to and from JSON folders."""
 
 import json
+import numpy as np
 import os
 from collections import OrderedDict
 
-from egegmvc.sme import *
+import egegmvc.sme
 
 def get_exam_from_folder(folder_name):
     """Get examination object from folder with file info.json.
@@ -35,7 +36,7 @@ def get_exam_from_folder(folder_name):
         Examination instance.
 
     """
-    e = Examination()
+    e = egegmvc.sme.Examination()
     with open('{}/info.json'.format(folder_name), 'r') as f:
         data = json.load(f)
             
@@ -45,11 +46,11 @@ def get_exam_from_folder(folder_name):
     e.diagnosis = data['diagnosis']
     e.ms = []
     for m_data in data['measurements']:
-        m = Measurement()
+        m = egegmvc.sme.Measurement()
         m.time = m_data['time']
         m.ss = []
         for s_data in m_data['signals']:
-            s = Signal()
+            s = egegmvc.sme.Signal()
             s.dt = s_data['dt']
             s.x = np.loadtxt('{}/{}'.format(folder_name, s_data['file']))
             m.ss.append(s)

@@ -20,9 +20,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 """Very simple implementation of SME model."""
 
-import json
-import numpy as np
-
 class Signal:
     """Signal."""
     
