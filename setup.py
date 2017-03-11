@@ -26,7 +26,7 @@ setup(
     description='Tool for grouping EGEG examinations',
     author='Aleksandr Popov',
     author_email='aleneus@gmail.com',
-    packages=['egegmvc', 'egegmvc.models', 'egegmvc.views'],
+    packages=['egegmvc'],
     scripts=['tkgrouper.py', 'igrouper.py'],
     install_requires = [
         'numpy',
