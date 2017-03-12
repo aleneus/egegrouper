@@ -32,6 +32,8 @@ import egegmvc.sqlite3_model
 import egegmvc.tk_views
 import egegmvc.plot_views
 
+from collections import OrderedDict
+
 class MainWindow:
     """Main window. Shows groups and main menu."""
     

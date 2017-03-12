@@ -1,0 +1,26 @@
+{
+    "name": "Anonym",
+    "diagnosis": "Healphy",
+    "age": 20,
+    "gender": "m",
+    "measurements": [
+        {
+            "time": "18/11/2017 14:00:00",
+            "signals": [
+                {
+                    "dt": 0.5,
+                    "file": "signal-11.txt"
+                }
+            ]
+        },
+        {
+            "time": "18/11/2017 14:50:00",
+            "signals": [
+                {
+                    "dt": 0.5,
+                    "file": "signal-21.txt"
+                }
+            ]
+        }
+    ]
+}

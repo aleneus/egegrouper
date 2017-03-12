@@ -58,4 +58,19 @@ class TestSqliteModel(unittest.TestCase):
         result = m.create_storage('..')
         self.assertEqual(result, False)
 
+    def test_get_examination(self):
+        """Get examination by ID from data base."""
+        m = Model()
+        m.open_storage('./test.sme.sqlite')
+        e = m.exam(1)
+        self.assertNotEqual(e, None)
+
+    def test_get_no_existing_examination(self):
+        """Try to get examination from data base by no existing exam_id."""
+        m = Model()
+        m.open_storage('./test.sme.sqlite')
+        e = m.exam(1000)
+        self.assertEqual(e, None)
+
+
 unittest.main()
