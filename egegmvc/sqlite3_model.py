@@ -112,32 +112,33 @@ class Model(BaseModel):
             Examination object.
 
         """
-        try:
-            e = sme.Examination()
-            e.name, e.diagnosis, e.age, e.gender = list(self.c.execute("""
-            SELECT E.name, E.diagnosis, E.age, E.gender FROM examination AS E
-            WHERE exam_id = ? """, [exam_id, ]))[0]
-            e.ms = []
-            ms_sql = list(self.c.execute("""
-            SELECT M.meas_id, M.time FROM measurement AS M
-            WHERE exam_id = ?
-            ORDER BY meas_id """, [exam_id, ]))
-            for m_sql in ms_sql:
-                m = sme.Measurement()
-                m_id, m.time = m_sql
-                m.ss = []
-                ss_sql = list(self.c.execute("""
-                SELECT S.dt, S.data FROM signal AS S
-                WHERE meas_id = ? """, [m_id, ]))
-                for s_sql in ss_sql:
-                    s = sme.Signal()
-                    s.dt = s_sql[0]
-                    s.x = np.array(np.frombuffer(s_sql[1]))
-                    m.ss.append(s)
-                e.ms.append(m)
-            return e
-        except Exception:
+        e = sme.Examination()
+        self.c.execute("""
+        SELECT E.name, E.diagnosis, E.age, E.gender FROM examination AS E
+        WHERE exam_id = ? """, [exam_id, ])
+        result = self.c.fetchone()
+        if not result:
             return None
+        e.name, e.diagnosis, e.age, e.gender = result
+        e.ms = []
+        self.c.execute("""
+        SELECT M.meas_id, M.time FROM measurement AS M
+        WHERE exam_id = ?
+        ORDER BY meas_id """, [exam_id, ])
+        for m_sql in self.c.fetchall():
+            m = sme.Measurement()
+            m_id, m.time = m_sql
+            m.ss = []
+            self.c.execute("""
+            SELECT S.dt, S.data FROM signal AS S
+            WHERE meas_id = ? """, [m_id, ])
+            for s_sql in self.c.fetchall():
+                s = sme.Signal()
+                s.dt = s_sql[0]
+                s.x = np.array(np.frombuffer(s_sql[1]))
+                m.ss.append(s)
+            e.ms.append(m)
+        return e
 
     def insert_exam(self, e):
         """Insert examination into data base.
@@ -204,28 +205,32 @@ class Model(BaseModel):
             Headers.
 
         """
-        # group records
-        data = list(self.c.execute("""
+        if not self.state()['storage_opened']:
+            return None, None
+        
+        self.c.execute("""
         SELECT * FROM egeg_group;
-        """))
+        """)
+        data = self.c.fetchall()
         headers = tuple(map(lambda x: x[0], self.c.description))
-        # number of examinations in groups
         num_in_groups = []
 
         ext_data = []
         for d in data:
-            n = list(self.c.execute("""
+            self.c.execute("""
             SELECT COUNT(E.exam_id)
             FROM examination as E, group_element as GE
-            WHERE GE.exam_id = E.exam_id AND GE.group_id = ? """, [d[0], ]))[0][0]
+            WHERE GE.exam_id = E.exam_id AND GE.group_id = ? """, [d[0], ])
+            n = self.c.fetchall()[0][0]
             ext_data.append(d + (n,))
         ext_headers = headers + ("number",)
 
-        ungrouped_num = list(self.c.execute("""
+        self.c.execute("""
         SELECT COUNT(exam_id)
         FROM examination
-        WHERE exam_id NOT IN (SELECT exam_id FROM group_element) """, []))[0][0]
-
+        WHERE exam_id NOT IN (SELECT exam_id FROM group_element) """)
+        ungrouped_num = self.c.fetchall()[0][0]
+        
         last_string = ['' for h in ext_headers]
         last_string[0] = '0'
         last_string[-2] = 'Ungrouped'
@@ -251,20 +256,26 @@ class Model(BaseModel):
 
         """
         if group_id == '0':
-            data = list(self.c.execute("""
+            self.c.execute("""
             SELECT exam_id, name, diagnosis, age, gender
             FROM examination
             WHERE exam_id NOT IN (SELECT exam_id FROM group_element) 
-            """, []))
+            """)
         else:
-            data = list(self.c.execute("""
+            self.c.execute("""
+            SELECT COUNT(*) FROM egeg_group WHERE group_id = ?
+            """, [group_id])
+            if self.c.fetchall()[0][0] == 0:
+                return None, None
+
+            self.c.execute("""
             SELECT E.exam_id, E.name, E.diagnosis, E.age, E.gender
             FROM examination AS E, group_element AS GE
             WHERE GE.exam_id = E.exam_id AND GE.group_id = ?
-            """, [group_id, ]))
-
+            """, [group_id, ])
+            
+        data = self.c.fetchall()
         headers = tuple(map(lambda x: x[0], self.c.description))
-        
         return data, headers
 
     def insert_group(self, name, description):

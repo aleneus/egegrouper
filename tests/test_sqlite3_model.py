@@ -58,12 +58,21 @@ class TestSqliteModel(unittest.TestCase):
         result = m.create_storage('..')
         self.assertEqual(result, False)
 
+    # get examination
+
+    def test_get_examination_naive(self):
+        """Get examination record by ID from data base."""
+        m = Model()
+        m.open_storage('./test.sme.sqlite')
+        e = m.exam(1)
+        self.assertNotEqual(e, None)
+
     def test_get_examination(self):
         """Get examination by ID from data base."""
         m = Model()
         m.open_storage('./test.sme.sqlite')
         e = m.exam(1)
-        self.assertNotEqual(e, None)
+        self.assertEqual(len(e.ms), 2)
 
     def test_get_no_existing_examination(self):
         """Try to get examination from data base by no existing exam_id."""
@@ -72,5 +81,47 @@ class TestSqliteModel(unittest.TestCase):
         e = m.exam(1000)
         self.assertEqual(e, None)
 
+    # storage info
 
+    def test_storage_info(self):
+        """Storage info result must be not empty if storage was opened."""
+        m = Model()
+        m.open_storage('./test.sme.sqlite')
+        data, headers = m.storage_info()
+        self.assertEqual(len(data) > 0, True)
+        self.assertEqual(len(headers) > 0, True)
+
+    def test_storage_info_if_storage_not_opened(self):
+        """Storage info result must be empty if storage was not opened."""
+        m = Model()
+        data, headers = m.storage_info()
+        self.assertEqual(data, None)
+        self.assertEqual(headers, None)
+
+    # group info
+
+    def test_group_info_by_existing_not_zero_id(self):
+        """Storage info result must be not empty if storage was opened."""
+        m = Model()
+        m.open_storage('./test.sme.sqlite')
+        data, headers = m.group_info(1)
+        self.assertNotEqual(data, None)
+        self.assertNotEqual(headers, None)
+
+    def test_get_ungrouped(self):
+        """Storage info result must be not empty if storage was opened."""
+        m = Model()
+        m.open_storage('./test.sme.sqlite')
+        data, headers = m.group_info('0')
+        self.assertNotEqual(data, None)
+        self.assertNotEqual(headers, None)
+
+    def test_group_info_if_group_does_not_exist(self):
+        """Storage info result must be not empty if storage was opened."""
+        m = Model()
+        m.open_storage('./test.sme.sqlite')
+        data, headers = m.group_info(1000)
+        self.assertEqual(data, None)
+        self.assertEqual(headers, None)
+        
 unittest.main()
