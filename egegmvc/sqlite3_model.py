@@ -54,15 +54,11 @@ class Model(BaseModel):
             self.close_storage()
         if os.path.isfile(file_name):
             os.remove(file_name)
-        try:
-            self.conn = sqlite3.connect(file_name)
-            self.c = self.conn.cursor()
-            self.c.executescript(create_sme_db_script)
-            self.conn.commit()
-            self.set_state(storage_opened=True, file_name = file_name)
-            return True
-        except Exception:
-            return False
+        self.conn = sqlite3.connect(file_name)
+        self.c = self.conn.cursor()
+        self.c.executescript(create_sme_db_script)
+        self.conn.commit()
+        self.set_state(storage_opened=True, file_name = file_name)
 
     def open_storage(self, file_name):
         """Open data base.
@@ -79,10 +75,9 @@ class Model(BaseModel):
         self.c = self.conn.cursor()
         self.c.execute("pragma foreign_keys=on")
         self.set_state(storage_opened=True, file_name=file_name)
-        return True
 
     def do_if_storage_opened(method):
-        """If storage is not opened AttributeError raised."""
+        """Decorator. If storage is not opened AttributeError raised."""
         def wrapped(self, *args):
             if not self.state()['storage_opened']:
                 raise AttributeError('Storage is not opened.')
@@ -431,12 +426,8 @@ class Model(BaseModel):
             Name of folder with info.json and signal txt files.
         
         """
-        try:
-            e = jsme.get_exam_from_folder(folder_name)
-            self.insert_exam(e)
-            return True
-        except Exception:
-            return False
+        e = jsme.get_exam_from_folder(folder_name)
+        self.insert_exam(e)
 
     @do_if_storage_opened
     def export_as_json_folder(self, exam_id, folder_name):
@@ -449,7 +440,7 @@ class Model(BaseModel):
         
         """
         e = self.exam(exam_id)
-        return jsme.put_exam_to_folder(e, folder_name)
+        jsme.put_exam_to_folder(e, folder_name)
 
     @do_if_storage_opened
     def group_record(self, group_id):
@@ -466,16 +457,13 @@ class Model(BaseModel):
             Attributes names and values for selected group.
         """
         attr = OrderedDict()
-        try:
-            self.c.execute("""
-            SELECT name, description
-            FROM egeg_group
-            WHERE group_id = ?
-            """, (group_id, ))
-            attr['name'], attr['description'] = self.c.fetchone()
-            return attr
-        except IndexError:
-            return None
+        self.c.execute("""
+        SELECT name, description
+        FROM egeg_group
+        WHERE group_id = ?
+        """, (group_id, ))
+        attr['name'], attr['description'] = self.c.fetchone()
+        return attr
 
     @do_if_storage_opened
     def update_group_record(self, group_id, attr):
@@ -489,17 +477,12 @@ class Model(BaseModel):
             Attributes names and values.
 
         """
-        try:
-            self.c.execute("""
-            UPDATE egeg_group
-            SET name = ?, description = ?
-            WHERE group_id = ?
-            """, (attr['name'], attr['description'], group_id, ))
-            self.conn.commit()
-            return True
-        except Exception:
-            return False
-
+        self.c.execute("""
+        UPDATE egeg_group
+        SET name = ?, description = ?
+        WHERE group_id = ?
+        """, (attr['name'], attr['description'], group_id, ))
+        self.conn.commit()
 
 class DBImporter:
     def DBimport(self, dest_filename, source_filename):

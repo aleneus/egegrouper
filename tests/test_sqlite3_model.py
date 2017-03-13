@@ -66,20 +66,20 @@ class TestSqliteModel(unittest.TestCase):
     def test_create_storage_if_exists(self):
         """If file file_name exists it should be correctly replaced by new storage."""
         m = Model()
-        file_name = './file.sme.sqlite'
-        if os.path.isfile(file_name):
-            os.remove(file_name)
+        file_name = './copy-test.sme.sqlite'
+        shutil.copy2('./test.sme.sqlite', file_name)
         m.create_storage(file_name)
-        result = m.create_storage(file_name)
+        m.close_storage()
+        
+        conn = sqlite3.connect(file_name)
+        c = conn.cursor()
+        c.execute("select count(*) from examination")
+        n = c.fetchone()[0]
+        conn.close()
+        
         if os.path.isfile(file_name):
             os.remove(file_name)
-        self.assertEqual(result, True)
-
-    def test_create_storage_with_bad_file_name(self):
-        """If the storage has some bad file_name, the model should return False."""
-        m = Model()
-        result = m.create_storage('..')
-        self.assertEqual(result, False)
+        self.assertEqual(n, 0)
 
     # get examination
 

@@ -29,7 +29,7 @@ from egegmvc.controller import Controller
 class ModelStub:
     def create_storage(self, name):
         if name=='bad_name':
-            return False
+            raise Exception
         else:
             return True
 
@@ -51,11 +51,9 @@ class ViewStub:
 class TestController(unittest.TestCase):
 
     def test_syntax(self):
-        #"""Test syntax."""
         pass
     
     def test_create_storage(self):
-        #"""Test create storage."""
         c = Controller(ModelStub())
         result = c.create_storage('bad_name')
         self.assertFalse(result)
