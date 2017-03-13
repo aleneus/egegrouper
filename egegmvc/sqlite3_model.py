@@ -81,6 +81,14 @@ class Model(BaseModel):
         self.set_state(storage_opened=True, file_name=file_name)
         return True
 
+    def do_if_storage_opened(method):
+        """If storage is not opened AttributeError raised."""
+        def wrapped(self, *args):
+            if not self.state()['storage_opened']:
+                raise AttributeError('Storage is not opened.')
+            return method(self, *args)
+        return wrapped
+
     def close_storage(self):
         """Close data base."""
         if self.state()['storage_opened']:
@@ -97,7 +105,8 @@ class Model(BaseModel):
 
         """
         return os.path.isfile(file_name)
-    
+
+    @do_if_storage_opened
     def exam(self, exam_id):
         """Return examination from data base.
 
@@ -140,6 +149,7 @@ class Model(BaseModel):
             e.ms.append(m)
         return e
 
+    @do_if_storage_opened
     def insert_exam(self, e):
         """Insert examination into data base.
 
@@ -149,9 +159,6 @@ class Model(BaseModel):
             Examination object
 
         """
-        if not self.state()['storage_opened']:
-            return False
-
         self.c.execute("""
         SELECT max(exam_id)
         FROM examination """)
@@ -185,6 +192,7 @@ class Model(BaseModel):
         self.conn.commit()
         return True
 
+    @do_if_storage_opened
     def delete_exam(self, exam_id):
         """Remove examination from data base.
 
@@ -200,6 +208,7 @@ class Model(BaseModel):
         """,(exam_id, ))
         self.conn.commit()
 
+    @do_if_storage_opened
     def storage_info(self):
         """Return tabular information about storage.
 
@@ -211,9 +220,6 @@ class Model(BaseModel):
             Headers.
 
         """
-        if not self.state()['storage_opened']:
-            return None, None
-        
         self.c.execute("""
         SELECT * FROM egeg_group;
         """)
@@ -245,6 +251,7 @@ class Model(BaseModel):
         
         return ext_data, ext_headers    
 
+    @do_if_storage_opened
     def group_info(self, group_id):
         """Return short information about examinations in selected group.
 
@@ -284,6 +291,7 @@ class Model(BaseModel):
         headers = tuple(map(lambda x: x[0], self.c.description))
         return data, headers
 
+    @do_if_storage_opened
     def insert_group(self, name, description):
         """Add new group of examinations.
 
@@ -295,13 +303,12 @@ class Model(BaseModel):
             Description for new group.
 
         """
-        if not self.state()['storage_opened']:
-            return
         self.c.execute("""
         INSERT INTO egeg_group (name, description)
         VALUES (?, ?) """, [name, description, ])
         self.conn.commit()
 
+    @do_if_storage_opened
     def delete_group(self, group_id):
         """Delete group of examinations fron data base.
 
@@ -315,6 +322,7 @@ class Model(BaseModel):
         WHERE group_id = ? """, [group_id, ])
         self.conn.commit()
 
+    @do_if_storage_opened
     def group_exam(self, exam_id, group_ids, placed_in):
         """Add and delete examination to and from groups.
 
@@ -345,6 +353,7 @@ class Model(BaseModel):
                     pass
         self.conn.commit()
 
+    @do_if_storage_opened
     def where_exam(self, exam_id):
         """Return description of groups where examination in or not in.
 
@@ -378,6 +387,7 @@ class Model(BaseModel):
         
         return group_records, headers, placed_in
     
+    @do_if_storage_opened
     def add_sme_db(self, file_name):
         """Add SME sqlite3 data base to current data base.
 
@@ -394,6 +404,7 @@ class Model(BaseModel):
         SMEDBImporter().DBimport(dest_name, source_name)
         self.open_storage(dest_name)
 
+    @do_if_storage_opened
     def add_gs_db(self, file_name):
         """Add GS sqlite3 data base to current data base.
         
@@ -410,6 +421,7 @@ class Model(BaseModel):
         GSDBImporter().DBimport(dest_name, source_name)
         self.open_storage(dest_name)
 
+    @do_if_storage_opened
     def add_exam_from_json_folder(self, folder_name):
         """Add examination from JSON folder to current data base.
 
@@ -426,6 +438,7 @@ class Model(BaseModel):
         except Exception: #FileNotFoundError:
             return False
 
+    @do_if_storage_opened
     def export_as_json_folder(self, exam_id, folder_name):
         """Export examination to JSON folder. Return True if sucsess, False overwise.
         
@@ -438,6 +451,7 @@ class Model(BaseModel):
         e = self.exam(exam_id)
         return jsme.put_exam_to_folder(e, folder_name)
 
+    @do_if_storage_opened
     def group_record(self, group_id):
         """Return attribute names and values of selected group.
 
@@ -463,6 +477,7 @@ class Model(BaseModel):
         except IndexError:
             return None
 
+    @do_if_storage_opened
     def update_group_record(self, group_id, attr):
         """Update group record in data base. Return True if sucsess, False overwise.
 

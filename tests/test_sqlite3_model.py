@@ -134,8 +134,13 @@ class TestSqliteModel(unittest.TestCase):
         m = Model()
         file_name = './copy-test.sme.sqlite'
         shutil.copy2('./test.sme.sqlite', file_name)
-        result = m.insert_exam(create_test_exam())
-        self.assertFalse(result)
+        try:
+            m.insert_exam(create_test_exam())
+            result = True
+        except AttributeError:
+            result = False
+        finally:
+            self.assertFalse(result)
 
     def test_insert_examination_to_new_storage(self):
         """Number of examination must be 1 after insertion examination to new empty storage."""
@@ -169,9 +174,13 @@ class TestSqliteModel(unittest.TestCase):
     def test_storage_info_if_storage_not_opened(self):
         """Storage info result must be empty if storage was not opened."""
         m = Model()
-        data, headers = m.storage_info()
-        self.assertEqual(data, None)
-        self.assertEqual(headers, None)
+        try:
+            m.storage_info()
+            result = True
+        except AttributeError:
+            result = False
+        finally:
+            self.assertFalse(result)
 
     # group info
 
