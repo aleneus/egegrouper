@@ -435,7 +435,7 @@ class Model(BaseModel):
             e = jsme.get_exam_from_folder(folder_name)
             self.insert_exam(e)
             return True
-        except Exception: #FileNotFoundError:
+        except Exception:
             return False
 
     @do_if_storage_opened

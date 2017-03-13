@@ -36,12 +36,60 @@ class ModelStub:
     def storage_info(self):
         return None, None
 
+    def exam(self, exam_id):
+        if exam_id == 'raise_excetion':
+            raise AttributeError('Test')
+        if exam_id == '1':
+            return 'examination data'
+        if exam_id == '1000':
+            return None
+
+class ViewStub:
+    def show_data(*args):
+        pass
+
 class TestController(unittest.TestCase):
+
+    def test_syntax(self):
+        #"""Test syntax."""
+        pass
     
     def test_create_storage(self):
-        """Test create storage."""
+        #"""Test create storage."""
         c = Controller(ModelStub())
         result = c.create_storage('bad_name')
-        self.assertEqual(result, False)
+        self.assertFalse(result)
+
+    def test_exam_with_existing_id(self):
+        c = Controller(ModelStub())
+        c.view_exam = ViewStub()
+        result = c.exam('1')
+        self.assertTrue(result)
+        
+    def test_exam_with_no_existing_id(self):
+        c = Controller(ModelStub())
+        result = c.exam('1000')
+        self.assertTrue(result)
+        
+    def test_exam_if_model_raising_exception(self):
+        c = Controller(ModelStub())
+        result = c.exam('raise_excetion')
+        self.assertFalse(result)
+        
+    def test_plot_exam_with_existing_id(self):
+        c = Controller(ModelStub())
+        c.view_exam_plot = ViewStub()
+        result = c.plot_exam('1')
+        self.assertTrue(result)
+        
+    def test_plot_exam_with_no_existing_id(self):
+        c = Controller(ModelStub())
+        result = c.plot_exam('1000')
+        self.assertTrue(result)
+        
+    def test_plot_exam_if_model_raising_exception(self):
+        c = Controller(ModelStub())
+        result = c.plot_exam('raise_excetion')
+        self.assertFalse(result)
 
 unittest.main()

@@ -54,6 +54,12 @@ class Controller:
 
         """
         self.model = model
+
+    def show_message(self, text):
+        """If controller has message view it asks veiw to show message."""
+        if not self.view_message:
+            return
+        self.view_message.show_data(text)
     
     def open_storage(self, file_name):
         """Open storage.
@@ -132,14 +138,16 @@ class Controller:
             Examination ID.
 
         """
-        e = self.model.exam(exam_id)
-        if not e:
-            if self.view_message:
-                self.view_message.show_data('Something wrong')
-            return False
-        if self.view_exam:
+        try:
+            e = self.model.exam(exam_id)
+            if e == None:
+                self.show_message('Exam data is empty.')
+                return True
             self.view_exam.show_data(e)
-        return True
+            return True
+        except Exception:
+            self.show_message('Something wrong.')
+            return False
 
     def plot_exam(self, exam_id):
         """Plot signals of examination.
@@ -150,14 +158,16 @@ class Controller:
             Examination ID.
 
         """
-        e = self.model.exam(exam_id)
-        if not e:
-            if self.view_message:
-                self.view_message.show_data('Something wrong')
-            return
-        if self.view_exam_plot:
+        try:
+            e = self.model.exam(exam_id)
+            if e == None:
+                self.show_message('Exam data is empty.')
+                return True
             self.view_exam_plot.show_data(e)
-        return True
+            return True
+        except Exception:
+            self.show_message('Something wrong')
+            return False
 
     def insert_group(self, name, description):
         """Add new group to current storage.
@@ -170,8 +180,9 @@ class Controller:
             Description of new group.
 
         """
-        self.model.insert_group(name, description) # TODO: OrderedDict
+        self.model.insert_group(name, description)
         self.storage_info()
+        return True
 
     def delete_group(self, group_id):
         """Delete group.
@@ -184,6 +195,7 @@ class Controller:
         """
         self.model.delete_group(group_id)
         self.storage_info()
+        return True
 
     def group_exam(self, exam_id, group_ids, placed_in):
         """Add and delete examination to and from groups.
@@ -199,6 +211,7 @@ class Controller:
 
         """
         self.model.group_exam(exam_id, group_ids, placed_in)
+        return True
 
     def where_exam(self, exam_id):
         """Show information of groups where examination is.
@@ -210,8 +223,7 @@ class Controller:
 
         """
         group_records, headers, placed_in = self.model.where_exam(exam_id)
-        if self.view_where_exam:
-            self.view_where_exam.show_data(group_records, headers, placed_in)
+        self.view_where_exam.show_data(group_records, headers, placed_in)
         return True
         
     def add_sme_db(self, file_name):
@@ -224,8 +236,7 @@ class Controller:
 
         """
         self.model.add_sme_db(file_name)
-        if self.view_message:
-            self.view_message.show_data('Done.')
+        self.show_message('Done.')
         return True
 
     def add_gs_db(self, file_name):
@@ -238,8 +249,7 @@ class Controller:
 
         """
         self.model.add_gs_db(file_name)
-        if self.view_message:
-            self.view_message.show_data('Done.')
+        self.show_message('Done.')
         return True
 
     def add_exam_from_json_folder(self, folder_name):
@@ -251,13 +261,12 @@ class Controller:
             Name of folder wich should contain the file info.json.
         
         """
-        result = self.model.add_exam_from_json_folder(folder_name)
-        if self.view_message:
-            if not result:
-                self.view_message.show_data('Something wrong.')
-            else:
-                self.view_message.show_data('Done.')
-        return result
+        if self.model.add_exam_from_json_folder(folder_name):
+            self.show_message('Done.')
+            return True
+        else:
+            self.show_message('Something wrong.')
+            return False
 
     def export_as_json_folder(self, exam_id, folder_name):
         """Export examination to JSON folder.
@@ -271,11 +280,11 @@ class Controller:
 
         """
         if self.model.export_as_json_folder(exam_id, folder_name):
-            if self.view_message:
-                self.view_message.show_data('Done.')
+            self.show_message('Done.')
+            return True
         else:
-            if self.view_message:
-                self.view_message.show_data('Something wrong.')
+            self.show_message('Something wrong.')
+            return False
 
     def delete_exam(self, exam_id):
         """Delete examination from storage.
@@ -287,6 +296,7 @@ class Controller:
         
         """
         self.model.delete_exam(exam_id)
+        return True
 
     def merge_exams(self, exam_id_1, exam_id_2):
         """Merge two exams.
@@ -305,9 +315,7 @@ class Controller:
         e2 = self.model.exam(exam_id_2)
         e = sme.merge_exams(e1, e2)
         self.model.insert_exam(e)
-        # todo exceptions
-        if self.view_message:
-            self.view_message.show_data('Done')
+        self.show_message('Done')
         return True
 
     def group_record(self, group_id):
@@ -324,7 +332,8 @@ class Controller:
             Attributes names and values.
 
         """
-        return self.model.group_record(group_id)
+        self.model.group_record(group_id)
+        return True
 
     def update_group_record(self, group_id, attr):
         """ Update attribute values of selected group.
@@ -342,4 +351,4 @@ class Controller:
         
         """
         self.model.update_group_record(group_id, attr)
-        # TODO exceptions
+        return True
