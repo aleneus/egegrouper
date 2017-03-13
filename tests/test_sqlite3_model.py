@@ -20,14 +20,37 @@
 
 import unittest
 import os
+import shutil
+import sqlite3
 
 import sys
 sys.path.insert(0, os.path.abspath('../'))
 
 from egegmvc.sqlite3_model import Model
+from egegmvc import sme
+
+def create_test_exam():
+    """Create test examination."""
+    e = sme.Examination()
+    m1 = sme.Measurement()
+    s11 = sme.Signal()
+    s11.x = [1,2,3,4,5]
+    m1.signals = [s11]
+    m2 = sme.Measurement()
+    s21 = sme.Signal()
+    s21.x = [1,2,3,4,5]
+    m2.signals = [s21]
+    e.measurements = [m1, m2]
+    return e
+
+
 
 class TestSqliteModel(unittest.TestCase):
     
+    def test_syntax(self):
+        """Syntax."""
+        pass
+
     def test_create_storage(self):
         """Test the fact of storage creation."""
         m = Model()
@@ -80,6 +103,58 @@ class TestSqliteModel(unittest.TestCase):
         m.open_storage('./test.sme.sqlite')
         e = m.exam(1000)
         self.assertEqual(e, None)
+
+    # insert examination
+
+    def test_insert_examination(self):
+        """Number of examination must be increase after insert examination."""
+        m = Model()
+        file_name = './copy-test.sme.sqlite'
+        shutil.copy2('./test.sme.sqlite', file_name)
+        
+        def get_len():
+            conn = sqlite3.connect(file_name)
+            c = conn.cursor()
+            c.execute("select count(*) from examination")
+            return c.fetchone()[0]
+            conn.close()
+            
+        len_before = get_len()
+        m.open_storage(file_name)
+        m.insert_exam(create_test_exam())
+        m.close_storage()
+        len_after = get_len()
+        
+        if os.path.isfile(file_name):
+            os.remove(file_name)
+        self.assertTrue(len_after > len_before)
+
+    def test_insert_examination_if_storage_was_not_open(self):
+        """Insert examination method must return False if storage was not open."""
+        m = Model()
+        file_name = './copy-test.sme.sqlite'
+        shutil.copy2('./test.sme.sqlite', file_name)
+        result = m.insert_exam(create_test_exam())
+        self.assertFalse(result)
+
+    def test_insert_examination_to_new_storage(self):
+        """Number of examination must be 1 after insertion examination to new empty storage."""
+        m = Model()
+        file_name = './copy-test.sme.sqlite'
+        
+        m.create_storage(file_name)
+        m.insert_exam(create_test_exam())
+        m.close_storage()
+        
+        conn = sqlite3.connect(file_name)
+        c = conn.cursor()
+        c.execute("select count(*) from examination")
+        n = c.fetchone()[0]
+        conn.close()
+            
+        if os.path.isfile(file_name):
+            os.remove(file_name)
+        self.assertEqual(n, 1)
 
     # storage info
 

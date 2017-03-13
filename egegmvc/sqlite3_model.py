@@ -149,15 +149,20 @@ class Model(BaseModel):
             Examination object
 
         """
-        exam_id = list(self.c.execute("""
+        if not self.state()['storage_opened']:
+            return False
+
+        self.c.execute("""
         SELECT max(exam_id)
-        FROM examination """))[0][0]
+        FROM examination """)
+        exam_id = self.c.fetchone()[0]
         if not exam_id:
             exam_id = 0
-            
-        meas_id = list(self.c.execute("""
+
+        self.c.execute("""
         SELECT max(meas_id)
-        FROM measurement """))[0][0]
+        FROM measurement """)
+        meas_id = self.c.fetchone()[0]
         if not meas_id:
             meas_id = 0
 
@@ -178,6 +183,7 @@ class Model(BaseModel):
                 VALUES (?,?,?) """, (s.x.tobytes(), s.dt, meas_id) )
             
         self.conn.commit()
+        return True
 
     def delete_exam(self, exam_id):
         """Remove examination from data base.
@@ -357,17 +363,16 @@ class Model(BaseModel):
             True if exam in group, False overwise.
         
         """
-        
+
         including_exam_groups_ids = [
-            r[0] for r in list(self.c.execute("""
+            r[0] for r in self.c.execute("""
             SELECT G.group_id
             FROM egeg_group as G, group_element
-            WHERE G.group_id = group_element.group_id AND group_element.exam_id = ? """, [exam_id]))
+            WHERE G.group_id = group_element.group_id AND group_element.exam_id = ? """, [exam_id])
         ]
 
-        group_records = list(self.c.execute("""
-        SELECT * FROM egeg_group
-        """))
+        self.c.execute("SELECT * FROM egeg_group")
+        group_records = self.c.fetchall()
         headers = tuple(map(lambda x: x[0], self.c.description))
         placed_in = [gr[0] in including_exam_groups_ids for gr in group_records]
         
@@ -448,11 +453,12 @@ class Model(BaseModel):
         """
         attr = OrderedDict()
         try:
-            attr['name'], attr['description'] = list(self.c.execute("""
+            self.c.execute("""
             SELECT name, description
             FROM egeg_group
             WHERE group_id = ?
-            """, (group_id, )))[0]
+            """, (group_id, ))
+            attr['name'], attr['description'] = self.c.fetchone()
             return attr
         except IndexError:
             return None
@@ -540,8 +546,10 @@ class GSDBImporter(DBImporter):
         Get during (last) measurement's and examination's id.
         
         """
-        exam_id = list(self._dest_c.execute('SELECT max(exam_id) FROM examination'))[0][0]
-        meas_id = list(self._dest_c.execute('SELECT max(meas_id) FROM measurement'))[0][0]
+        self._dest_c.execute('SELECT max(exam_id) FROM examination')
+        exam_id = self._dest_c.fetchone()[0]
+        self._dest_c.execute('SELECT max(meas_id) FROM measurement')
+        meas_id = self._dest_c.fetchone()[0]
         if not exam_id:
             exam_id = 0
         if not meas_id:
