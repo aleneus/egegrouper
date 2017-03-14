@@ -62,14 +62,13 @@ class Controller:
         self.view_message.show_data(text)
 
     def model_can_grumble(method):
-        """Decorator. Ask model to do something and if model raises exception return False."""
+        """Decorator. Try to do something and if model raises an exception return None."""
         def wrapped(self, *args):
             try:
-                method(self, *args)
-                return True
+                return method(self, *args)
             except Exception:
                 self.show_message('Something wrong') #TODO: more concrete messages
-                return False
+                return None
         return wrapped
 
     @model_can_grumble
@@ -84,6 +83,7 @@ class Controller:
         """
         self.model.open_storage(file_name)
         self.storage_info()
+        return True
         
     @model_can_grumble
     def create_storage(self, file_name):
@@ -114,6 +114,7 @@ class Controller:
         """
         self.model.open_or_create_storage(file_name)
         self.storage_info()
+        return True
 
     @model_can_grumble
     def close_storage(self):
@@ -125,6 +126,7 @@ class Controller:
         """Show common information about storage."""
         data, headers = self.model.storage_info()
         self.view_storage.show_data(data, headers)
+        return True
 
     @model_can_grumble
     def group_info(self, group_id):
@@ -138,6 +140,7 @@ class Controller:
         """
         data, headers = self.model.group_info(group_id)
         self.view_group.show_data(data, headers)
+        return True
 
     @model_can_grumble
     def exam(self, exam_id):
@@ -154,6 +157,7 @@ class Controller:
             self.show_message('Exam data is empty.')
             return True
         self.view_exam.show_data(e)
+        return True
 
     @model_can_grumble
     def plot_exam(self, exam_id):
@@ -170,6 +174,7 @@ class Controller:
             self.show_message('Exam data is empty.')
             return True
         self.view_exam_plot.show_data(e)
+        return True
 
     @model_can_grumble
     def insert_group(self, name, description):
@@ -185,6 +190,7 @@ class Controller:
         """
         self.model.insert_group(name, description)
         self.storage_info()
+        return True
 
     @model_can_grumble
     def delete_group(self, group_id):
@@ -198,6 +204,7 @@ class Controller:
         """
         self.model.delete_group(group_id)
         self.storage_info()
+        return True
 
     @model_can_grumble
     def group_exam(self, exam_id, group_ids, placed_in):
@@ -214,6 +221,7 @@ class Controller:
 
         """
         self.model.group_exam(exam_id, group_ids, placed_in)
+        return True
 
     @model_can_grumble
     def where_exam(self, exam_id):
@@ -227,6 +235,7 @@ class Controller:
         """
         group_records, headers, placed_in = self.model.where_exam(exam_id)
         self.view_where_exam.show_data(group_records, headers, placed_in)
+        return True
 
     @model_can_grumble
     def add_sme_db(self, file_name):
@@ -240,6 +249,7 @@ class Controller:
         """
         self.model.add_sme_db(file_name)
         self.show_message('Done.')
+        return True
 
     @model_can_grumble
     def add_gs_db(self, file_name):
@@ -253,6 +263,7 @@ class Controller:
         """
         self.model.add_gs_db(file_name)
         self.show_message('Done.')
+        return True
 
     @model_can_grumble
     def add_exam_from_json_folder(self, folder_name):
@@ -266,6 +277,7 @@ class Controller:
         """
         self.model.add_exam_from_json_folder(folder_name)
         self.show_message('Done.')
+        return True
 
     @model_can_grumble
     def export_as_json_folder(self, exam_id, folder_name):
@@ -281,6 +293,7 @@ class Controller:
         """
         self.model.export_as_json_folder(exam_id, folder_name)
         self.show_message('Done.')
+        return True
 
     @model_can_grumble
     def delete_exam(self, exam_id):
@@ -293,6 +306,7 @@ class Controller:
         
         """
         self.model.delete_exam(exam_id)
+        return True
 
     @model_can_grumble
     def merge_exams(self, exam_id_1, exam_id_2):
@@ -313,8 +327,9 @@ class Controller:
         e = sme.merge_exams(e1, e2)
         self.model.insert_exam(e)
         self.show_message('Done')
+        return True
 
-    # TODO
+    @model_can_grumble
     def group_record(self, group_id):
         """Return group record.
 
@@ -342,9 +357,6 @@ class Controller:
         attr : OrderedDict
             Attributes names and values.
 
-        Return
-        ------
-        : str
-        
         """
         self.model.update_group_record(group_id, attr)
+        return True

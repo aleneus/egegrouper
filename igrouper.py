@@ -311,7 +311,6 @@ class GrouperShell(cmd.Cmd):
         
         data = controller.group_record(group_id)
         if not data:
-            print('Something wrong')
             return
         DialogText(data).input()
         controller.update_group_record(group_id, data)
