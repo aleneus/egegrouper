@@ -22,7 +22,7 @@ from setuptools import setup
 
 setup(
     name='EGEGrouper',
-    version='1.0',
+    version='0.1',
     description='Tool for grouping EGEG examinations',
     author='Aleksandr Popov',
     author_email='aleneus@gmail.com',
@@ -32,6 +32,7 @@ setup(
         'numpy',
         'matplotlib',
         'tabulate',
+        'pyreadline;platform_system=="Windows"',
     ],
     entry_points={
         'console_scripts': [
