@@ -32,6 +32,7 @@ setup(
         'numpy',
         'matplotlib',
         'tabulate',
+        'nose',
         'pyreadline;platform_system=="Windows"',
     ],
     entry_points={
