@@ -23,9 +23,9 @@ import numpy as np
 from collections import OrderedDict
 import os
 
-from egegmvc.model import BaseModel
-import egegmvc.sme as sme
-import egegmvc.sme_json_folders as jsme
+from .model import BaseModel
+from . import sme
+from . import sme_json_folders as jsme
 
 class Model(BaseModel):
     """Model implementation for SQLite3 SME data base."""

@@ -18,7 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 """
 
-from egegmvc import sme
+from . import sme
 
 class Controller:
     """Controller in MVC."""

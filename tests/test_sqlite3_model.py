@@ -20,14 +20,14 @@
 
 import unittest
 import os
+import sys
 import shutil
 import sqlite3
 
-import sys
-sys.path.insert(0, os.path.abspath('../'))
-
-from egegmvc.sqlite3_model import Model
-from egegmvc import sme
+from .context import egegrouper
+from egegrouper import *
+from egegrouper.sqlite3_model import Model
+from egegrouper import sme
 
 def create_test_exam():
     """Create test examination."""
@@ -207,5 +207,6 @@ class TestSqliteModel(unittest.TestCase):
         data, headers = m.group_info(1000)
         self.assertEqual(data, None)
         self.assertEqual(headers, None)
-        
-unittest.main()
+
+if __name__ == '__main__':
+    unittest.main()

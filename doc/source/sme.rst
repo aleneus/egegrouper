@@ -6,12 +6,12 @@ Conceptual SME model
 SME classes
 ===========	   
 	   
-.. automodule:: egegmvc.sme
+.. automodule:: egegrouper.sme
    :members:
 
 SME and JSON folders
 ====================
 
-.. automodule:: egegmvc.sme_json_folders
+.. automodule:: egegrouper.sme_json_folders
    :members:
 

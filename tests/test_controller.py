@@ -18,13 +18,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from .context import egegrouper
+from egegrouper.controller import Controller
+
 import unittest
 import os
-
-import sys
-sys.path.insert(0, os.path.abspath('../'))
-
-from egegmvc.controller import Controller
 
 class ModelStub:
     def create_storage(self, name):
@@ -49,6 +47,9 @@ class ViewStub:
         pass
 
 class TestController(unittest.TestCase):
+
+    def test_absolute_truth_and_meaning(self):
+        assert True
 
     def test_syntax(self):
         pass
@@ -90,4 +91,5 @@ class TestController(unittest.TestCase):
         result = c.plot_exam('raise_excetion')
         self.assertFalse(result)
 
-unittest.main()
+if __name__ == '__main__':
+    unittest.main()

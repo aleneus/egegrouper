@@ -1,6 +1,6 @@
 GrouperController
 =================
 
-.. automodule:: egegmvc.controller
+.. automodule:: egegrouper.controller
    :members:
    

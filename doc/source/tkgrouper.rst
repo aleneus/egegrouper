@@ -1,5 +1,5 @@
 tkgrouper
 =========
 
-.. automodule:: tkgrouper
+.. automodule:: egegrouper.tkgrouper
    :members:

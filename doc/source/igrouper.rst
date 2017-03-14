@@ -1,5 +1,5 @@
 igrouper
 ========
 
-.. automodule:: igrouper
+.. automodule:: egegrouper.igrouper
    :members:

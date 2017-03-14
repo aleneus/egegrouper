@@ -26,8 +26,8 @@ setup(
     description='Tool for grouping EGEG examinations',
     author='Aleksandr Popov',
     author_email='aleneus@gmail.com',
-    packages=['egegmvc'],
-    scripts=['tkgrouper.py', 'igrouper.py'],
+    packages=['egegrouper'],
+    #scripts=['tkgrouper.py', 'igrouper.py'],
     install_requires = [
         'numpy',
         'matplotlib',
@@ -36,10 +36,10 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'igrouper = igrouper:main'
+            'igrouper = egegrouper.igrouper:main'
         ],
         'gui_scripts': [
-            'tkgrouper = tkgrouper:main'
+            'tkgrouper = egegrouper.tkgrouper:main'
         ]
     },
 )
