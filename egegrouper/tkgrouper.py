@@ -379,6 +379,3 @@ controller.view_message = tk_views.Message()
 def main():
     main_window = MainWindow()
     main_window.master.mainloop()
-
-if __name__ == '__main__':
-    main()

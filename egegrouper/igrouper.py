@@ -329,12 +329,6 @@ class GrouperShell(cmd.Cmd):
         """)    
 
 controller = controller.Controller(sqlite3_model.Model())
-controller.view_message = text_views.Message()
-controller.view_storage = text_views.Table()
-controller.view_group = text_views.Table()
-controller.view_exam = text_views.Exam()
-controller.view_where_exam = text_views.WhereExam()
-controller.view_exam_plot = plot_views.Exam()
         
 def main():
     print("""
@@ -348,11 +342,17 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("fname", help="Name of data base")
     args = parser.parse_args()
+    
+    controller.view_message = text_views.Message()
+    controller.view_storage = text_views.Table()
+    controller.view_group = text_views.Table()
+    controller.view_exam = text_views.Exam()
+    controller.view_where_exam = text_views.WhereExam()
+    controller.view_exam_plot = plot_views.Exam()
+    
     if not controller.open_or_create_storage(args.fname):
         print("Can't open storage\nExit...\n")
         return
+
     gshell = GrouperShell()
     gshell.cmdloop()
-
-if __name__ == '__main__':
-    main()
