@@ -6,15 +6,30 @@
 Welcome to egegrouper's documentation!
 ======================================
 
+Electrogastrography (EGG) and electrogastroenterography (EGEG) are electrophysiological methods for diagnostics of stomach and gastrointestinal tract motility.
+
+This package provides the abilities of forming the sets of EGG and EGEG examinations data for follow statistical processing.
+
+User guides
+-----------
+
+.. toctree::
+   
+   tkgrouper <tkgrouper_guide>
+   igrouper <igrouper_guide>
+
+Package documentation
+---------------------
+
 SME model
----------
+^^^^^^^^^
 
 .. toctree::
 
    SME <sme>
       
 Base part
----------
+^^^^^^^^^
 
 .. toctree::
 
@@ -22,14 +37,14 @@ Base part
    Controller <controller>
 
 Model implementations
----------------------
+^^^^^^^^^^^^^^^^^^^^^
 
 .. toctree::
    
    Sqlite3 <sqlite3>
 
 Views
------
+^^^^^
 
 .. toctree::
    
@@ -38,7 +53,7 @@ Views
    Plot <plot>
 
 User Interfaces
----------------
+^^^^^^^^^^^^^^^
 
 .. toctree::
 
