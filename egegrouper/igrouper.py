@@ -340,12 +340,12 @@ def main():
     parser.add_argument("fname", help="Name of data base")
     args = parser.parse_args()
     
-    controller.view_message = text_views.Message()
-    controller.view_storage = text_views.Table()
-    controller.view_group = text_views.Table()
-    controller.view_exam = text_views.Exam()
-    controller.view_where_exam = text_views.WhereExam()
-    controller.view_exam_plot = plot_views.Exam()
+    controller.set_view_message(text_views.Message())
+    controller.set_view_storage(text_views.Table())
+    controller.set_view_group(text_views.Table())
+    controller.set_view_exam(text_views.Exam())
+    controller.set_view_where_exam(text_views.WhereExam())
+    controller.set_view_exam_plot(plot_views.Exam())
     
     if not controller.open_or_create_storage(args.fname):
         print("Can't open storage\nExit...\n")

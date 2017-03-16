@@ -27,26 +27,6 @@ from . import sme
 class Controller:
     """Controller in MVC."""
     
-    model = None
-    """Model."""
-    
-    view_message = None
-    """View for messages."""
-
-    view_storage = None
-    """View for common information about storage."""
-
-    view_group = None
-    """View for information about examination in group."""
-    
-    view_exam = None
-    """View for details of one examination."""
-
-    view_exam_plot = None
-    """View for plotting signals of examination."""
-
-    view_where_exam = None
-    """View for groups in which the examination is."""
 
     def __init__(self, model):
         """Set model.
@@ -57,13 +37,37 @@ class Controller:
             Model.
 
         """
-        self.model = model
+        self._model = model
+        self._view_message = None
+        self._view_storage = None
+        self._view_group = None
+        self._view_exam = None
+        self._view_exam_plot = None
+        self._view_where_exam = None
 
+    def set_view_message(self, view):
+        self._view_message = view
+
+    def set_view_storage(self, view):
+        self._view_storage = view
+        
+    def set_view_group(self, view):
+        self._view_group = view
+        
+    def set_view_exam(self, view):
+        self._view_exam = view
+        
+    def set_view_exam_plot(self, view):
+        self._view_exam_plot = view
+        
+    def set_view_where_exam(self, view):
+        self._view_where_exam = view
+        
     def show_message(self, text):
         """If controller has message view it asks veiw to show message."""
-        if not self.view_message:
+        if not self._view_message:
             return
-        self.view_message.show_data(text)
+        self._view_message.show_data(text)
 
     def model_can_grumble(method):
         """Decorator. Try to do something and if model raises an exception return None."""
@@ -86,7 +90,7 @@ class Controller:
             File name.
 
         """
-        self.model.open_storage(file_name)
+        self._model.open_storage(file_name)
         self.storage_info()
         return True
         
@@ -100,7 +104,7 @@ class Controller:
             File name.
 
         """
-        if not self.model.create_storage(file_name):
+        if not self._model.create_storage(file_name):
             return False
         self.storage_info()
         return True
@@ -117,20 +121,20 @@ class Controller:
             File name.
 
         """
-        self.model.open_or_create_storage(file_name)
+        self._model.open_or_create_storage(file_name)
         self.storage_info()
         return True
 
     @model_can_grumble
     def close_storage(self):
         """Close storage."""
-        self.model.close_storage()
+        self._model.close_storage()
 
     @model_can_grumble
     def storage_info(self):
         """Show common information about storage."""
-        data, headers = self.model.storage_info()
-        self.view_storage.show_data(data, headers)
+        data, headers = self._model.storage_info()
+        self._view_storage.show_data(data, headers)
         return True
 
     @model_can_grumble
@@ -143,8 +147,8 @@ class Controller:
             Group ID.
 
         """
-        data, headers = self.model.group_info(group_id)
-        self.view_group.show_data(data, headers)
+        data, headers = self._model.group_info(group_id)
+        self._view_group.show_data(data, headers)
         return True
 
     @model_can_grumble
@@ -157,11 +161,11 @@ class Controller:
             Examination ID.
 
         """
-        e = self.model.exam(exam_id)
+        e = self._model.exam(exam_id)
         if e == None:
             self.show_message('Exam data is empty.')
             return True
-        self.view_exam.show_data(e)
+        self._view_exam.show_data(e)
         return True
 
     @model_can_grumble
@@ -174,11 +178,11 @@ class Controller:
             Examination ID.
 
         """
-        e = self.model.exam(exam_id)
+        e = self._model.exam(exam_id)
         if e == None:
             self.show_message('Exam data is empty.')
             return True
-        self.view_exam_plot.show_data(e)
+        self._view_exam_plot.show_data(e)
         return True
 
     @model_can_grumble
@@ -193,7 +197,7 @@ class Controller:
             Description of new group.
 
         """
-        self.model.insert_group(name, description)
+        self._model.insert_group(name, description)
         self.storage_info()
         return True
 
@@ -207,7 +211,7 @@ class Controller:
             Group ID.
 
         """
-        self.model.delete_group(group_id)
+        self._model.delete_group(group_id)
         self.storage_info()
         return True
 
@@ -225,7 +229,7 @@ class Controller:
             True for examinations to be placed in groups. Length of group_ids must be equal to length of placed_in.
 
         """
-        self.model.group_exam(exam_id, group_ids, placed_in)
+        self._model.group_exam(exam_id, group_ids, placed_in)
         return True
 
     @model_can_grumble
@@ -238,8 +242,8 @@ class Controller:
             Examination ID.
 
         """
-        group_records, headers, placed_in = self.model.where_exam(exam_id)
-        self.view_where_exam.show_data(group_records, headers, placed_in)
+        group_records, headers, placed_in = self._model.where_exam(exam_id)
+        self._view_where_exam.show_data(group_records, headers, placed_in)
         return True
 
     @model_can_grumble
@@ -252,7 +256,7 @@ class Controller:
             File name. Example: example.sme.sqlite.
 
         """
-        self.model.add_sme_db(file_name)
+        self._model.add_sme_db(file_name)
         self.show_message('Done.')
         return True
 
@@ -266,7 +270,7 @@ class Controller:
             File name. Example: example.gs.sqlite.
 
         """
-        self.model.add_gs_db(file_name)
+        self._model.add_gs_db(file_name)
         self.show_message('Done.')
         return True
 
@@ -280,7 +284,7 @@ class Controller:
             Name of folder wich should contain the file info.json.
         
         """
-        self.model.add_exam_from_json_folder(folder_name)
+        self._model.add_exam_from_json_folder(folder_name)
         self.show_message('Done.')
         return True
 
@@ -296,7 +300,7 @@ class Controller:
             Name of folder for export info.json and signals in text format.
 
         """
-        self.model.export_as_json_folder(exam_id, folder_name)
+        self._model.export_as_json_folder(exam_id, folder_name)
         self.show_message('Done.')
         return True
 
@@ -310,7 +314,7 @@ class Controller:
             ID of examination to be deleted.
         
         """
-        self.model.delete_exam(exam_id)
+        self._model.delete_exam(exam_id)
         return True
 
     @model_can_grumble
@@ -327,10 +331,10 @@ class Controller:
             Examination 2 ID.
 
         """
-        e1 = self.model.exam(exam_id_1)
-        e2 = self.model.exam(exam_id_2)
+        e1 = self._model.exam(exam_id_1)
+        e2 = self._model.exam(exam_id_2)
         e = sme.merge_exams(e1, e2)
-        self.model.insert_exam(e)
+        self._model.insert_exam(e)
         self.show_message('Done')
         return True
 
@@ -349,7 +353,7 @@ class Controller:
             Attributes names and values.
 
         """
-        return self.model.group_record(group_id)
+        return self._model.group_record(group_id)
 
     @model_can_grumble
     def update_group_record(self, group_id, attr):
@@ -363,5 +367,5 @@ class Controller:
             Attributes names and values.
 
         """
-        self.model.update_group_record(group_id, attr)
+        self._model.update_group_record(group_id, attr)
         return True

@@ -74,13 +74,13 @@ class MainWindow:
         self.view_storage.pack(side=LEFT, fill=BOTH, expand=True)
         self.view_storage.item_opened.connect(self.group_info)
         self.view_storage.item_selected.connect(self.group_selected)
-        controller.view_storage = self.view_storage
+        controller.set_view_storage(self.view_storage)
         self.group_window = GroupWindow(self.master)
         self.view_group = self.group_window.view_group
         self.view_group.item_opened.connect(self.plot_exam)
         self.view_group.item_selected.connect(self.exam_selected)
-        controller.view_group = self.view_group
-        controller.view_exam_plot = plot_views.Exam()
+        controller.set_view_group(self.view_group)
+        controller.set_view_exam_plot(plot_views.Exam())
 
     def open_storage(self):
         """Open storage and show groups in it."""
@@ -307,7 +307,7 @@ class GroupingDialog:
         self.grouping_widget.pack()
         self.cancel_button.pack(side=RIGHT)
         self.save_button.pack(side=RIGHT)
-        controller.view_where_exam = self.grouping_widget
+        controller.set_view_where_exam(self.grouping_widget)
         controller.where_exam(exam_id)
 
     def on_save_button(self):
@@ -371,7 +371,7 @@ class AboutWindow:
         self.close_button.pack(side=TOP)
 
 controller = controller.Controller(sqlite3_model.Model())
-controller.view_message = tk_views.Message()
+controller.set_view_message(tk_views.Message())
 
 def main():
     main_window = MainWindow()

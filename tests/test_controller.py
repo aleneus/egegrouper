@@ -61,7 +61,7 @@ class TestController(unittest.TestCase):
 
     def test_exam_with_existing_id(self):
         c = Controller(ModelStub())
-        c.view_exam = ViewStub()
+        c.set_view_exam(ViewStub())
         result = c.exam('1')
         self.assertTrue(result)
         
@@ -77,7 +77,7 @@ class TestController(unittest.TestCase):
         
     def test_plot_exam_with_existing_id(self):
         c = Controller(ModelStub())
-        c.view_exam_plot = ViewStub()
+        c.set_view_exam_plot(ViewStub())
         result = c.plot_exam('1')
         self.assertTrue(result)
         
