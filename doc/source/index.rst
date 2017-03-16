@@ -14,8 +14,9 @@ For users
 ---------
 
 .. toctree::
+   :maxdepth: 1
 
-   How to install and run <installation>
+   installation
    GUI tkgrouper <tkgrouper_guide>
    CLI igrouper <igrouper_guide>
 

@@ -1,4 +1,6 @@
 TkGrouper short guide
 =====================
 
-TkGrouper guide.
+Start tkgrouper::
+
+  $ tkgrouper

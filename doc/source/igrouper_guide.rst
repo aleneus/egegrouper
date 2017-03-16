@@ -1,4 +1,6 @@
 igrouper short guide
 ====================
 
-igrouper guide.
+Start igrouper::
+
+  $ igrouper example.sme.sqlite
