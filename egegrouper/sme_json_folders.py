@@ -74,7 +74,8 @@ def put_exam_to_folder(e, folder_name):
         Folder name.
     
     """
-    os.makedirs(folder_name)
+    abs_folder_path = os.path.expanduser(folder_name)
+    os.makedirs(abs_folder_path)
     e_dict = OrderedDict()
     e_dict['name'] = e.name
     e_dict['diagnosis'] = e.diagnosis
@@ -89,10 +90,10 @@ def put_exam_to_folder(e, folder_name):
             s_dict = OrderedDict()
             s_dict['dt'] = s.dt
             s_dict['file'] = 'signal-{}{}.txt'.format(mn, sn)
-            np.savetxt("{}/signal-{}{}.txt".format(folder_name, mn, sn), s.x, fmt='%f')            
+            np.savetxt("{}/signal-{}{}.txt".format(abs_folder_path, mn, sn), s.x, fmt='%f')            
             m_dict['signals'].append(s_dict)
         e_dict['measurements'].append(m_dict)
                            
     s = json.dumps(e_dict, ensure_ascii=False, indent='    ')
-    with open('{}/info.json'.format(folder_name), 'w') as f:
+    with open('{}/info.json'.format(abs_folder_path), 'w') as f:
         f.write(s)

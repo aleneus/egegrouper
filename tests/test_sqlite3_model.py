@@ -29,21 +29,7 @@ from egegrouper import *
 from egegrouper.sqlite3_model import Model
 from egegrouper import sme
 
-def create_test_exam():
-    """Create test examination."""
-    e = sme.Examination()
-    m1 = sme.Measurement()
-    s11 = sme.Signal()
-    s11.x = [1,2,3,4,5]
-    m1.signals = [s11]
-    m2 = sme.Measurement()
-    s21 = sme.Signal()
-    s21.x = [1,2,3,4,5]
-    m2.signals = [s21]
-    e.measurements = [m1, m2]
-    return e
-
-
+from preparation import *
 
 class TestSqliteModel(unittest.TestCase):
     
@@ -55,12 +41,10 @@ class TestSqliteModel(unittest.TestCase):
         """Test the fact of storage creation."""
         m = Model()
         file_name = './file.sme.sqlite'
-        if os.path.isfile(file_name):
-            os.remove(file_name)
+        remove_file(file_name)
         m.create_storage(file_name)
         exists = os.path.isfile(file_name)
-        if os.path.isfile(file_name):
-            os.remove(file_name)
+        remove_file(file_name)
         self.assertEqual(exists, True)
 
     def test_create_storage_if_exists(self):
@@ -70,15 +54,12 @@ class TestSqliteModel(unittest.TestCase):
         shutil.copy2('./test.sme.sqlite', file_name)
         m.create_storage(file_name)
         m.close_storage()
-        
         conn = sqlite3.connect(file_name)
         c = conn.cursor()
         c.execute("select count(*) from examination")
         n = c.fetchone()[0]
         conn.close()
-        
-        if os.path.isfile(file_name):
-            os.remove(file_name)
+        remove_file(file_name)
         self.assertEqual(n, 0)
 
     # get examination
@@ -111,22 +92,18 @@ class TestSqliteModel(unittest.TestCase):
         m = Model()
         file_name = './copy-test.sme.sqlite'
         shutil.copy2('./test.sme.sqlite', file_name)
-        
         def get_len():
             conn = sqlite3.connect(file_name)
             c = conn.cursor()
             c.execute("select count(*) from examination")
             return c.fetchone()[0]
             conn.close()
-            
         len_before = get_len()
         m.open_storage(file_name)
         m.insert_exam(create_test_exam())
         m.close_storage()
         len_after = get_len()
-        
-        if os.path.isfile(file_name):
-            os.remove(file_name)
+        remove_file(file_name)
         self.assertTrue(len_after > len_before)
 
     def test_insert_examination_if_storage_was_not_open(self):
@@ -146,25 +123,20 @@ class TestSqliteModel(unittest.TestCase):
         """Number of examination must be 1 after insertion examination to new empty storage."""
         m = Model()
         file_name = './copy-test.sme.sqlite'
-        
         m.create_storage(file_name)
         m.insert_exam(create_test_exam())
         m.close_storage()
-        
         conn = sqlite3.connect(file_name)
         c = conn.cursor()
         c.execute("select count(*) from examination")
         n = c.fetchone()[0]
         conn.close()
-            
-        if os.path.isfile(file_name):
-            os.remove(file_name)
+        remove_file(file_name)
         self.assertEqual(n, 1)
 
     # storage info
 
     def test_storage_info(self):
-        """Storage info result must be not empty if storage was opened."""
         m = Model()
         m.open_storage('./test.sme.sqlite')
         data, headers = m.storage_info()
@@ -172,7 +144,6 @@ class TestSqliteModel(unittest.TestCase):
         self.assertEqual(len(headers) > 0, True)
 
     def test_storage_info_if_storage_not_opened(self):
-        """Storage info result must be empty if storage was not opened."""
         m = Model()
         try:
             m.storage_info()
@@ -185,7 +156,6 @@ class TestSqliteModel(unittest.TestCase):
     # group info
 
     def test_group_info_by_existing_not_zero_id(self):
-        """Storage info result must be not empty if storage was opened."""
         m = Model()
         m.open_storage('./test.sme.sqlite')
         data, headers = m.group_info(1)
