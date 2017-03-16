@@ -20,8 +20,12 @@ from tkinter import ttk
 from tkinter import messagebox
 
 class SimpleSignal:
-    """Provides simple signals and slots mechanism for interconnection with self-made widgets."""
+    """Provides simple signals and slots mechanism."""
     def __init__(self):
+        """Constructor.
+
+        Create empty list of connected function.
+        """
         self.slots = []
 
     def emit(self, *args):
@@ -31,7 +35,14 @@ class SimpleSignal:
                 s(args)
 
     def connect(self, slot):
-        """Connect signal with slot."""
+        """Connect signal with slot.
+        
+        Parameters
+        ----------
+        slot
+            Function to be connected with signal.
+        
+        """
         for i in range(len(self.slots)):
             if self.slots[i] == slot:
                 return
@@ -41,7 +52,14 @@ class SimpleSignal:
         self.slots.append(slot)
 
     def disconnect(self, slot):
-        """Disconnect slot from signal."""
+        """Disconnect slot from signal.
+        
+        Parameters
+        ----------
+        slot
+            Name of connected function.
+        
+        """
         for i in range(len(self.slots)):
             if self.slots[i] == slot:
                 self.slots[i] = None
@@ -64,6 +82,16 @@ class Message:
 class TableWidget(Frame):
     """Table widget."""
     def __init__(self, parent, headers):
+        """Constructor.
+
+        Parameters
+        ----------
+        parent
+            Master for widget.
+        headers : list of str
+            Headers for table.
+
+        """
         Frame.__init__(self, parent)
         self.scrollbar = Scrollbar(self, orient=VERTICAL)
         self.tree = ttk.Treeview(self, yscrollcommand=self.scrollbar.set)
@@ -79,7 +107,14 @@ class TableWidget(Frame):
         self.tree.bind("<<TreeviewSelect>>", self.item_selected.emit)
 
     def selected_item_text(self):
-        """Return text in selected item."""
+        """Return text in selected item.
+
+        Returns
+        -------
+        item_text : str.
+            Text of selected item.
+        
+        """
         try:
             item = self.tree.selection()[0]
             item_text = self.tree.item(item,"text")
@@ -89,14 +124,30 @@ class TableWidget(Frame):
             return item_text
 
     def set_columns(self, headers):
-        """Set number of columns and headers."""
+        """Set number of columns and headers.
+
+        Parameters
+        ----------
+        headers : list of str
+            Headers for table.
+
+        """
         self.tree["columns"] = headers[1:]
         self.tree.heading("#0", text=headers[0])
         for header in headers[1:]:
             self.tree.heading(header, text=header)
 
-    def update_data(self, rows, headers):
-        """Fill table with data."""
+    def update_data(self, rows):
+        """Fill table with data.
+
+        Parameters
+        ----------
+        rows : list of tuple of str
+            Data in table rows.
+        headers : list of str
+            Headers.
+        
+        """
         self.clear()
         for (i, row) in zip(range(len(rows)), rows):
             self.tree.insert("", END, iid = str(i), text=str(row[0]), values=row[1:])
@@ -106,7 +157,7 @@ class TableWidget(Frame):
         self.tree.delete(*self.tree.get_children())
 
     def remember_selection(self):
-        """Remember selection."""
+        """Remember selected item."""
         self._selected_item = self.tree.selection()[0]
         
     def restore_selection(self):
@@ -119,11 +170,19 @@ class TableWidget(Frame):
 class Storage(TableWidget):
     """Table widget for stoarge info."""
     def __init__(self, parent):
+        """Constructor.
+
+        Parameters
+        ----------
+        parent
+            Master for widget.
+
+        """
         headers = ["ID", "Name", "Description", "Num"]
         super().__init__(parent, headers)
         self.last_group_id = None
         
-    def show_data(self, data, headers):
+    def show_data(self, data):
         """Fill table with data.
 
         Parameters
@@ -134,15 +193,23 @@ class Storage(TableWidget):
             Headers.
 
         """
-        self.update_data(data, headers)
+        self.update_data(data)
 
 class Group(TableWidget):
     """Table widget for stoarge info."""
     def __init__(self, parent):
+        """Constructor.
+        
+        Parameters
+        ----------
+        parent
+            Master for widget.
+
+        """
         headers = ["ID", "Name", "Diagnosis", "Age", "Gender"]
         super().__init__(parent, headers)
         
-    def show_data(self, data, headers):
+    def show_data(self, data):
         """Fill table with data.
 
         Parameters
@@ -153,11 +220,18 @@ class Group(TableWidget):
             Headers.
 
         """
-        self.update_data(data, headers)
+        self.update_data(data)
         
 class GroupingTable(TableWidget):
     """Table widget for grouping."""
     def __init__(self, parent):
+        """Constructor.
+
+        Parameters
+        ----------
+        parent
+            Master for widget.
+        """
         Frame.__init__(self, parent)
         headers = ["ID", "Name", "Placed in"]
         super().__init__(parent, headers)
@@ -173,6 +247,16 @@ class GroupingTable(TableWidget):
         self.tree.item(item, values=(values[0], 'X' if values[1] == '' else ''))
         
     def checked_group_ids(self):
+        """Get IDs of checked groups.
+        
+        Returns
+        -------
+        groups_ids : list of str
+            IDs of all groups.
+        placed_in : list of bool
+            True if exam in group, False otherwise.
+
+        """
         placed_in = []
         group_ids = []
         for item in self.tree.get_children():
