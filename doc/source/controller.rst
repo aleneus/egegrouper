@@ -1,4 +1,4 @@
-Controller
+controller
 ==========
 
 .. automodule:: egegrouper.controller

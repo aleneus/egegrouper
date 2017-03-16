@@ -1,4 +1,4 @@
-Text views
+text_views
 ==========
 
 .. automodule:: egegrouper.text_views

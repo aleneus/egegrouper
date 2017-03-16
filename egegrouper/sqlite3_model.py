@@ -20,7 +20,7 @@ import numpy as np
 from collections import OrderedDict
 import os
 
-from .model import BaseModel
+from .base_model import BaseModel
 from . import sme
 from . import sme_json_folders as jsme
 

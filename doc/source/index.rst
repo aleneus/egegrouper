@@ -10,56 +10,30 @@ Electrogastrography (EGG) and electrogastroenterography (EGEG) are electrophysio
 
 This package provides the abilities of forming the sets of EGG and EGEG examinations data for follow statistical processing.
 
-User guides
------------
+For users
+---------
 
 .. toctree::
+
+   How to install and run <installation>
+   GUI tkgrouper <tkgrouper_guide>
+   CLI igrouper <igrouper_guide>
+
+Modules
+-------
+
+.. toctree::
+
+   sme
+   model
+   sqlite3
+   controller
+   text
+   tk
+   plot
+   igrouper
+   tkgrouper
    
-   tkgrouper <tkgrouper_guide>
-   igrouper <igrouper_guide>
-
-Package documentation
----------------------
-
-SME model
-^^^^^^^^^
-
-.. toctree::
-
-   SME <sme>
-      
-Base part
-^^^^^^^^^
-
-.. toctree::
-
-   Model <model>
-   Controller <controller>
-
-Model implementations
-^^^^^^^^^^^^^^^^^^^^^
-
-.. toctree::
-   
-   Sqlite3 <sqlite3>
-
-Views
-^^^^^
-
-.. toctree::
-   
-   Text <text>
-   Tk <tk>
-   Plot <plot>
-
-User Interfaces
-^^^^^^^^^^^^^^^
-
-.. toctree::
-
-   igrouper (CLI) <igrouper>
-   tkgrouper (GUI) <tkgrouper>
-
 Indices and tables
 ==================
 
