@@ -334,7 +334,7 @@ class Controller:
         self.show_message('Done.')
         return True
 
-    #@model_can_grumble
+    @model_can_grumble
     def add_exam_from_json_folder(self, folder_name):
         """Add examination from JSON folder to current storage. Return True if success, None if an exception raised.
 
