@@ -89,7 +89,7 @@ def put_exam_to_folder(e, folder_name):
             s_dict = OrderedDict()
             s_dict['dt'] = s.dt
             s_dict['file'] = 'signal-{}{}.txt'.format(mn, sn)
-            np.savetxt("{}/signal-{}{}.txt".format(folder_name, mn, sn), s.x)            
+            np.savetxt("{}/signal-{}{}.txt".format(folder_name, mn, sn), s.x, fmt='%f')            
             m_dict['signals'].append(s_dict)
         e_dict['measurements'].append(m_dict)
                            
