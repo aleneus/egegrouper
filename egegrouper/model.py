@@ -19,6 +19,7 @@ class BaseModel():
     """Model in MVC. Base class."""
     
     def __init__(self):
+        """Constructor."""
         self._state = {}
 
     # Common work with storage

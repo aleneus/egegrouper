@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-"""Interactiove command line interface to egegrouper."""
+"""Interactive command line interface to EGEGrouper."""
 
 import cmd, sys, argparse, readline
 from collections import OrderedDict
@@ -26,21 +26,29 @@ from . import plot_views
 from . import controller
 
 class DialogText:
-    """Text dialog for input fields values."""
-    
-    data_dict = None
-    
+    """Text dialog for input fields values. 
+
+    This dialog processes data in the dictionary with keys which correspond attributes of group.
+
+    """
     def __init__(self, data_dict):
+        """Constructor.
+
+        Parameters
+        ----------
+        data_dict : OrderedDict
+            Dictionary to process.
+
+        """
         self.data_dict = data_dict
 
-    def set_data_dict(data_dict):
-        self.data_dict = data_dict        
-    
     def input(self):
+        """Process input data."""
         for key in self.data_dict:
             self.data_dict[key] = self.rlineinput(key + ': ', self.data_dict[key])
             
     def rlineinput(self, prompt, prefill=''):
+        """Output existing value to the edit area."""
         readline.set_startup_hook(lambda: readline.insert_text(prefill))
         try:
             return input(prompt)
@@ -49,11 +57,15 @@ class DialogText:
             
 
 class GrouperShell(cmd.Cmd):
-    """CLI interface to EGEGrouper."""
+    """Class for processing user's commands."""
     
     prompt = 'igrouper> '
 
     def __init__(self):
+        """Constructor.
+
+        Set aliases for commands.
+        """
         cmd.Cmd.__init__(self)
         self.aliases = {
             'd' : self.do_db_info,
@@ -72,6 +84,16 @@ class GrouperShell(cmd.Cmd):
             }
 
     def default(self, line):
+        """This method called if user gives not existing command.
+
+        Here the aliases processed.
+
+        Parameters
+        ----------
+        line : str
+            User's command.
+
+        """
         cmd, arg, line = self.parseline(line)
         if cmd in self.aliases:
             self.aliases[cmd](arg)
@@ -107,7 +129,7 @@ class GrouperShell(cmd.Cmd):
         controller.storage_info()
 
     def do_group_info(self, arg):
-        """ group_info id [hfa]
+        """ group_info id
         
         Print information about group.
 
@@ -117,8 +139,6 @@ class GrouperShell(cmd.Cmd):
         if len(cargv) == 0:
             print('Few arguments')
             return
-        if self.parse(arg, 'hfa'):
-            print('Calc quality stub')
         controller.group_info(cargv[0])
 
     def do_exam_info(self, arg):
@@ -169,7 +189,7 @@ class GrouperShell(cmd.Cmd):
         if len(cargv)==0:
             print('Few arguments')
             return
-        answer = input('Are you shure? (yes/no/y/n): ')
+        answer = input('Are you sure? (yes/no/y/n): ')
         if answer not in ['yes', 'y']:
             return
         controller.delete_group(cargv[0])
@@ -216,7 +236,7 @@ class GrouperShell(cmd.Cmd):
     def do_add_sme(self, arg):
         """ add_sme file_name
 
-        Add records from sme data base.
+        Add records from SME data base.
         """
         cargv = arg.split()
         if len(cargv) == 0:
@@ -235,7 +255,7 @@ class GrouperShell(cmd.Cmd):
     def do_add_json(self, arg):
         """ add_json folder_name
 
-        Add examination from json forder.
+        Add examination from JSON folder.
 
         Aliases: aj
         """
@@ -248,7 +268,7 @@ class GrouperShell(cmd.Cmd):
     def do_export_json(self, arg):
         """ export_json exam_id folder_name
 
-        Export examination to json forder.
+        Export examination to JSON folder.
 
         Aliases: ej
         """

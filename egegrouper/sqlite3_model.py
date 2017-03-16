@@ -79,6 +79,7 @@ class Model(BaseModel):
             if not self.state()['storage_opened']:
                 raise AttributeError('Storage is not opened.')
             return method(self, *args)
+        wrapped.__doc__ = method.__doc__
         return wrapped
 
     def close_storage(self):

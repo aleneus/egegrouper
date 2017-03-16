@@ -15,7 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-"""Mapping examinations to and from JSON folders."""
+"""Mapping examinations to and from JSON folders.
+
+JSON folder is the folder that consists file info.json and signals in simple text format."""
 
 import json
 import numpy as np
@@ -26,6 +28,11 @@ from . import sme
 
 def get_exam_from_folder(folder_name):
     """Get examination object from folder with file info.json.
+
+    Parameters
+    ----------
+    folder_name : str
+        Name of JSON folder.
     
     Return
     ------

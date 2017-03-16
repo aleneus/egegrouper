@@ -25,11 +25,10 @@ The common scenario for controller is to ask connected model to make some data m
 from . import sme
 
 class Controller:
-    """Controller in MVC."""
-    
+    """Controller in MVC."""    
 
     def __init__(self, model):
-        """Set model.
+        """Constructor. Set model.
 
         Parameters
         ----------
@@ -46,31 +45,93 @@ class Controller:
         self._view_where_exam = None
 
     def set_view_message(self, view):
+        """Set view for show messages.
+
+        Parameters
+        ----------
+        view
+            View object.
+
+        """
         self._view_message = view
 
     def set_view_storage(self, view):
+        """Set view for show information about storage: groups, number of examinations in groups and number of ungrouped examination.
+
+        Parameters
+        ----------
+        view
+            View object.
+
+        """
         self._view_storage = view
         
     def set_view_group(self, view):
+        """Set view for show information about examinations in group.
+
+        Parameters
+        ----------
+        view
+            View object.
+
+        """
         self._view_group = view
         
     def set_view_exam(self, view):
+        """Set view for show information examination.
+
+        Parameters
+        ----------
+        view
+            View object.
+
+        """
         self._view_exam = view
         
     def set_view_exam_plot(self, view):
+        """Set view for plot signals of examination.
+
+        Parameters
+        ----------
+        view
+            View object.
+
+        """
         self._view_exam_plot = view
         
     def set_view_where_exam(self, view):
+        """Set view for show groups in which examination is.
+
+        Parameters
+        ----------
+        view
+            View object.
+
+        """
         self._view_where_exam = view
         
     def show_message(self, text):
-        """If controller has message view it asks veiw to show message."""
+        """If controller has message view it asks view to show message.
+
+        Parameters
+        ----------
+        text : str
+            Text of message.
+
+        """
         if not self._view_message:
             return
         self._view_message.show_data(text)
 
     def model_can_grumble(method):
-        """Decorator. Try to do something and if model raises an exception return None."""
+        """Decorator. Try to do something and if model raises an exception return None.
+        
+        Parameters
+        ----------
+        method
+            Method to decorate.
+
+        """
         def wrapped(self, *args):
             try:
                 return method(self, *args)
@@ -82,7 +143,7 @@ class Controller:
 
     @model_can_grumble
     def open_storage(self, file_name):
-        """Open storage.
+        """Open storage. Return True if success, None if an exception raised.
 
         Parameters
         ----------
@@ -96,7 +157,7 @@ class Controller:
         
     @model_can_grumble
     def create_storage(self, file_name):
-        """Create storage.
+        """Create storage. Return True if success, None if an exception raised.
 
         Parameters
         ----------
@@ -104,14 +165,13 @@ class Controller:
             File name.
 
         """
-        if not self._model.create_storage(file_name):
-            return False
+        self._model.create_storage(file_name)
         self.storage_info()
         return True
 
     @model_can_grumble
     def open_or_create_storage(self, file_name):
-        """Open or create storage.
+        """Open or create storage. Return True if success, None if an exception raised.
 
         If there are no data base it will be created.
 
@@ -127,19 +187,19 @@ class Controller:
 
     @model_can_grumble
     def close_storage(self):
-        """Close storage."""
+        """Close storage. Return True if success, None if an exception raised."""
         self._model.close_storage()
 
     @model_can_grumble
     def storage_info(self):
-        """Show common information about storage."""
+        """Show common information about storage. Return True if success, None if an exception raised."""
         data, headers = self._model.storage_info()
         self._view_storage.show_data(data, headers)
         return True
 
     @model_can_grumble
     def group_info(self, group_id):
-        """Show list of examinations of group.
+        """Show list of examinations of group. Return True if success, None if an exception raised.
 
         Parameters
         ----------
@@ -153,7 +213,7 @@ class Controller:
 
     @model_can_grumble
     def exam(self, exam_id):
-        """Show information about selected examination.
+        """Show information about selected examination. Return True if success, None if an exception raised.
 
         Parameters
         ----------
@@ -170,7 +230,7 @@ class Controller:
 
     @model_can_grumble
     def plot_exam(self, exam_id):
-        """Plot signals of examination.
+        """Plot signals of examination. Return True if success, None if an exception raised.
 
         Parameters
         ----------
@@ -187,7 +247,7 @@ class Controller:
 
     @model_can_grumble
     def insert_group(self, name, description):
-        """Add new group to current storage.
+        """Add new group to current storage. Return True if success, None if an exception raised.
 
         Parameters
         ----------
@@ -203,7 +263,7 @@ class Controller:
 
     @model_can_grumble
     def delete_group(self, group_id):
-        """Delete group.
+        """Delete group. Return True if success, None if an exception raised.
 
         Parameters
         ----------
@@ -217,7 +277,7 @@ class Controller:
 
     @model_can_grumble
     def group_exam(self, exam_id, group_ids, placed_in):
-        """Add and delete examination to and from groups.
+        """Add and delete examination to and from groups. Return True if success, None if an exception raised.
 
         Parameters
         ----------
@@ -234,7 +294,7 @@ class Controller:
 
     @model_can_grumble
     def where_exam(self, exam_id):
-        """Show information of groups where examination is.
+        """Show information of groups where examination is. Return True if success, None if an exception raised.
 
         Parameters
         ----------
@@ -248,7 +308,7 @@ class Controller:
 
     @model_can_grumble
     def add_sme_db(self, file_name):
-        """Add SME sqlite3 data base to current storage.
+        """Add SME sqlite3 data base to current storage. Return True if success, None if an exception raised.
 
         Parameters
         ----------
@@ -262,7 +322,7 @@ class Controller:
 
     @model_can_grumble
     def add_gs_db(self, file_name):
-        """Add GS sqlite3 data base to current storage.
+        """Add GS sqlite3 data base to current storage. Return True if success, None if an exception raised.
 
         Parameters
         ----------
@@ -276,12 +336,12 @@ class Controller:
 
     @model_can_grumble
     def add_exam_from_json_folder(self, folder_name):
-        """Add examination from JSON folder to current storage.
+        """Add examination from JSON folder to current storage. Return True if success, None if an exception raised.
 
         Parameters
         ----------
         folder_name : str
-            Name of folder wich should contain the file info.json.
+            Name of folder which should contain the file info.json.
         
         """
         self._model.add_exam_from_json_folder(folder_name)
@@ -290,7 +350,7 @@ class Controller:
 
     @model_can_grumble
     def export_as_json_folder(self, exam_id, folder_name):
-        """Export examination to JSON folder.
+        """Export examination to JSON folder. Return True if success, None if an exception raised.
 
         Parameters
         ----------
@@ -306,7 +366,7 @@ class Controller:
 
     @model_can_grumble
     def delete_exam(self, exam_id):
-        """Delete examination from storage.
+        """Delete examination from storage. Return True if success, None if an exception raised.
 
         Parameters
         ----------
@@ -319,9 +379,9 @@ class Controller:
 
     @model_can_grumble
     def merge_exams(self, exam_id_1, exam_id_2):
-        """Merge two exams.
+        """Merge two exams. Return True if success, None if an exception raised.
         
-        Create joined examination and put it to storage. Add measuremets from examination 2 to examination 1.
+        Create joined examination and put it to storage. Add measurements from examination 2 to examination 1.
 
         Parameters
         ----------
@@ -350,14 +410,14 @@ class Controller:
         Return
         ------
         : OrderedDict
-            Attributes names and values.
+            Attributes names and values. If an exception raised return None.
 
         """
         return self._model.group_record(group_id)
 
     @model_can_grumble
     def update_group_record(self, group_id, attr):
-        """ Update attribute values of selected group.
+        """ Update attribute values of selected group. Return True if success, None if an exception raised.
 
         Parameters
         ----------
