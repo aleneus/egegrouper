@@ -19,30 +19,63 @@ class BaseModel():
     """Model in MVC. Base class."""
     
     def __init__(self):
-        """Constructor."""
+        """Constructor.
+        
+        Create fields and set initial state of model.
+        
+        """
         self._state = {}
 
     # Common work with storage
 
     def create_storage(self, name):
-        """Create new storage."""
+        """Create new storage.
+
+        Parameters
+        ----------
+        name : str
+            Storage name.
+
+        """
         pass
 
     def open_storage(self, name):
-        """Open an existing storage."""
+        """Open storage.
+
+        Parameters
+        ----------
+        name : str
+            Storage name.
+
+        """
         pass
+
+    @staticmethod
+    def do_if_storage_opened(method):
+        """Decorator. If storage is not opened AttributeError raised."""
+        def wrapped(self, *args):
+            if not self.state()['storage_opened']:
+                raise AttributeError('Storage is not opened.')
+            return method(self, *args)
+        wrapped.__doc__ = method.__doc__
+        return wrapped
 
     def close_storage(self):
         """Close current storage."""
         pass
 
     def storage_exists(self, name):
-        """Check if storage exists.
+        """Check if the storage exists.
+
+        Parameters
+        ----------
+        name : str
+            Name of storage.
 
         Returns
         -------
         : bool
-            True if exists, False overwise.
+            True if exists, False otherwise.
 
         """
         pass
@@ -148,11 +181,27 @@ class BaseModel():
     # Grouping
     
     def insert_group(self, name, description):
-        """Add new group to current storage."""
+        """Add new group of examinations.
+
+        Parameters
+        ----------
+        name : str
+            Name of new group.
+        description : str
+            Description for new group.
+
+        """
         pass
 
     def delete_group(self, group_id):
-        """Delete group."""
+        """Delete group of examinations from storage.
+
+        Parameters
+        ----------
+        group_id : str
+            Group ID.
+
+        """
         pass
 
     def group_exam(self, exam_id, group_ids, placed_in):
@@ -161,9 +210,9 @@ class BaseModel():
         Parameters
         ----------
         exam_id : str
-            Examination identifier.
+            Examination ID.
         group_ids : list of str
-            Group identifiers.
+            Group IDs.
         placed_in : list of bool
             True for examinations to be placed in groups. Length of group_ids must be equal to length of placed_in.
 
@@ -171,25 +220,51 @@ class BaseModel():
         pass
 
     def where_exam(self, exam_id):
-        """Return description of groups where examination in or not in."""
+        """Return description of groups where examination in or not in.
+
+        Parameters
+        ----------
+        exam_id : str
+            Examination ID.
+
+        Returns
+        -------
+        group_records : list of tuple
+            All group records.
+        headers : list of str
+            Names of group attributes.
+        placed_in : list of bool
+            True if exam in group, False otherwise.
+        
+        """
         pass
 
+    def group_record(self, group_id):
+        """Return attribute names and values of selected group.
 
-    # Import and export
+        Parameters
+        ----------
+        group_id : str
+            Group ID.
 
-    def add_sme_db(self, file_name):
-        """Add records from SME storage to current storage."""
+        Returns
+        -------
+        : OrderedDict
+            Attributes names and values for selected group.
+
+        """
         pass
 
-    def add_gs_db(self, file_name):
-        """Add records from Gastroscan sqlite3 data base to current storage."""
-        pass
+    def update_group_record(self, group_id, attr):
+        """Update group record in storage.
 
-    def add_exam_from_json_folder(self, folder_name):
-        """Add examination fron JSON folder to current storage."""
-        pass
+        Parameters
+        ----------
+        group_id : str
+            Group ID.
+        attr : OrderedDict
+            Attributes names and values.
 
-    def export_as_json_folder(self, exam_id, folder_name):
-        """Export examination fo JSON folder."""
+        """
         pass
 

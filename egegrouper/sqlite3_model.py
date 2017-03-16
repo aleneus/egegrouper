@@ -25,27 +25,26 @@ from . import sme
 from . import sme_json_folders as jsme
 
 class Model(BaseModel):
-    """Model implementation for SQLite3 SME data base."""
+    """Model implementation for SQLite3 SME database."""
     
     def __init__(self):
-        """Constructor."""
+        """Constructor.
+        
+        Create fields and set initial state of model.
+        
+        """
         super().__init__()
         self.conn = None
         self.c = None
         self.set_state(storage_opened=False, file_name = None)
 
     def create_storage(self, file_name):
-        """Create new data base.
+        """Create new database.
 
         Parameters
         ----------
         file_name : str
             File name.
-
-        Return
-        ------
-        : bool
-            True if storage was created, False overwise.
 
         """
         if self.state()['storage_opened']:
@@ -59,7 +58,7 @@ class Model(BaseModel):
         self.set_state(storage_opened=True, file_name = file_name)
 
     def open_storage(self, file_name):
-        """Open data base.
+        """Open database.
 
         Parameters
         ----------
@@ -74,35 +73,31 @@ class Model(BaseModel):
         self.c.execute("pragma foreign_keys=on")
         self.set_state(storage_opened=True, file_name=file_name)
 
-    def do_if_storage_opened(method):
-        """Decorator. If storage is not opened AttributeError raised."""
-        def wrapped(self, *args):
-            if not self.state()['storage_opened']:
-                raise AttributeError('Storage is not opened.')
-            return method(self, *args)
-        wrapped.__doc__ = method.__doc__
-        return wrapped
-
     def close_storage(self):
-        """Close data base."""
+        """Close current database."""
         if self.state()['storage_opened']:
             self.conn.close()
-        self.set_state(storage_opened=False, file_name=None)
+            self.set_state(storage_opened=False, file_name=None)
 
     def storage_exists(self, file_name):
-        """Check if storage exists.
+        """Check if the file exists.
+
+        Parameters
+        ----------
+        file_name : str
+            Name of database file.
 
         Returns
         -------
         : bool
-            True if exists, False overwise.
+            True if exists, False otherwise.
 
         """
         return os.path.isfile(file_name)
 
-    @do_if_storage_opened
+    @BaseModel.do_if_storage_opened
     def exam(self, exam_id):
-        """Return examination from data base.
+        """Return examination from database.
 
         Parameters
         ----------
@@ -143,9 +138,9 @@ class Model(BaseModel):
             e.ms.append(m)
         return e
 
-    @do_if_storage_opened
+    @BaseModel.do_if_storage_opened
     def insert_exam(self, e):
-        """Insert examination into data base.
+        """Insert examination into current database.
 
         Parameters
         ----------
@@ -184,11 +179,10 @@ class Model(BaseModel):
                 VALUES (?,?,?) """, (s.x.tobytes(), s.dt, meas_id) )
             
         self.conn.commit()
-        return True
 
-    @do_if_storage_opened
+    @BaseModel.do_if_storage_opened
     def delete_exam(self, exam_id):
-        """Remove examination from data base.
+        """Remove examination from database.
 
         Parameters
         ----------
@@ -202,14 +196,14 @@ class Model(BaseModel):
         """,(exam_id, ))
         self.conn.commit()
 
-    @do_if_storage_opened
+    @BaseModel.do_if_storage_opened
     def storage_info(self):
-        """Return tabular information about storage.
+        """Return tabular information about database.
 
-        Return
-        ------
-        ext_data : list of tuples
-            Table with information about storage.
+        Returns
+        -------
+        ext_data : list of tuple
+            Table with information about database.
         ext_headers : tuple
             Headers.
 
@@ -245,7 +239,7 @@ class Model(BaseModel):
         
         return ext_data, ext_headers    
 
-    @do_if_storage_opened
+    @BaseModel.do_if_storage_opened
     def group_info(self, group_id):
         """Return short information about examinations in selected group.
 
@@ -285,7 +279,7 @@ class Model(BaseModel):
         headers = tuple(map(lambda x: x[0], self.c.description))
         return data, headers
 
-    @do_if_storage_opened
+    @BaseModel.do_if_storage_opened
     def insert_group(self, name, description):
         """Add new group of examinations.
 
@@ -302,30 +296,31 @@ class Model(BaseModel):
         VALUES (?, ?) """, [name, description, ])
         self.conn.commit()
 
-    @do_if_storage_opened
+    @BaseModel.do_if_storage_opened
     def delete_group(self, group_id):
-        """Delete group of examinations fron data base.
+        """Delete group of examinations from database.
 
         Parameters
         ----------
         group_id : str
             Group ID.
+
         """
         self.c.execute("""
         DELETE FROM egeg_group
         WHERE group_id = ? """, [group_id, ])
         self.conn.commit()
 
-    @do_if_storage_opened
+    @BaseModel.do_if_storage_opened
     def group_exam(self, exam_id, group_ids, placed_in):
         """Add and delete examination to and from groups.
 
         Parameters
         ----------
         exam_id : str
-            Examination identifier.
+            Examination ID.
         group_ids : list of str
-            Group identifiers.
+            Group IDs.
         placed_in : list of bool
             True for examinations to be placed in groups. Length of group_ids must be equal to length of placed_in.
 
@@ -347,7 +342,7 @@ class Model(BaseModel):
                     pass
         self.conn.commit()
 
-    @do_if_storage_opened
+    @BaseModel.do_if_storage_opened
     def where_exam(self, exam_id):
         """Return description of groups where examination in or not in.
 
@@ -363,7 +358,7 @@ class Model(BaseModel):
         headers : list of str
             Names of group attributes.
         placed_in : list of bool
-            True if exam in group, False overwise.
+            True if exam in group, False otherwise.
         
         """
 
@@ -381,14 +376,14 @@ class Model(BaseModel):
         
         return group_records, headers, placed_in
     
-    @do_if_storage_opened
+    @BaseModel.do_if_storage_opened
     def add_sme_db(self, file_name):
-        """Add SME sqlite3 data base to current data base.
+        """Add SME sqlite3 database to current database.
 
         Parameters
         ----------
         file_name : str
-            Name of file with SQLite3 SME data base.
+            Name of file with SQLite3 SME database.
 
         """
         source_name = file_name
@@ -398,14 +393,14 @@ class Model(BaseModel):
         SMEDBImporter().DBimport(dest_name, source_name)
         self.open_storage(dest_name)
 
-    @do_if_storage_opened
+    @BaseModel.do_if_storage_opened
     def add_gs_db(self, file_name):
-        """Add GS sqlite3 data base to current data base.
+        """Add GS SQLite3 database to current database.
         
         Parameters
         ----------
         file_name : str
-            Name of file with SQLite3 Gastroscan data base.
+            Name of file with SQLite3 Gastroscan database.
 
         """
         source_name = file_name
@@ -415,9 +410,9 @@ class Model(BaseModel):
         GSDBImporter().DBimport(dest_name, source_name)
         self.open_storage(dest_name)
 
-    @do_if_storage_opened
+    @BaseModel.do_if_storage_opened
     def add_exam_from_json_folder(self, folder_name):
-        """Add examination from JSON folder to current data base.
+        """Add examination from JSON folder to current database.
 
         Parameters
         ----------
@@ -428,12 +423,14 @@ class Model(BaseModel):
         e = jsme.get_exam_from_folder(folder_name)
         self.insert_exam(e)
 
-    @do_if_storage_opened
+    @BaseModel.do_if_storage_opened
     def export_as_json_folder(self, exam_id, folder_name):
-        """Export examination to JSON folder. Return True if sucsess, False overwise.
+        """Export examination to JSON folder. Return True if sucsess, False otherwise.
         
         Parameters
         ----------
+        exam_id: str
+            Examination ID.
         folder_name : str
             Name of folder for export info.json and signals in txt format.
         
@@ -441,7 +438,7 @@ class Model(BaseModel):
         e = self.exam(exam_id)
         jsme.put_exam_to_folder(e, folder_name)
 
-    @do_if_storage_opened
+    @BaseModel.do_if_storage_opened
     def group_record(self, group_id):
         """Return attribute names and values of selected group.
 
@@ -454,6 +451,7 @@ class Model(BaseModel):
         -------
         : OrderedDict
             Attributes names and values for selected group.
+
         """
         attr = OrderedDict()
         self.c.execute("""
@@ -464,9 +462,9 @@ class Model(BaseModel):
         attr['name'], attr['description'] = self.c.fetchone()
         return attr
 
-    @do_if_storage_opened
+    @BaseModel.do_if_storage_opened
     def update_group_record(self, group_id, attr):
-        """Update group record in data base. Return True if sucsess, False overwise.
+        """Update group record in database.
 
         Parameters
         ----------
@@ -553,7 +551,7 @@ class GSDBImporter(DBImporter):
         return (exam_id, meas_id)
 
     def _insert_exam(self, t, ind, exam_id, meas_id):
-        """Insert examination to destination DB. Data takes from temprorary lists t and ind."""
+        """Insert examination to destination DB. Data takes from temporary lists t and ind."""
         dt = 0.5
         self._dest_c.execute('\
         INSERT INTO examination (name, diagnosis, age, gender)\
@@ -585,7 +583,7 @@ class GSDBImporter(DBImporter):
         return (exam_id, meas_id)
 
     def _form_exam(self, r, t, ind):
-        """Form temprorary lists t and ind."""
+        """Form temporary lists t and ind."""
         if len(t) == 0:
             t.append(r)
             ind.append(1)
@@ -607,7 +605,7 @@ class GSDBImporter(DBImporter):
 # sqlite3 scripts
 #---------------------------------------
 
-# create new SME data base 
+# create new SME database 
 create_sme_db_script = """
 pragma foreign_keys=1;
 
@@ -650,7 +648,7 @@ create table group_element(
 );
 """
 
-# import SME data base
+# import SME database
 add_sme_db_script = """
 -- Create temporary table for variables and store max values of SMEP entities from nation db.
 drop table if exists variable;
