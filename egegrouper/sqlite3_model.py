@@ -28,6 +28,7 @@ class Model(BaseModel):
     """Model implementation for SQLite3 SME data base."""
     
     def __init__(self):
+        """Constructor."""
         super().__init__()
         self.conn = None
         self.c = None
@@ -493,6 +494,7 @@ class DBImporter:
 
 class SMEDBImporter(DBImporter):
     def run(self):
+        """Import."""
         self._dconn = sqlite3.connect(self._dest_filename)
         self._sconn = sqlite3.connect(self._source_filename)
         
@@ -509,6 +511,7 @@ class SMEDBImporter(DBImporter):
 
 class GSDBImporter(DBImporter):
     def run(self):
+        """Import."""
         self._dconn = sqlite3.connect(self._dest_filename)
         self._sconn = sqlite3.connect(self._source_filename)
         
@@ -538,10 +541,7 @@ class GSDBImporter(DBImporter):
         self._dconn.close()
         
     def _get_last_ids(self):
-        """
-        Get during (last) measurement's and examination's id.
-        
-        """
+        """Get during (last) measurement's and examination's id."""
         self._dest_c.execute('SELECT max(exam_id) FROM examination')
         exam_id = self._dest_c.fetchone()[0]
         self._dest_c.execute('SELECT max(meas_id) FROM measurement')
@@ -553,10 +553,7 @@ class GSDBImporter(DBImporter):
         return (exam_id, meas_id)
 
     def _insert_exam(self, t, ind, exam_id, meas_id):
-        """
-        Insert examination to destination DB. Data takes from temprorary lists t and ind.
-        
-        """
+        """Insert examination to destination DB. Data takes from temprorary lists t and ind."""
         dt = 0.5
         self._dest_c.execute('\
         INSERT INTO examination (name, diagnosis, age, gender)\
@@ -588,10 +585,7 @@ class GSDBImporter(DBImporter):
         return (exam_id, meas_id)
 
     def _form_exam(self, r, t, ind):
-        """
-        Form temprorary lists t and ind.
-        
-        """
+        """Form temprorary lists t and ind."""
         if len(t) == 0:
             t.append(r)
             ind.append(1)
