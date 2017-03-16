@@ -137,7 +137,7 @@ class TableWidget(Frame):
         for header in headers[1:]:
             self.tree.heading(header, text=header)
 
-    def update_data(self, rows):
+    def update_data(self, rows, headers):
         """Fill table with data.
 
         Parameters
@@ -182,7 +182,7 @@ class Storage(TableWidget):
         super().__init__(parent, headers)
         self.last_group_id = None
         
-    def show_data(self, data):
+    def show_data(self, data, headers):
         """Fill table with data.
 
         Parameters
@@ -193,7 +193,7 @@ class Storage(TableWidget):
             Headers.
 
         """
-        self.update_data(data)
+        self.update_data(data, headers)
 
 class Group(TableWidget):
     """Table widget for stoarge info."""
@@ -209,7 +209,7 @@ class Group(TableWidget):
         headers = ["ID", "Name", "Diagnosis", "Age", "Gender"]
         super().__init__(parent, headers)
         
-    def show_data(self, data):
+    def show_data(self, data, headers):
         """Fill table with data.
 
         Parameters
@@ -220,7 +220,7 @@ class Group(TableWidget):
             Headers.
 
         """
-        self.update_data(data)
+        self.update_data(data, headers)
         
 class GroupingTable(TableWidget):
     """Table widget for grouping."""

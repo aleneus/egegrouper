@@ -346,8 +346,11 @@ class GrouperShell(cmd.Cmd):
         """)    
 
 controller = controller.Controller(sqlite3_model.Model())
+"""Controller."""
         
 def main():
+    """Entry point."""
+    
     print("""
     EGEGrouper Copyright (C) 2017 Aleksandr Popov
 

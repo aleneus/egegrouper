@@ -32,6 +32,10 @@ class MainWindow:
     """Main window. Shows groups and main menu."""
     
     def __init__(self):
+        """Constructor.
+
+        Create main window.
+        """
         self.master = Tk()
         self.master.title("EGEGrouper")
 
@@ -284,6 +288,16 @@ class GroupWindow:
     """Window for show and select examinations."""
     
     def __init__(self, parent):
+        """Constructor.
+
+        Create window.
+
+        Parameters
+        ----------
+        parent
+            Master for window.
+
+        """
         self.master = Toplevel(parent)
         self.master.title("Examinations")
         self.master.protocol('WM_DELETE_WINDOW', self.on_destroy)
@@ -298,6 +312,16 @@ class GroupingDialog:
     """Dialog for grouping examinations."""
     
     def __init__(self, parent, exam_id):
+        """Constructor.
+        
+        Parameters
+        ----------
+        parent
+            Master.
+        exam_id : str
+            Examination ID.
+
+        """
         self.exam_id = exam_id
         self.master = Toplevel(parent)
         self.master.title("Grouping")
@@ -320,6 +344,18 @@ class GroupRecordDialog:
     """Dialog for edit group record."""
     
     def __init__(self, parent, group_record, group_id = None):
+        """Constructor.
+        
+        Parameters
+        ----------
+        parent
+            Master.
+        group_record : OrderedDict
+            Attributes and values of group.
+        group_is : str
+            Group ID.
+
+        """
         self.group_id = group_id
         self.group_record = group_record
         self.master = Toplevel(parent)
@@ -357,6 +393,11 @@ class GroupRecordDialog:
 class AboutWindow:
     """Window with short info about the program."""
     def __init__(self, parent):
+        """Constructor.
+
+        Create window with info about the program.
+
+        """
         self.master = Toplevel(parent)
         self.master.title("About EGEGrouper")
         label = Label(self.master, text="""
@@ -371,8 +412,10 @@ class AboutWindow:
         self.close_button.pack(side=TOP)
 
 controller = controller.Controller(sqlite3_model.Model())
+"""Controller."""
 controller.set_view_message(tk_views.Message())
 
 def main():
+    """Entry point."""
     main_window = MainWindow()
     main_window.master.mainloop()
