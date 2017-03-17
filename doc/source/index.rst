@@ -17,8 +17,8 @@ For users
    :maxdepth: 1
 
    installation
-   GUI tkgrouper <tkgrouper_guide>
-   CLI igrouper <igrouper_guide>
+   tkgrouper_guide
+   igrouper_guide
 
 Modules
 -------

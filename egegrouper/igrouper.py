@@ -157,7 +157,7 @@ class GrouperShell(cmd.Cmd):
     def do_plot_exam(self, arg):
         """ plot_exam id
         
-        Plot signals in examination.
+        Plot signals of examination.
 
         Aliases: p
         """

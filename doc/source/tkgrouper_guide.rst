@@ -1,5 +1,5 @@
-TkGrouper short guide
-=====================
+tkgrouper example
+=================
 
 Start tkgrouper on GNU/Linux::
 
