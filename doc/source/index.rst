@@ -3,12 +3,26 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to EGEGrouper's documentation!
-======================================
+Welcome to EGEGrouper 0.1.0 documentation!
+============================================
 
 Electrogastrography (EGG) and electrogastroenterography (EGEG) are electrophysiological methods for diagnostics of stomach and gastrointestinal tract motility.
 
 This package provides the abilities of forming the sets of EGG and EGEG examinations data for follow statistical processing.
+
+EGEGrouper `repository <https://bitbucket.org/aleneus/egegrouper>`_
+
+Contacts:
+
+* aleneus@gmail.com
+* `DSPLab at NArFU <http://dsplab.narfu.ru>`_ (In Russ.)
+
+Requires
+--------
+
+* matplotlib
+* tabulate
+* pyreadline (on Windows)
 
 For users
 ---------
