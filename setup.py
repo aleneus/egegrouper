@@ -16,15 +16,22 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from setuptools import setup
+import os
+
+def read(fname):
+    return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 setup(
-    name='EGEGrouper',
-    version='0.1',
-    description='Tool for grouping EGEG examinations',
-    author='Aleksandr Popov',
-    author_email='aleneus@gmail.com',
+    name="EGEGrouper",
+    version="0.1.0",
+    description="Tool for grouping EGEG examinations",
+    author="Aleksandr Popov",
+    author_email="aleneus@gmail.com",
+    license = "GPLv3",
+    keywords = "electrophysiology electrogastrography electrogastroenterography biosignal storage dataset",
+    url = "http://packages.python.org/egegrouper",
+    long_description=read('README'),
     packages=['egegrouper'],
-    #scripts=['tkgrouper.py', 'igrouper.py'],
     install_requires = [
         'numpy',
         'matplotlib',
@@ -40,4 +47,16 @@ setup(
             'tkgrouper = egegrouper.tkgrouper:main'
         ]
     },
+    classifiers=[
+        "Development Status :: 4 - Beta",
+        "Environment :: Console",
+        "Environment :: X11 Applications",
+        "Intended Audience :: Science/Research",
+        "Intended Audience :: Developers",
+        "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+        "Operating System :: POSIX :: Linux",
+        "Operating System :: Microsoft :: Windows",
+        "Programming Language :: Python :: 3",
+        "Topic :: Scientific/Engineering :: Bio-Informatics",
+    ],
 )
