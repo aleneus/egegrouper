@@ -81,7 +81,7 @@ class Message:
 
 class TableWidget(Frame):
     """Table widget."""
-    def __init__(self, parent, headers):
+    def __init__(self, parent, headers, anchors = []):
         """Constructor.
 
         Parameters
@@ -98,7 +98,7 @@ class TableWidget(Frame):
         self.scrollbar.config(command=self.tree.yview)
         self.scrollbar.pack(side=RIGHT, fill=Y)
         self.tree.pack(side=LEFT, fill=BOTH, expand=True)
-        self.set_columns(headers)
+        self.set_columns(headers, anchors)
         # signals
         self.item_opened = SimpleSignal()
         self.tree.bind("<Double-1>", self.item_opened.emit)
@@ -123,7 +123,7 @@ class TableWidget(Frame):
         finally:
             return item_text
 
-    def set_columns(self, headers):
+    def set_columns(self, headers, anchors = []):
         """Set number of columns and headers.
 
         Parameters
@@ -136,6 +136,9 @@ class TableWidget(Frame):
         self.tree.heading("#0", text=headers[0])
         for header in headers[1:]:
             self.tree.heading(header, text=header)
+        if len(anchors) == len(headers):
+            for (h, a) in zip(headers, anchors):
+                self.tree.column(header, anchor=a)
 
     def update_data(self, rows, headers):
         """Fill table with data.
@@ -234,7 +237,8 @@ class GroupingTable(TableWidget):
         """
         Frame.__init__(self, parent)
         headers = ["ID", "Name", "Placed in"]
-        super().__init__(parent, headers)
+        anchors = [None, None, CENTER]
+        super().__init__(parent, headers, anchors)
         self.tree.bind("<Double-1>", self.toggle_item)
         self.tree.bind("<Return>", self.toggle_item)
 
