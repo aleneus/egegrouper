@@ -29,7 +29,7 @@ setup(
     author_email="aleneus@gmail.com",
     license = "GPLv3",
     keywords = "electrophysiology electrogastrography electrogastroenterography biosignal storage dataset",
-    url = "http://packages.python.org/egegrouper",
+    url = "https://bitbucket.org/aleneus/egegrouper",
     long_description=read('README'),
     packages=['egegrouper'],
     install_requires = [
