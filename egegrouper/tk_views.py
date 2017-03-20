@@ -65,20 +65,6 @@ class SimpleSignal:
                 self.slots[i] = None
 
 
-class Message:
-    """Text message view."""
-    def show_data(self, text):
-        """ Show message box.
-
-        Parameters
-        ----------
-        text : str
-            Message text.
-
-        """
-        messagebox.showinfo("Message", text)
-        
-
 class TableWidget(Frame):
     """Table widget."""
     def __init__(self, parent, headers = []):
@@ -179,6 +165,63 @@ class TableWidget(Frame):
             return
         self.tree.selection_set(self._selected_item)
         
+class GroupingTable(TableWidget):
+    """Table widget for grouping."""
+    def __init__(self, parent):
+        """Constructor.
+
+        Parameters
+        ----------
+        parent
+            Master for widget.
+        """
+        Frame.__init__(self, parent)
+        headers = ["ID", "Name", "In"]
+        widths = [50, None, 100]
+        anchors=[None, None, CENTER]
+        super().__init__(parent, headers)
+        self.set_columns(widths=widths, anchors=anchors)
+        self.tree.bind("<Double-1>", self.toggle_item)
+        self.tree.bind("<Return>", self.toggle_item)
+
+    def toggle_item(self, event):
+        """Toggle item."""
+        if len(self.tree.selection()) == 0:
+            return
+        item = self.tree.selection()[0]
+        values = self.tree.item(item, 'values')
+        self.tree.item(item, values=(values[0], 'X' if values[1] == '' else ''))
+        
+    def checked_group_ids(self):
+        """Get IDs of checked groups.
+        
+        Returns
+        -------
+        groups_ids : list of str
+            IDs of all groups.
+        placed_in : list of bool
+            True if exam in group, False otherwise.
+
+        """
+        placed_in = []
+        group_ids = []
+        for item in self.tree.get_children():
+            group_ids.append(self.tree.item(item, 'text'))
+            placed_in.append(self.tree.item(item, 'values')[1] == 'X')
+        return group_ids, placed_in
+        
+class Message:
+    """Text message view."""
+    def show_data(self, text):
+        """ Show message box.
+
+        Parameters
+        ----------
+        text : str
+            Message text.
+
+        """
+        messagebox.showinfo("Message", text)
 
 class Storage(TableWidget):
     """Table widget for stoarge info."""
@@ -240,52 +283,6 @@ class Group(TableWidget):
 
         """
         self.update_data(data)
-        
-class GroupingTable(TableWidget):
-    """Table widget for grouping."""
-    def __init__(self, parent):
-        """Constructor.
-
-        Parameters
-        ----------
-        parent
-            Master for widget.
-        """
-        Frame.__init__(self, parent)
-        headers = ["ID", "Name", "In"]
-        widths = [50, None, 100]
-        anchors=[None, None, CENTER]
-        super().__init__(parent, headers)
-        self.set_columns(widths=widths, anchors=anchors)
-        self.tree.bind("<Double-1>", self.toggle_item)
-        self.tree.bind("<Return>", self.toggle_item)
-
-    def toggle_item(self, event):
-        """Toggle item."""
-        if len(self.tree.selection()) == 0:
-            return
-        item = self.tree.selection()[0]
-        values = self.tree.item(item, 'values')
-        self.tree.item(item, values=(values[0], 'X' if values[1] == '' else ''))
-        
-    def checked_group_ids(self):
-        """Get IDs of checked groups.
-        
-        Returns
-        -------
-        groups_ids : list of str
-            IDs of all groups.
-        placed_in : list of bool
-            True if exam in group, False otherwise.
-
-        """
-        placed_in = []
-        group_ids = []
-        for item in self.tree.get_children():
-            group_ids.append(self.tree.item(item, 'text'))
-            placed_in.append(self.tree.item(item, 'values')[1] == 'X')
-        return group_ids, placed_in
-    
         
 class WhereExam(GroupingTable):
     """Tk view to show groups where examination is."""
