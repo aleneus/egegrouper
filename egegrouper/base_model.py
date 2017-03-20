@@ -15,7 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-class BaseModel():
+from abc import ABC, abstractmethod
+
+class BaseModel(ABC):
     """Model in MVC. Base class."""
     
     def __init__(self):
@@ -26,29 +28,14 @@ class BaseModel():
         """
         self._state = {}
 
-    # Common work with storage
+    def set_state(self, **kwargs):
+        """Set model state."""
+        for key in kwargs:
+            self._state[key] = kwargs[key]
 
-    def create_storage(self, name):
-        """Create new storage.
-
-        Parameters
-        ----------
-        name : str
-            Storage name.
-
-        """
-        pass
-
-    def open_storage(self, name):
-        """Open storage.
-
-        Parameters
-        ----------
-        name : str
-            Storage name.
-
-        """
-        pass
+    def state(self):
+        """Return model state."""
+        return self._state
 
     @staticmethod
     def do_if_storage_opened(method):
@@ -60,10 +47,50 @@ class BaseModel():
         wrapped.__doc__ = method.__doc__
         return wrapped
 
+    def open_or_create_storage(self, name):
+        """Open or create storage (if stoarge not exists).
+        
+        Parameters
+        ----------
+        name : str
+            Name of storage.
+        
+        """
+        if self.storage_exists(name):
+            self.open_storage(name)
+        else:
+            self.create_storage(name)
+
+    @abstractmethod
+    def create_storage(self, name):
+        """Create new storage.
+
+        Parameters
+        ----------
+        name : str
+            Storage name.
+
+        """
+        pass
+
+    @abstractmethod
+    def open_storage(self, name):
+        """Open storage.
+
+        Parameters
+        ----------
+        name : str
+            Storage name.
+
+        """
+        pass
+
+    @abstractmethod
     def close_storage(self):
         """Close current storage."""
         pass
 
+    @abstractmethod
     def storage_exists(self, name):
         """Check if the storage exists.
 
@@ -80,33 +107,7 @@ class BaseModel():
         """
         pass
 
-    def open_or_create_storage(self, name):
-        """Open or create storage (if stoarge not exists).
-        
-        Parameters
-        ----------
-        name : str
-            Name of storage.
-        
-        """
-        if self.storage_exists(name):
-            self.open_storage(name)
-        else:
-            self.create_storage(name)
-
-    # Model state
-
-    def set_state(self, **kwargs):
-        """Set model state."""
-        for key in kwargs:
-            self._state[key] = kwargs[key]
-
-    def state(self):
-        """Return model state."""
-        return self._state
-
-    # Mapping
-    
+    @abstractmethod
     def exam(self, exam_id):
         """Return examination object.
 
@@ -123,17 +124,19 @@ class BaseModel():
         """
         pass
 
-    def insert_exam(self, e):
+    @abstractmethod
+    def insert_exam(self, exam):
         """Add examination into current storage.
 
         Parameters
         ----------
-        e : sme.Examination
+        exam : sme.Examination
             Examination object
 
         """
         pass
 
+    @abstractmethod
     def delete_exam(self, exam_id):
         """Delete examination from current storage.
 
@@ -145,8 +148,7 @@ class BaseModel():
         """
         pass
     
-    # Data Viewing
-
+    @abstractmethod
     def storage_info(self):
         """Return common information about current storage.
 
@@ -160,6 +162,7 @@ class BaseModel():
         """
         pass
 
+    @abstractmethod
     def group_info(self, group_id):
         """Return information about examinations of selected group.
 
@@ -178,8 +181,7 @@ class BaseModel():
         """
         pass
 
-    # Grouping
-    
+    @abstractmethod
     def insert_group(self, name, description):
         """Add new group of examinations.
 
@@ -193,6 +195,7 @@ class BaseModel():
         """
         pass
 
+    @abstractmethod
     def delete_group(self, group_id):
         """Delete group of examinations from storage.
 
@@ -204,6 +207,7 @@ class BaseModel():
         """
         pass
 
+    @abstractmethod
     def group_exam(self, exam_id, group_ids, placed_in):
         """Add and delete examination to and from groups.
 
@@ -219,6 +223,7 @@ class BaseModel():
         """
         pass
 
+    @abstractmethod
     def where_exam(self, exam_id):
         """Return description of groups where examination in or not in.
 
@@ -239,6 +244,7 @@ class BaseModel():
         """
         pass
 
+    @abstractmethod
     def group_record(self, group_id):
         """Return attribute names and values of selected group.
 
@@ -255,6 +261,7 @@ class BaseModel():
         """
         pass
 
+    @abstractmethod
     def update_group_record(self, group_id, attr):
         """Update group record in storage.
 
@@ -267,4 +274,3 @@ class BaseModel():
 
         """
         pass
-

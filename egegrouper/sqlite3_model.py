@@ -139,12 +139,12 @@ class Model(BaseModel):
         return e
 
     @BaseModel.do_if_storage_opened
-    def insert_exam(self, e):
+    def insert_exam(self, exam):
         """Insert examination into current database.
 
         Parameters
         ----------
-        e : sme.Examination
+        exam : sme.Examination
             Examination object
 
         """
@@ -164,10 +164,10 @@ class Model(BaseModel):
 
         self.c.execute("""
         INSERT INTO examination (name, diagnosis, age, gender)
-        VALUES (?,?,?,?) """, (e.name, e.diagnosis, e.age, e.gender) )
+        VALUES (?,?,?,?) """, (exam.name, exam.diagnosis, exam.age, exam.gender) )
         exam_id += 1
 
-        for m in e.ms:
+        for m in exam.ms:
             self.c.execute("""
             INSERT INTO measurement (time, exam_id)
             VALUES (?,?) """, (m.time, exam_id) )
