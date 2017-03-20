@@ -81,7 +81,7 @@ class Message:
 
 class TableWidget(Frame):
     """Table widget."""
-    def __init__(self, parent, headers, anchors = []):
+    def __init__(self, parent, headers = []):
         """Constructor.
 
         Parameters
@@ -98,14 +98,14 @@ class TableWidget(Frame):
         self.scrollbar.config(command=self.tree.yview)
         self.scrollbar.pack(side=RIGHT, fill=Y)
         self.tree.pack(side=LEFT, fill=BOTH, expand=True)
-        self.set_columns(headers, anchors)
+        self.set_columns(headers=headers)
         # signals
         self.item_opened = SimpleSignal()
         self.tree.bind("<Double-1>", self.item_opened.emit)
         self.tree.bind("<Return>", self.item_opened.emit)
         self.item_selected = SimpleSignal()
         self.tree.bind("<<TreeviewSelect>>", self.item_selected.emit)
-
+        
     def selected_item_text(self):
         """Return text in selected item.
 
@@ -123,38 +123,48 @@ class TableWidget(Frame):
         finally:
             return item_text
 
-    def set_columns(self, headers, anchors = []):
-        """Set number of columns and headers.
+    def set_columns(self, **kwargs):
+        """Different settings for columns.
 
         Parameters
         ----------
         headers : list of str
             Headers for table.
+        anchors : list of str
+            Anchors for columns. Use for align content.
+        widths : list of int
+            Widths of columns.
 
         """
-        self.tree["columns"] = headers[1:]
-        self.tree.heading("#0", text=headers[0])
-        for header in headers[1:]:
-            self.tree.heading(header, text=header)
-        if len(anchors) == len(headers):
-            for (h, a) in zip(headers, anchors):
-                self.tree.column(header, anchor=a)
+        if 'headers' in kwargs:
+            headers = kwargs['headers']
+            self.column_ids = ["#0",] + headers[1:]
+            self.tree["columns"] = headers[1:]
+            for (cid, h) in zip(self.column_ids, headers):
+                self.tree.heading(cid, text=h)
+        if 'anchors' in kwargs:
+            anchors = kwargs['anchors']
+            for (cid, a) in zip(self.column_ids, anchors):
+                self.tree.column(cid, anchor=a)
+        if 'widths' in kwargs:
+            widths = kwargs['widths']
+            for (cid, w) in zip(self.column_ids, widths):
+                self.tree.column(cid, width=w)
+        self.tree.pack(side=LEFT, fill=BOTH, expand=True)
 
-    def update_data(self, rows, headers):
+    def update_data(self, data):
         """Fill table with data.
 
         Parameters
         ----------
-        rows : list of tuple of str
+        data : list of tuple of str
             Data in table rows.
-        headers : list of str
-            Headers.
         
         """
         self.clear()
-        for (i, row) in zip(range(len(rows)), rows):
+        for (i, row) in zip(range(len(data)), data):
             self.tree.insert("", END, iid = str(i), text=str(row[0]), values=row[1:])
-
+        
     def clear(self):
         """Clear all items."""
         self.tree.delete(*self.tree.get_children())
@@ -183,6 +193,9 @@ class Storage(TableWidget):
         """
         headers = ["ID", "Name", "Description", "Num"]
         super().__init__(parent, headers)
+        widths = [50, None, None, 50]
+        anchors = [CENTER, None, None, CENTER]
+        self.set_columns(widths=widths, anchors=anchors)
         self.last_group_id = None
         
     def show_data(self, data, headers):
@@ -196,7 +209,7 @@ class Storage(TableWidget):
             Headers.
 
         """
-        self.update_data(data, headers)
+        self.update_data(data)
 
 class Group(TableWidget):
     """Table widget for stoarge info."""
@@ -211,6 +224,9 @@ class Group(TableWidget):
         """
         headers = ["ID", "Name", "Diagnosis", "Age", "Gender"]
         super().__init__(parent, headers)
+        widths = [50, None, None, None, None]
+        anchors = [None, None, None, CENTER, CENTER]
+        self.set_columns(widths=widths, anchors=anchors)
         
     def show_data(self, data, headers):
         """Fill table with data.
@@ -223,7 +239,7 @@ class Group(TableWidget):
             Headers.
 
         """
-        self.update_data(data, headers)
+        self.update_data(data)
         
 class GroupingTable(TableWidget):
     """Table widget for grouping."""
@@ -236,9 +252,11 @@ class GroupingTable(TableWidget):
             Master for widget.
         """
         Frame.__init__(self, parent)
-        headers = ["ID", "Name", "Placed in"]
-        anchors = [None, None, CENTER]
-        super().__init__(parent, headers, anchors)
+        headers = ["ID", "Name", "In"]
+        widths = [50, None, 100]
+        anchors=[None, None, CENTER]
+        super().__init__(parent, headers)
+        self.set_columns(widths=widths, anchors=anchors)
         self.tree.bind("<Double-1>", self.toggle_item)
         self.tree.bind("<Return>", self.toggle_item)
 
@@ -290,4 +308,4 @@ class WhereExam(GroupingTable):
             for p, gr in zip(placed_in, group_records)
         ]
         headers_ext = headers + ('', )
-        self.update_data(rows, headers_ext)
+        self.update_data(rows)
