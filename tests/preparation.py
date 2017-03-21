@@ -19,9 +19,11 @@ def create_test_exam():
     return e
 
 def remove_file(file_name):
-    if os.path.isfile(file_name):
-        os.remove(file_name)
+    abs_file_name = os.path.expanduser(file_name)
+    if os.path.isfile(abs_file_name):
+        os.remove(abs_file_name)
 
-def remove_folder(folder_name):
-    if os.path.isdir(folder_name):
-        shutil.rmtree(folder_name)
+def remove_folder(dir_name):
+    abs_dir_name = os.path.expanduser(dir_name)
+    if os.path.isdir(abs_dir_name):
+        shutil.rmtree(abs_dir_name)

@@ -33,20 +33,91 @@ class TestSmeJsonFolders(unittest.TestCase):
         """Syntax."""
         pass
 
-    def test_put_exam_to_folder_creates_info(self):
+    def test_put_exam_creates_correct_json_file(self):
         e = create_test_exam()
-        folder_name = './exported_jfolder'
+        file_name = "example.json"
+        folder_name = "{}.data".format(file_name)
+        remove_file(file_name)
         remove_folder(folder_name)
-        put_exam_to_folder(e, folder_name)
-        result = os.path.isfile(os.path.join(folder_name, 'info.json'))
+        put_exam(e, file_name)
+        result = os.path.isfile(file_name)
+        remove_file(file_name)
         remove_folder(folder_name)
         self.assertTrue(result)
 
-    def test_put_exam_to_folder_creates_signal(self):
+    def test_put_exam_creates_correct_data_folder(self):
         e = create_test_exam()
-        folder_name = './exported_jfolder'
+        file_name = "example.json"
+        folder_name = "{}.data".format(file_name)
+        remove_file(file_name)
         remove_folder(folder_name)
-        put_exam_to_folder(e, folder_name)
-        result = os.path.isfile(os.path.join(folder_name, 'signal-11.txt'))
+        put_exam(e, file_name)
+        result = os.path.isdir(folder_name)
+        remove_file(file_name)
         remove_folder(folder_name)
         self.assertTrue(result)
+
+    def test_put_exam_creates_signal_file_in_data_folder(self):
+        e = create_test_exam()
+        file_name = "example.json"
+        folder_name = "{}.data".format(file_name)
+        remove_file(file_name)
+        remove_folder(folder_name)
+        put_exam(e, file_name)
+        result = os.path.isfile(os.path.join(
+            folder_name,
+            "signal-11.txt"
+        ))
+        remove_file(file_name)
+        remove_folder(folder_name)
+        self.assertTrue(result)
+
+    def test_put_exam_creates_not_empty_signal_file_in_data_folder(self):
+        e = create_test_exam()
+        file_name = "example.json"
+        folder_name = "{}.data".format(file_name)
+        remove_file(file_name)
+        remove_folder(folder_name)
+        put_exam(e, file_name)
+        result = os.path.getsize(
+            os.path.join(
+                folder_name,
+                "signal-11.txt"
+            )   
+        )
+        remove_file(file_name)
+        remove_folder(folder_name)
+        self.assertTrue(result > 0)
+
+    def test_put_exam_creates_correct_json_file_using_home_dir(self):
+        e = create_test_exam()
+        file_name = "~/example.json"
+        folder_name = "{}.data".format(file_name)
+        print(os.path.expanduser(folder_name))
+        remove_file(os.path.expanduser(file_name))
+        remove_folder(os.path.expanduser(folder_name))
+        put_exam(e, file_name)
+        result = os.path.isfile(os.path.expanduser(file_name))
+        remove_file(os.path.expanduser(file_name))
+        remove_folder(os.path.expanduser(folder_name))
+        self.assertTrue(result)
+
+    def test_get_json_gives_not_empty_object(self):
+        file_name = "test.json"
+        e = get_exam(file_name)
+        self.assertFalse(e == None)
+
+    def test_get_json_gives_correct_measurements_number(self):
+        file_name = "test.json"
+        e = get_exam(file_name)
+        self.assertEqual(len(e.ms), 2)
+
+    def test_get_json_gives_not_empty_signal(self):
+        file_name = "test.json"
+        e = get_exam(file_name)
+        self.assertTrue(len(e.ms[0].ss[0].x) > 0)
+
+    def test_get_json_gives_corrent_name_of_patient(self):
+        file_name = "test.json"
+        e = get_exam(file_name)
+        self.assertEqual(e.name, "Anonym")

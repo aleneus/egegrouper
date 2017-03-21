@@ -3,8 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to EGEGrouper 0.1.0 documentation!
-============================================
+Welcome to EGEGrouper documentation!
+====================================
 
 Electrogastrography (EGG) and electrogastroenterography (EGEG) are electrophysiological methods for diagnostics of stomach and gastrointestinal tract motility.
 
