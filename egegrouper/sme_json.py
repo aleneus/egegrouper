@@ -21,7 +21,7 @@ JSON folder is the folder that consists file info.json and signals in simple tex
 
 import json
 import numpy as np
-import os
+import os, shutil
 from collections import OrderedDict
 
 from . import sme
@@ -80,6 +80,10 @@ def put_exam(e, file_name):
     """
     abs_file_name = os.path.expanduser(file_name)
     abs_data_folder_name = "{}.data".format(abs_file_name)
+    if os.path.isfile(abs_file_name):
+        os.remove(abs_file_name)
+    if os.path.isdir(abs_data_folder_name):
+        shutil.rmtree(abs_data_folder_name)
     os.makedirs(abs_data_folder_name)
     e_dict = OrderedDict()
     e_dict['name'] = e.name

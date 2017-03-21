@@ -137,7 +137,7 @@ class Controller:
                 return method(self, *args)
             except Exception as err:
                 self.show_message('Something wrong') #TODO: more concrete messages
-                # print(err.args) # uncomment for debugging
+                #print(err.args) # uncomment for debugging
                 return None
         wrapped.__doc__ = method.__doc__
         return wrapped
@@ -336,32 +336,32 @@ class Controller:
         return True
 
     @model_can_grumble
-    def add_exam_from_json_folder(self, folder_name):
-        """Add examination from JSON folder to current storage. Return True if success, None if an exception raised.
+    def add_exam_from_json_file(self, file_name):
+        """Add examination from JSON file to current storage. Return True if success, None if an exception raised.
 
         Parameters
         ----------
-        folder_name : str
-            Name of folder which should contain the file info.json.
+        file_name : str
+            Name of JSON file.
         
         """
-        self._model.add_exam_from_json_folder(folder_name)
+        self._model.add_exam_from_json_file(file_name)
         self.show_message('Done.')
         return True
 
     @model_can_grumble
-    def export_as_json_folder(self, exam_id, folder_name):
-        """Export examination to JSON folder. Return True if success, None if an exception raised.
+    def export_exam_to_json_file(self, exam_id, file_name):
+        """Export examination to JSON file. Return True if success, None if an exception raised.
 
         Parameters
         ----------
         exam_id : str
             Examination ID.
-        folder_name : str
-            Name of folder for export info.json and signals in text format.
+        file_name : str
+            Name of JSON file.
 
         """
-        self._model.export_as_json_folder(exam_id, folder_name)
+        self._model.export_exam_to_json_file(exam_id, file_name)
         self.show_message('Done.')
         return True
 

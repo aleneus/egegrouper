@@ -9,6 +9,6 @@ sme
 sme_json_folders
 ================
 
-.. automodule:: egegrouper.sme_json_folders
+.. automodule:: egegrouper.sme_json
    :members:
 

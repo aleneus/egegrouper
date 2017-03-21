@@ -253,9 +253,9 @@ class GrouperShell(cmd.Cmd):
         controller.add_gs_db(cargv[0])
 
     def do_add_json(self, arg):
-        """ add_json folder_name
+        """ add_json file_name
 
-        Add examination from JSON folder.
+        Add examination from JSON file.
 
         Aliases: aj
         """
@@ -263,12 +263,12 @@ class GrouperShell(cmd.Cmd):
         if len(cargv) == 0:
             print('Few arguments')
             return
-        controller.add_exam_from_json_folder(cargv[0])
+        controller.add_exam_from_json_file(cargv[0])
 
     def do_export_json(self, arg):
-        """ export_json exam_id folder_name
+        """ export_json exam_id file_name
 
-        Export examination to JSON folder.
+        Export examination to JSON file.
 
         Aliases: ej
         """
@@ -278,7 +278,7 @@ class GrouperShell(cmd.Cmd):
             return
         exam_id = cargv[0]
         folder_name = cargv[1]
-        controller.export_as_json_folder(exam_id, folder_name)
+        controller.export_exam_to_json_file(exam_id, folder_name)
 
     def do_delete_exam(self, arg):
         """ delete_exam id
@@ -352,13 +352,13 @@ def main():
     """Entry point."""
     
     print("""
-    EGEGrouper Copyright (C) 2017 Aleksandr Popov
+    EGEGrouper 0.2.0 Copyright (C) 2017 Aleksandr Popov
 
     This program comes with ABSOLUTELY NO WARRANTY; for details type `w'.
     This is free software, and you are welcome to redistribute it
     under certain conditions; type `c' for details.
     """)
-    
+
     parser = argparse.ArgumentParser()
     parser.add_argument("fname", help="Name of data base")
     args = parser.parse_args()

@@ -37,7 +37,7 @@ class MainWindow:
         Create main window.
         """
         self.master = Tk()
-        self.master.title("EGEGrouper")
+        self.master.title("EGEGrouper 0.2.0")
 
         # menu
         self.main_menu = Menu(self.master)
@@ -47,7 +47,7 @@ class MainWindow:
         self.storage_menu.add_command(label="Close", command=self.close_storage)
         self.add_data_submenu = Menu(self.storage_menu, tearoff=0)
         self.add_data_submenu.add_command(label="Add SME sqlite3 DB", command=self.add_sme)
-        self.add_data_submenu.add_command(label="Add JSON folder", command=self.add_json)
+        self.add_data_submenu.add_command(label="Add exam from JSON", command=self.add_json)
         #self.add_data_submenu.add_command(label="TODO: Add Gastroscan sqlite3 DB", command=)
         self.storage_menu.add_cascade(label="Add data", menu=self.add_data_submenu)
         self.storage_menu.add_command(label="Exit", command=self.close_db_and_exit)
@@ -149,14 +149,15 @@ class MainWindow:
         controller.storage_info()
 
     def add_json(self):
-        """Add examination from json forder."""
-        folder_name = filedialog.askdirectory(
+        """Add examination from JSON file."""
+        file_name = filedialog.askopenfilename(
             parent = self.master,
-            title = 'JSON folder name',
+            title = 'Add exam from JSON',
+            filetypes = [('JSON files', '.json'), ('all files', '.*')],
         )
-        if not folder_name:
+        if not file_name:
             return
-        controller.add_exam_from_json_folder(folder_name)
+        controller.add_exam_from_json_file(file_name)
         controller.storage_info()
 
     def group_selected(self, *args):
@@ -214,18 +215,19 @@ class MainWindow:
         self.view_group.restore_selection()
 
     def export_json(self):
-        """Export selected examination to json forder."""
+        """Export selected examination to JSON file."""
         exam_id = self.view_group.selected_item_text()
         if not exam_id:
             return
-        folder_name = filedialog.asksaveasfilename(
+        file_name = filedialog.asksaveasfilename(
             parent = self.master,
-            title = 'JSON folder name',
-            defaultextension = '',
+            title = 'Export exam to JSON',
+            defaultextension = '.json',
+            filetypes = [('JSON files', '.json'), ('all files', '.*')],
         )
-        if not folder_name:
+        if not file_name:
             return
-        controller.export_as_json_folder(exam_id, folder_name)
+        controller.export_exam_to_json_file(exam_id, file_name)
         
     def add_group(self):
         """Add new group."""

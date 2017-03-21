@@ -22,7 +22,7 @@ import os
 
 from .base_model import BaseModel
 from . import sme
-from . import sme_json_folders as jsme
+from . import sme_json as jsme
 
 class Model(BaseModel):
     """Model implementation for SQLite3 SME database."""
@@ -411,32 +411,32 @@ class Model(BaseModel):
         self.open_storage(dest_name)
 
     @BaseModel.do_if_storage_opened
-    def add_exam_from_json_folder(self, folder_name):
-        """Add examination from JSON folder to current database.
+    def add_exam_from_json_file(self, file_name):
+        """Add examination from JSON file to current database.
 
         Parameters
         ----------
-        folder_name : str
-            Name of folder with info.json and signal txt files.
+        file_name : str
+            Name of JSON file.
         
         """
-        e = jsme.get_exam_from_folder(folder_name)
+        e = jsme.get_exam(file_name)
         self.insert_exam(e)
 
     @BaseModel.do_if_storage_opened
-    def export_as_json_folder(self, exam_id, folder_name):
-        """Export examination to JSON folder. Return True if sucsess, False otherwise.
+    def export_exam_to_json_file(self, exam_id, file_name):
+        """Export examination to JSON file.
         
         Parameters
         ----------
         exam_id: str
             Examination ID.
-        folder_name : str
-            Name of folder for export info.json and signals in txt format.
+        file_name : str
+            Name of JSON file.
         
         """
         e = self.exam(exam_id)
-        jsme.put_exam_to_folder(e, folder_name)
+        jsme.put_exam(e, file_name)
 
     @BaseModel.do_if_storage_opened
     def group_record(self, group_id):

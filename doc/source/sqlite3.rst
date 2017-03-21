@@ -6,7 +6,7 @@ sqlite3_model
    .. autoclass:: egegrouper.sqlite3_model.Model
    
       .. automethod:: __init__(self)
-      .. automethod:: add_exam_from_json_folder(self, folder_name)
+      .. automethod:: add_exam_from_json_file(self, file_name)
       .. automethod:: add_gs_db(self, file_name)
       .. automethod:: add_sme_db(self, file_name)
       .. automethod:: close_storage(self)
@@ -15,7 +15,7 @@ sqlite3_model
       .. automethod:: delete_group(self, group_id)
       .. automethod:: do_if_storage_opened(method)
       .. automethod:: exam(self, exam_id)
-      .. automethod:: export_as_json_folder(self, exam_id, folder_name)
+      .. automethod:: export_exam_to_json_file(self, exam_id, file_name)
       .. automethod:: group_exam(self, exam_id, group_ids, placed_in)
       .. automethod:: group_info(self, group_id)
       .. automethod:: group_record(self, group_id)

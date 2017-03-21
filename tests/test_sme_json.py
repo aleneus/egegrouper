@@ -23,7 +23,7 @@ import sqlite3
 
 from .context import egegrouper
 from egegrouper import sme
-from egegrouper.sme_json_folders import *
+from egegrouper.sme_json import *
 
 from preparation import *
 
