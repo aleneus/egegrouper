@@ -37,7 +37,7 @@ class MainWindow:
         Create main window.
         """
         self.master = Tk()
-        self.master.title("EGEGrouper 0.2.0")
+        self.master.title("EGEGrouper 0.3.0")
 
         # menu
         self.main_menu = Menu(self.master)
