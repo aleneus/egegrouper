@@ -171,12 +171,34 @@ class TestSqliteModel(unittest.TestCase):
         self.assertNotEqual(headers, None)
 
     def test_group_info_if_group_does_not_exist(self):
-        """Storage info result must be not empty if storage was opened."""
         m = Model()
         m.open_storage('./test.sme.sqlite')
-        data, headers = m.group_info(1000)
+        data, headers = m.group_info('1000')
         self.assertEqual(data, None)
         self.assertEqual(headers, None)
 
+    # exams
+
+    def test_exams_length_of_result_ungrouped(self):
+        m = Model()
+        m.open_storage('./test.sme.sqlite')
+        es = m.exams('0')
+        m.close_storage()
+        self.assertEqual(len(es), 1)
+
+    def test_exams_length_of_result_group_1(self):
+        m = Model()
+        m.open_storage('./test.sme.sqlite')
+        es = m.exams('1')
+        m.close_storage()
+        self.assertEqual(len(es), 2)
+        
+    def test_exams_not_existing_group_id(self):
+        m = Model()
+        m.open_storage('./test.sme.sqlite')
+        es = m.exams('1000')
+        m.close_storage()
+        self.assertEqual(es, None)
+        
 if __name__ == '__main__':
     unittest.main()

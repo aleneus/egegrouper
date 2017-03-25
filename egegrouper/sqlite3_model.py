@@ -181,6 +181,31 @@ class Model(BaseModel):
         self.conn.commit()
 
     @BaseModel.do_if_storage_opened
+    def exams(self, group_id):
+        """
+        Return examinations of selected group.
+
+        Parameters
+        ----------
+        group_id : str
+           Group ID.
+
+        Returns
+        -------
+        : list of sme.Examination
+            Examination objects.
+        
+        """
+        exam_records, headers = self.group_info(group_id)
+        if exam_records == None:
+            return None
+        return [
+            self.exam(exam_record[0])
+            for exam_record
+            in exam_records
+        ]
+
+    @BaseModel.do_if_storage_opened
     def delete_exam(self, exam_id):
         """Remove examination from database.
 

@@ -182,6 +182,24 @@ class BaseModel(ABC):
         pass
 
     @abstractmethod
+    def exams(self, group_id):
+        """
+        Return examinations of selected group.
+
+        Parameters
+        ----------
+        group_id : str
+           Group ID.
+
+        Returns
+        -------
+        : list of sme.Examination
+            Examination objects.
+        
+        """
+        pass
+    
+    @abstractmethod
     def insert_group(self, name, description):
         """Add new group of examinations.
 
