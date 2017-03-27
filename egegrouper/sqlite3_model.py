@@ -49,13 +49,14 @@ class Model(BaseModel):
         """
         if self.state()['storage_opened']:
             self.close_storage()
-        if os.path.isfile(file_name):
-            os.remove(file_name)
-        self.conn = sqlite3.connect(file_name)
+        abs_file_name = os.path.expanduser(file_name)
+        if os.path.isfile(abs_file_name):
+            os.remove(abs_file_name)
+        self.conn = sqlite3.connect(abs_file_name)
         self.c = self.conn.cursor()
         self.c.executescript(create_sme_db_script)
         self.conn.commit()
-        self.set_state(storage_opened=True, file_name = file_name)
+        self.set_state(storage_opened=True, file_name = abs_file_name)
 
     def open_storage(self, file_name):
         """Open database.
@@ -68,10 +69,11 @@ class Model(BaseModel):
         """
         if self.state()['storage_opened']:
             self.close_storage()
-        self.conn = sqlite3.connect(file_name)
+        abs_file_name = os.path.expanduser(file_name)
+        self.conn = sqlite3.connect(abs_file_name)
         self.c = self.conn.cursor()
         self.c.execute("pragma foreign_keys=on")
-        self.set_state(storage_opened=True, file_name=file_name)
+        self.set_state(storage_opened=True, file_name=abs_file_name)
 
     def close_storage(self):
         """Close current database."""
@@ -93,7 +95,8 @@ class Model(BaseModel):
             True if exists, False otherwise.
 
         """
-        return os.path.isfile(file_name)
+        abs_file_name = os.path.expanduser(file_name)
+        return os.path.isfile(abs_file_name)
 
     @BaseModel.do_if_storage_opened
     def exam(self, exam_id):
@@ -411,7 +414,7 @@ class Model(BaseModel):
             Name of file with SQLite3 SME database.
 
         """
-        source_name = file_name
+        source_name = os.path.expanduser(file_name)
         dest_name = self.state()['file_name']
         if self.state()['storage_opened']:
             self.close_storage()
@@ -428,7 +431,7 @@ class Model(BaseModel):
             Name of file with SQLite3 Gastroscan database.
 
         """
-        source_name = file_name
+        source_name = os.path.expanduser(file_name)
         dest_name = self.state()['file_name']
         if self.state()['storage_opened']:
             self.close_storage()
@@ -445,7 +448,8 @@ class Model(BaseModel):
             Name of JSON file.
         
         """
-        e = jsme.get_exam(file_name)
+        abs_file_name = os.path.expanduser(file_name)
+        e = jsme.get_exam(abs_file_name)
         self.insert_exam(e)
 
     @BaseModel.do_if_storage_opened
@@ -460,8 +464,9 @@ class Model(BaseModel):
             Name of JSON file.
         
         """
+        abs_file_name = os.path.expanduser(file_name)
         e = self.exam(exam_id)
-        jsme.put_exam(e, file_name)
+        jsme.put_exam(e, abs_file_name)
 
     @BaseModel.do_if_storage_opened
     def group_record(self, group_id):

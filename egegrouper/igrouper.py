@@ -352,7 +352,7 @@ def main():
     """Entry point."""
     
     print("""
-    EGEGrouper 0.3.0 Copyright (C) 2017 Aleksandr Popov
+    EGEGrouper 0.3.1 Copyright (C) 2017 Aleksandr Popov
 
     This program comes with ABSOLUTELY NO WARRANTY; for details type `w'.
     This is free software, and you are welcome to redistribute it

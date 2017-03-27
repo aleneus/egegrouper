@@ -47,6 +47,16 @@ class TestSqliteModel(unittest.TestCase):
         remove_file(file_name)
         self.assertEqual(exists, True)
 
+    def test_create_storage_in_home_dir(self):
+        """Test the fact of storage creation."""
+        m = Model()
+        file_name = '~/file.sme.sqlite'
+        remove_file(file_name)
+        m.create_storage(file_name)
+        exists = os.path.isfile(os.path.expanduser(file_name))
+        remove_file(file_name)
+        self.assertEqual(exists, True)
+        
     def test_create_storage_if_exists(self):
         """If file file_name exists it should be correctly replaced by new storage."""
         m = Model()
@@ -62,6 +72,35 @@ class TestSqliteModel(unittest.TestCase):
         remove_file(file_name)
         self.assertEqual(n, 0)
 
+    def test_open_stoarge_home_dir(self):
+        """Copy test database to ~ and try to open it."""
+        file_name = "~/test.sme.sqlite"
+        abs_file_name = os.path.expanduser(file_name)
+        remove_file(abs_file_name)
+        shutil.copy2('./test.sme.sqlite', abs_file_name)
+        m = Model()
+        m.open_storage(abs_file_name)
+        result = m.state()['storage_opened']
+        m.close_storage()
+        remove_file(abs_file_name)
+        self.assertTrue(result)
+
+    def test_storage_exists(self):
+        file_name = "./test.sme.sqlite"
+        m = Model()
+        result = m.storage_exists(file_name)
+        self.assertTrue(result)
+
+    def test_storage_exists_home_dir(self):
+        file_name = "~/test.sme.sqlite"
+        abs_file_name = os.path.expanduser(file_name)
+        remove_file(abs_file_name)
+        shutil.copy2("./test.sme.sqlite", abs_file_name)
+        m = Model()
+        result = m.storage_exists(abs_file_name)
+        remove_file(abs_file_name)
+        self.assertTrue(result)
+        
     # get examination
 
     def test_get_examination_naive(self):
@@ -199,6 +238,62 @@ class TestSqliteModel(unittest.TestCase):
         es = m.exams('1000')
         m.close_storage()
         self.assertEqual(es, None)
+
+    # import data
+
+    def test_add_sme_db(self):
+        """Add copy of test database to another copy of it and check if number of examinations increased."""
+        source_file_name = './test.sme.sqlite'
+        dest_file_name = './temp.test.sme.sqlite'
+        remove_file(dest_file_name)
+        shutil.copy2(source_file_name, dest_file_name)
+
+        conn = sqlite3.connect(dest_file_name)
+        c = conn.cursor()
+        c.execute("select * from examination;")
+        n1 = len(c.fetchall())
+        conn.close()
+        
+        m = Model()
+        m.open_storage(dest_file_name)
+        m.add_sme_db(source_file_name)
+        m.close_storage()
+        
+        conn = sqlite3.connect(dest_file_name)
+        c = conn.cursor()
+        c.execute("select * from examination;")
+        n2 = len(c.fetchall())
+        conn.close()
+        
+        remove_file(dest_file_name)
+        self.assertEqual(n2, n1*2)
+        
+    def test_add_exam_from_json_file(self):
+        """Add json examination to copy of test database and check if number of examinations increased."""
+        to_file_name = './temp.test.sme.sqlite'
+        from_file_name = './test.json'
+        remove_file(to_file_name)
+        shutil.copy2('./test.sme.sqlite', to_file_name)
+        
+        conn = sqlite3.connect(to_file_name)
+        c = conn.cursor()
+        c.execute("select * from examination;")
+        n1 = len(c.fetchall())
+        conn.close()
+        
+        m = Model()
+        m.open_storage(to_file_name)
+        m.add_exam_from_json_file(from_file_name)
+        m.close_storage()
+
+        conn = sqlite3.connect(to_file_name)
+        c = conn.cursor()
+        c.execute("select * from examination;")
+        n2 = len(c.fetchall())
+        conn.close()
+        
+        remove_file(to_file_name)
+        self.assertEqual(n2, n1+1)
         
 if __name__ == '__main__':
     unittest.main()
