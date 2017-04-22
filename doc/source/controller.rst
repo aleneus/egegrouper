@@ -6,7 +6,7 @@ controller
    .. autoclass:: egegrouper.controller.Controller
 
       .. automethod:: __init__(self, model)
-      .. automethod:: add_exam_from_json_file(self, file_name)
+      .. automethod:: add_exams_to_storage(self, exams)
       .. automethod:: add_gs_db(self, file_name)
       .. automethod:: add_sme_db(self, file_name)
       .. automethod:: close_storage(self)

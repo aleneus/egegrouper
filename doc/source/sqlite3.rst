@@ -6,9 +6,8 @@ sqlite3_model
    .. autoclass:: egegrouper.sqlite3_model.Model
    
       .. automethod:: __init__(self)
-      .. automethod:: add_exam_from_json_file(self, file_name)
+      .. automethod:: add_data_from_another_storage(self, name)
       .. automethod:: add_gs_db(self, file_name)
-      .. automethod:: add_sme_db(self, file_name)
       .. automethod:: close_storage(self)
       .. automethod:: create_storage(self, file_name)
       .. automethod:: delete_exam(self, exam_id)
@@ -27,12 +26,3 @@ sqlite3_model
       .. automethod:: storage_info(self)
       .. automethod:: update_group_record(self, group_id, attr)
       .. automethod:: where_exam(self, exam_id)
-
-   .. autoclass:: egegrouper.sqlite3_model.DBImporter
-      :members:
-		      
-   .. autoclass:: egegrouper.sqlite3_model.SMEDBImporter
-      :members:
-      
-   .. autoclass:: egegrouper.sqlite3_model.GSDBImporter
-      :members:

@@ -17,11 +17,14 @@ Contacts:
 * aleneus@gmail.com
 * `DSPLab at NArFU <http://dsplab.narfu.ru>`_ (In Russ.)
 
-What's new in 0.3
+What's new in 1.0
 -----------------
 
-* Method for extracting full examinations of group added to base_model and sqlite3_model.
-* Unit tests for sqlite3_model added.
+* Architecture in the import and export (TODO) part changed.
+* Importers module added.
+* Importer for JSON file implemented.
+* Importer for Gastroscan sqlite database added. (TODO)    
+* Import and adding data from another storage of the same type (merging storages) are different things now.
 
 Requires
 --------
@@ -55,6 +58,7 @@ Modules
    plot
    igrouper
    tkgrouper
+   importers
    
 History
 -------   

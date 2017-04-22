@@ -6,6 +6,7 @@ base_model
    .. autoclass:: egegrouper.base_model.BaseModel
    
       .. automethod:: __init__(self)
+      .. automethod:: add_data_from_another_storage(self, name)
       .. automethod:: close_storage(self)
       .. automethod:: create_storage(self, name)
       .. automethod:: delete_exam(self, exam_id)

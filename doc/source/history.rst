@@ -1,3 +1,9 @@
+0.3
+===
+
+* Method for extracting full examinations of group added to base_model and sqlite3_model.
+* Unit tests for sqlite3_model added.
+
 0.2
 ===
 

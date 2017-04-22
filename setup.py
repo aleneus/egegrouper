@@ -23,7 +23,7 @@ def read(fname):
 
 setup(
     name="EGEGrouper",
-    version="0.3.1",
+    version="1.0.0",
     description="Tool for grouping EGEG examinations",
     author="Aleksandr Popov",
     author_email="aleneus@gmail.com",
