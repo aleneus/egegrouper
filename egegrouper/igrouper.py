@@ -264,7 +264,8 @@ class GrouperShell(cmd.Cmd):
         if len(cargv) == 0:
             print('Few arguments')
             return
-        controller.add_exam_from_json_file(cargv[0])
+        file_name = cargv[0]
+        json_file_importer.do_work(file_name)
 
     def do_export_json(self, arg):
         """ export_json exam_id file_name
@@ -347,7 +348,7 @@ class GrouperShell(cmd.Cmd):
         """)    
 
 controller = controller.Controller(sqlite3_model.Model())
-"""Controller."""
+json_file_importer = importers.JsonFileImporter(controller)
         
 def main():
     """Entry point."""

@@ -16,6 +16,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from abc import ABC, abstractmethod
+from . import sme_json
+import os
 
 class BaseImporter(ABC):
     """Base class for importers."""
@@ -42,8 +44,9 @@ class BaseImporter(ABC):
             True if success, False if not.
 
         """
-        es = self._get_exams(source)
-        self.controller.add_exams(es)
+        abs_file_name = os.path.expanduser(source)
+        es = self._get_exams(abs_file_name)
+        self.controller.add_exams_to_storage(es)
         return True # TODO
 
     @abstractmethod
@@ -63,6 +66,18 @@ class BaseImporter(ABC):
         """
         pass
     
+    
+class JsonFileImporter(BaseImporter):
+    """Importer from JSON file."""
+    
+    def _get_exams(self, source):
+        exam = sme_json.get_exam(source)
+        return [exam, ]
+
+    
 class GSImporter(BaseImporter):
+    """TODO"""
     def _get_exams(self, source):
         return []
+
+# Think about split it to files. Separate file for every importer.

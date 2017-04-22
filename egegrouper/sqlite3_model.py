@@ -22,7 +22,6 @@ import os
 
 from .base_model import BaseModel
 from . import sme
-from . import sme_json as jsme
 
 class Model(BaseModel):
     """Model implementation for SQLite3 SME database."""
@@ -451,20 +450,7 @@ class Model(BaseModel):
         GSDBImporter().DBimport(dest_name, source_name)
         self.open_storage(dest_name)
 
-    @BaseModel.do_if_storage_opened
-    def add_exam_from_json_file(self, file_name):
-        """Add examination from JSON file to current database.
-
-        Parameters
-        ----------
-        file_name : str
-            Name of JSON file.
-        
-        """
-        abs_file_name = os.path.expanduser(file_name)
-        e = jsme.get_exam(abs_file_name)
-        self.insert_exam(e)
-
+    # TODO: replace exports to views
     @BaseModel.do_if_storage_opened
     def export_exam_to_json_file(self, exam_id, file_name):
         """Export examination to JSON file.

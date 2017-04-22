@@ -336,20 +336,6 @@ class Controller:
         return True
 
     @model_can_grumble
-    def add_exam_from_json_file(self, file_name):
-        """Add examination from JSON file to current storage. Return True if success, None if an exception raised.
-
-        Parameters
-        ----------
-        file_name : str
-            Name of JSON file.
-        
-        """
-        self._model.add_exam_from_json_file(file_name)
-        self.show_message('Done.')
-        return True
-
-    @model_can_grumble
     def export_exam_to_json_file(self, exam_id, file_name):
         """Export examination to JSON file. Return True if success, None if an exception raised.
 
@@ -429,4 +415,19 @@ class Controller:
 
         """
         self._model.update_group_record(group_id, attr)
+        return True
+
+    @model_can_grumble
+    def add_exams_to_storage(self, exams):
+        """Add exams to current storage. Return True if success, None if an exception raised.
+
+        Parameters
+        ----------
+        exams : list of sme.Examination
+            Examinations to be added.
+
+        """
+        for exam in exams:
+            self._model.insert_exam(exam)
+        self.show_message('Done.')
         return True

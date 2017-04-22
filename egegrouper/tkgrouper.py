@@ -158,7 +158,7 @@ class MainWindow:
         )
         if not file_name:
             return
-        controller.add_exam_from_json_file(file_name)
+        json_file_importer.do_work(file_name)
         controller.storage_info()
 
     def group_selected(self, *args):
@@ -415,8 +415,8 @@ class AboutWindow:
         self.close_button.pack(side=TOP)
 
 controller = controller.Controller(sqlite3_model.Model())
-"""Controller."""
 controller.set_view_message(tk_views.Message())
+json_file_importer = importers.JsonFileImporter(controller)
 
 def main():
     """Entry point."""
