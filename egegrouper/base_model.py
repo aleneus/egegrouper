@@ -294,8 +294,8 @@ class BaseModel(ABC):
         pass
 
     @abstractmethod
-    def attach_storage(self, name):
-        """Attach storage of the same type to current storage.
+    def add_data_from_another_storage(self, name):
+        """Add data from storage of the same type to current storage.
 
         Parameters
         ----------

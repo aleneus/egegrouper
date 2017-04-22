@@ -137,7 +137,7 @@ class Controller:
                 return method(self, *args)
             except Exception as err:
                 self.show_message('Something wrong') #TODO: more concrete messages
-                #print(err.args) # uncomment for debugging
+                print(err.args) # uncomment for debugging
                 return None
         wrapped.__doc__ = method.__doc__
         return wrapped
@@ -317,7 +317,7 @@ class Controller:
             File name.
 
         """
-        self._model.attach_storage(file_name)
+        self._model.add_data_from_another_storage(file_name)
         self.show_message('Done.')
         return True
 

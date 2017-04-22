@@ -403,10 +403,9 @@ class Model(BaseModel):
         
         return group_records, headers, placed_in
 
-    # TODO: refact it!
     @BaseModel.do_if_storage_opened
-    def attach_storage(self, file_name):
-        """Attach storage of the same type to current storage.
+    def add_data_from_another_storage(self, file_name):
+        """Add data from storage of the same type to current storage.
 
         Parameters
         ----------
@@ -415,23 +414,11 @@ class Model(BaseModel):
 
         """
         source_name = os.path.expanduser(file_name)
-        dest_name = self.state()['file_name']
-        if self.state()['storage_opened']:
-            self.close_storage()
-            
-        sconn = sqlite3.connect(source_name)
-        dconn = sqlite3.connect(dest_name)
-        src_c = sconn.cursor()
-        dest_c = dconn.cursor()
-        dest_c.execute("attach database ? as 'source';", (source_name,))
-        dest_c.executescript(add_sme_db_script)
-        dest_c.execute("detach database source;")
-        dest_c.execute('drop table variable;')
-        dconn.commit()
-        sconn.close()
-        dconn.close()
-
-        self.open_storage(dest_name)
+        self.c.execute("attach database ? as 'source';", (source_name,))
+        self.c.executescript(add_sme_db_script)
+        self.c.execute("detach database source;")
+        self.c.execute("drop table variable;")
+        self.conn.commit()
     
     @BaseModel.do_if_storage_opened
     def add_gs_db(self, file_name):

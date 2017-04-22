@@ -38,16 +38,10 @@ class BaseImporter(ABC):
         source : str
             Name of data source.
         
-        Returns
-        -------
-        bool
-            True if success, False if not.
-
         """
         abs_file_name = os.path.expanduser(source)
         es = self._get_exams(abs_file_name)
         self.controller.add_exams_to_storage(es)
-        return True # TODO
 
     @abstractmethod
     def _get_exams(self, source):
@@ -66,7 +60,7 @@ class BaseImporter(ABC):
         """
         pass
     
-    
+
 class JsonFileImporter(BaseImporter):
     """Importer from JSON file."""
     
@@ -74,9 +68,9 @@ class JsonFileImporter(BaseImporter):
         exam = sme_json.get_exam(source)
         return [exam, ]
 
-    
+
 class GSImporter(BaseImporter):
-    """TODO"""
+    """Importer from Gastroscan sqlite3 database."""
     def _get_exams(self, source):
         return []
 
