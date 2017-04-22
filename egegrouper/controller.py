@@ -314,10 +314,10 @@ class Controller:
         Parameters
         ----------
         file_name : str
-            File name. Example: example.sme.sqlite.
+            File name.
 
         """
-        self._model.add_exams_from_storage(file_name)
+        self._model.attach_storage(file_name)
         self.show_message('Done.')
         return True
 

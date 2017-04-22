@@ -405,8 +405,8 @@ class Model(BaseModel):
 
     # TODO: refact it!
     @BaseModel.do_if_storage_opened
-    def add_exams_from_storage(self, file_name): # TODO: rename to attach_storage
-        """Add exams from SME sqlite3 database to current database.
+    def attach_storage(self, file_name):
+        """Attach storage of the same type to current storage.
 
         Parameters
         ----------
