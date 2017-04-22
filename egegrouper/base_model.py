@@ -292,3 +292,15 @@ class BaseModel(ABC):
 
         """
         pass
+
+    @abstractmethod
+    def add_exams_from_storage(self, name):
+        """Add exams from storage of the same type to current storage.
+
+        Parameters
+        ----------
+        name : str
+            Name of storage to be added.
+
+        """
+        pass

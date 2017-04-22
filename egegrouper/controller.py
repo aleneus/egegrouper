@@ -317,7 +317,7 @@ class Controller:
             File name. Example: example.sme.sqlite.
 
         """
-        self._model.add_sme_db(file_name)
+        self._model.add_exams_from_storage(file_name)
         self.show_message('Done.')
         return True
 

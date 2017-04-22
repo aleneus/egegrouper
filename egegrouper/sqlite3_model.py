@@ -403,10 +403,11 @@ class Model(BaseModel):
         placed_in = [gr[0] in including_exam_groups_ids for gr in group_records]
         
         return group_records, headers, placed_in
-    
+
+    # TODO: refact it!
     @BaseModel.do_if_storage_opened
-    def add_sme_db(self, file_name):
-        """Add SME sqlite3 database to current database.
+    def add_exams_from_storage(self, file_name): # TODO: rename to attach_storage
+        """Add exams from SME sqlite3 database to current database.
 
         Parameters
         ----------
@@ -418,9 +419,21 @@ class Model(BaseModel):
         dest_name = self.state()['file_name']
         if self.state()['storage_opened']:
             self.close_storage()
-        SMEDBImporter().DBimport(dest_name, source_name)
-        self.open_storage(dest_name)
+            
+        sconn = sqlite3.connect(source_name)
+        dconn = sqlite3.connect(dest_name)
+        src_c = sconn.cursor()
+        dest_c = dconn.cursor()
+        dest_c.execute("attach database ? as 'source';", (source_name,))
+        dest_c.executescript(add_sme_db_script)
+        dest_c.execute("detach database source;")
+        dest_c.execute('drop table variable;')
+        dconn.commit()
+        sconn.close()
+        dconn.close()
 
+        self.open_storage(dest_name)
+    
     @BaseModel.do_if_storage_opened
     def add_gs_db(self, file_name):
         """Add GS SQLite3 database to current database.
@@ -519,23 +532,6 @@ class DBImporter:
         self._source_filename = source_filename
         self._dest_filename = dest_filename
         self.run()
-
-class SMEDBImporter(DBImporter):
-    def run(self):
-        """Import."""
-        self._dconn = sqlite3.connect(self._dest_filename)
-        self._sconn = sqlite3.connect(self._source_filename)
-        
-        self._dest_c = self._dconn.cursor()
-        self._src_c = self._sconn.cursor()
-        self._dest_c.execute("attach database ? as 'source';", (self._source_filename,))
-        self._dest_c.executescript(add_sme_db_script)
-        self._dest_c.execute("detach database source;")
-        self._dest_c.execute('drop table variable;')
-        self._dconn.commit()
-        
-        self._sconn.close()
-        self._dconn.close()
 
 class GSDBImporter(DBImporter):
     def run(self):
