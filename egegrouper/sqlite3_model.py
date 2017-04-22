@@ -678,7 +678,7 @@ create table group_element(
 );
 """
 
-# import SME database
+# add SME database
 add_sme_db_script = """
 -- Create temporary table for variables and store max values of SMEP entities from nation db.
 drop table if exists variable;

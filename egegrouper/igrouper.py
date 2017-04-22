@@ -24,6 +24,7 @@ from . import sqlite3_model
 from . import text_views
 from . import plot_views
 from . import controller
+from . import importers
 
 class DialogText:
     """Text dialog for input fields values. 

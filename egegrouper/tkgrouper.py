@@ -25,6 +25,7 @@ from . import controller
 from . import sqlite3_model
 from . import tk_views
 from . import plot_views
+from . import importers
 
 from collections import OrderedDict
 
