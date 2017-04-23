@@ -248,10 +248,15 @@ class GrouperShell(cmd.Cmd):
     def do_add_gs(self, arg):
         """ add_gs file_name
 
-        Add records from Gastroscan sqlite data base.
+        Import records from Gastroscan sqlite data base.
         """
         cargv = arg.split()
-        controller.add_gs_db(cargv[0])
+        if len(cargv) == 0:
+            print('Few arguments')
+            return
+        file_name = cargv[0]
+        gs_importer.do_work(file_name)
+        #controller.add_gs_db(cargv[0])
 
     def do_add_json(self, arg):
         """ add_json file_name
@@ -349,6 +354,7 @@ class GrouperShell(cmd.Cmd):
 
 controller = controller.Controller(sqlite3_model.Model())
 json_file_importer = importers.JsonFileImporter(controller)
+gs_importer = importers.GsImporter(controller)
         
 def main():
     """Entry point."""

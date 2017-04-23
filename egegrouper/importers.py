@@ -69,9 +69,10 @@ class JsonFileImporter(BaseImporter):
         return [exam, ]
 
 
-class GSImporter(BaseImporter):
+class GsImporter(BaseImporter):
     """Importer from Gastroscan sqlite3 database."""
     def _get_exams(self, source):
+        print("Start import GS database...")
         return []
 
 # Think about split it to files. Separate file for every importer.
