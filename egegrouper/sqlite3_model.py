@@ -22,6 +22,8 @@ import os
 
 from .base_model import BaseModel
 from . import sme
+from . import sme_sqlite3
+from . import sme_json
 
 class Model(BaseModel):
     """Model implementation for SQLite3 SME database."""
@@ -112,33 +114,7 @@ class Model(BaseModel):
             Examination object.
 
         """
-        e = sme.Examination()
-        self.c.execute("""
-        SELECT E.name, E.diagnosis, E.age, E.gender FROM examination AS E
-        WHERE exam_id = ? """, [exam_id, ])
-        result = self.c.fetchone()
-        if not result:
-            return None
-        e.name, e.diagnosis, e.age, e.gender = result
-        e.ms = []
-        self.c.execute("""
-        SELECT M.meas_id, M.time FROM measurement AS M
-        WHERE exam_id = ?
-        ORDER BY meas_id """, [exam_id, ])
-        for m_sql in self.c.fetchall():
-            m = sme.Measurement()
-            m_id, m.time = m_sql
-            m.ss = []
-            self.c.execute("""
-            SELECT S.dt, S.data FROM signal AS S
-            WHERE meas_id = ? """, [m_id, ])
-            for s_sql in self.c.fetchall():
-                s = sme.Signal()
-                s.dt = s_sql[0]
-                s.x = np.array(np.frombuffer(s_sql[1]))
-                m.ss.append(s)
-            e.ms.append(m)
-        return e
+        return sme_sqlite3.get_exam(self.c, exam_id)
 
     @BaseModel.do_if_storage_opened
     def insert_exam(self, exam):
@@ -150,36 +126,7 @@ class Model(BaseModel):
             Examination object
 
         """
-        self.c.execute("""
-        SELECT max(exam_id)
-        FROM examination """)
-        exam_id = self.c.fetchone()[0]
-        if not exam_id:
-            exam_id = 0
-
-        self.c.execute("""
-        SELECT max(meas_id)
-        FROM measurement """)
-        meas_id = self.c.fetchone()[0]
-        if not meas_id:
-            meas_id = 0
-
-        self.c.execute("""
-        INSERT INTO examination (name, diagnosis, age, gender)
-        VALUES (?,?,?,?) """, (exam.name, exam.diagnosis, exam.age, exam.gender) )
-        exam_id += 1
-
-        for m in exam.ms:
-            self.c.execute("""
-            INSERT INTO measurement (time, exam_id)
-            VALUES (?,?) """, (m.time, exam_id) )
-            meas_id += 1
-
-            for s in m.ss:
-                self.c.execute("""
-                INSERT INTO signal (data, dt, meas_id)
-                VALUES (?,?,?) """, (s.x.tobytes(), s.dt, meas_id) )
-            
+        sme_sqlite3.put_exam(self.c, exam)
         self.conn.commit()
 
     @BaseModel.do_if_storage_opened
@@ -452,7 +399,7 @@ class Model(BaseModel):
         """
         abs_file_name = os.path.expanduser(file_name)
         e = self.exam(exam_id)
-        jsme.put_exam(e, abs_file_name)
+        sme_json.put_exam(e, abs_file_name)
 
     @BaseModel.do_if_storage_opened
     def group_record(self, group_id):
