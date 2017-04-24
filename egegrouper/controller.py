@@ -23,6 +23,7 @@ The common scenario for controller is to ask connected model to make some data m
 """
 
 from . import sme
+from . import exporters
 
 class Controller:
     """Controller in MVC."""    
@@ -308,22 +309,6 @@ class Controller:
         return True
 
     @model_can_grumble
-    def export_exam_to_json_file(self, exam_id, file_name):
-        """Export examination to JSON file. Return True if success, None if an exception raised.
-
-        Parameters
-        ----------
-        exam_id : str
-            Examination ID.
-        file_name : str
-            Name of JSON file.
-
-        """
-        self._model.export_exam_to_json_file(exam_id, file_name)
-        self.show_message('Done.')
-        return True
-
-    @model_can_grumble
     def delete_exam(self, exam_id):
         """Delete examination from storage. Return True if success, None if an exception raised.
 
@@ -389,6 +374,8 @@ class Controller:
         self._model.update_group_record(group_id, attr)
         return True
 
+    # import and export
+
     @model_can_grumble
     def import_exams(self, exams):
         """Add exams to current storage. Return True if success, None if an exception raised.
@@ -401,5 +388,25 @@ class Controller:
         """
         for exam in exams:
             self._model.insert_exam(exam)
+        self.show_message('Done.')
+        return True
+
+    @model_can_grumble
+    def export_exam_to_json_file(self, exam_id, file_name):
+        """Export examination to JSON file. Return True if success, None if an exception raised.
+
+        Parameters
+        ----------
+        exam_id : str
+            Examination ID.
+        file_name : str
+            Name of JSON file.
+
+        """
+        e = self._model.exam(exam_id)
+        if e == None:
+            self.show_message('Exam data is empty.')
+            return True
+        exporters.JsonFileExporter().export_exam(e, file_name)
         self.show_message('Done.')
         return True

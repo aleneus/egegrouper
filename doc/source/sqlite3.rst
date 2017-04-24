@@ -13,7 +13,6 @@ sqlite3_model
       .. automethod:: do_if_storage_opened(method)
       .. automethod:: exam(self, exam_id)
       .. automethod:: exams(self, group_id)
-      .. automethod:: export_exam_to_json_file(self, exam_id, file_name)
       .. automethod:: group_exam(self, exam_id, group_ids, placed_in)
       .. automethod:: group_info(self, group_id)
       .. automethod:: group_record(self, group_id)

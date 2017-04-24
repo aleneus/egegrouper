@@ -18,7 +18,9 @@
 from abc import ABC, abstractmethod
 import os
 import sqlite3
+import numpy as np
 
+from . import sme
 from . import sme_json
 from . import sme_sqlite3
 
@@ -91,7 +93,31 @@ class SmeImporter(BaseImporter):
 class GsImporter(BaseImporter):
     """Importer from Gastroscan sqlite3 database."""
     def _get_exams(self, source):
-        print("Start import GS database...")
-        return []
-
-# Think about split it to files. Separate file for every importer.
+        abs_file_name = os.path.expanduser(source)
+        conn = sqlite3.connect(abs_file_name)
+        c = conn.cursor()
+        exams = []
+        c.execute("""SELECT id, name, diagnosis, age, sex, date FROM record;""")
+        for record_row in c.fetchall():
+            e = sme.Examination()
+            record_id = record_row[0]
+            e.name = record_row[1]
+            e.diagnosis = record_row[2]
+            e.age = record_row[3]
+            e.gender = record_row[4]
+            m = sme.Measurement()
+            m.time = record_row[5]
+            m.ss = []
+            c.execute("""
+            SELECT signal
+            FROM waveform
+            WHERE (record_id = ?) and (edited = 0);""", (record_id, ))
+            for signal_row in c.fetchall():
+                s = sme.Signal()
+                s.dt = 0.5
+                s.x = np.array(np.frombuffer(signal_row[0]))
+                m.ss.append(s)
+            e.ms = [m]
+            exams.append(e)
+        conn.close()
+        return exams

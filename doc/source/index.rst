@@ -60,6 +60,7 @@ Modules
    igrouper
    tkgrouper
    importers
+   exporters
    
 History
 -------   
