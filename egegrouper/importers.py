@@ -16,8 +16,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from abc import ABC, abstractmethod
-from . import sme_json
 import os
+import sqlite3
+
+from . import sme_json
+from . import sme_sqlite3
 
 class BaseImporter(ABC):
     """Base class for importers."""
@@ -68,6 +71,22 @@ class JsonFileImporter(BaseImporter):
         exam = sme_json.get_exam(source)
         return [exam, ]
 
+class SmeImporter(BaseImporter):
+    """TODO doc it
+    
+    """
+    def _get_exams(self, source):
+        abs_file_name = os.path.expanduser(source)
+        conn = sqlite3.connect(abs_file_name)
+        c = conn.cursor()
+        c.execute("SELECT exam_id from examination;")
+        exams = []
+        for r in c.fetchall():
+            exam_id = r[0]
+            exam = sme_sqlite3.get_exam(c, exam_id)
+            exams.append(exam)
+        conn.close()
+        return exams
 
 class GsImporter(BaseImporter):
     """Importer from Gastroscan sqlite3 database."""

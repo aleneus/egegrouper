@@ -146,7 +146,8 @@ class MainWindow:
         )
         if not file_name:
             return
-        controller.add_sme_db(file_name)
+        sme_importer.do_work(file_name)
+        #controller.add_sme_db(file_name)
         controller.storage_info()
 
     def add_json(self):
@@ -417,6 +418,7 @@ class AboutWindow:
 controller = controller.Controller(sqlite3_model.Model())
 controller.set_view_message(tk_views.Message())
 json_file_importer = importers.JsonFileImporter(controller)
+sme_importer = importers.SmeImporter(controller)
 
 def main():
     """Entry point."""
