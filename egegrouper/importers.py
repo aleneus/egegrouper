@@ -72,7 +72,7 @@ class JsonFileImporter(BaseImporter):
         exam = sme_json.get_exam(source)
         return [exam, ]
 
-class SmeImporter(BaseImporter):
+class SmeSqliteImporter(BaseImporter):
     """Importer from SME sqlite3 database."""
     def _get_exams(self, source):
         abs_file_name = os.path.expanduser(source)
@@ -87,7 +87,7 @@ class SmeImporter(BaseImporter):
         conn.close()
         return exams
 
-class GsImporter(BaseImporter):
+class GsSqliteImporter(BaseImporter):
     """Importer from Gastroscan sqlite3 database."""
     def _get_exams(self, source):
         abs_file_name = os.path.expanduser(source)

@@ -117,13 +117,13 @@ class GrouperShell(cmd.Cmd):
         return True
 
     def do_quit(self, arg):
-        """ Close data base and exit.
+        """ Close database and exit.
         """
         controller.close_storage()
         return True
 
     def do_db_info(self, arg):
-        """ Print information about data base.
+        """ Print information about database.
 
         Aliases: d
         """
@@ -237,26 +237,26 @@ class GrouperShell(cmd.Cmd):
     def do_import_sme(self, arg):
         """ import_sme file_name
 
-        Add records from SME data base.
+        Add records from SME database.
         """
         cargv = arg.split()
         if len(cargv) == 0:
             print('Few arguments')
             return
         file_name = cargv[0]
-        sme_importer.do_work(file_name)
+        importers.SmeSqliteImporter(controller).do_work(file_name)
 
-    def do_add_gs(self, arg):
-        """ add_gs file_name
+    def do_import_gs(self, arg):
+        """ import_gs file_name
 
-        Import records from Gastroscan sqlite data base.
+        Import records from Gastroscan sqlite database.
         """
         cargv = arg.split()
         if len(cargv) == 0:
             print('Few arguments')
             return
         file_name = cargv[0]
-        gs_importer.do_work(file_name)
+        importers.GsSqliteImporter(controller).do_work(file_name)
 
     def do_import_json(self, arg):
         """ import_json file_name
@@ -270,7 +270,7 @@ class GrouperShell(cmd.Cmd):
             print('Few arguments')
             return
         file_name = cargv[0]
-        json_file_importer.do_work(file_name)
+        importers.JsonFileImporter(controller).do_work(file_name)
 
     def do_export_json(self, arg):
         """ export_json exam_id file_name
@@ -290,7 +290,7 @@ class GrouperShell(cmd.Cmd):
     def do_delete_exam(self, arg):
         """ delete_exam id
 
-        Delete examination from data base.
+        Delete examination from database.
 
         Aliases: de
         """
@@ -353,9 +353,6 @@ class GrouperShell(cmd.Cmd):
         """)    
 
 controller = controller.Controller(sqlite3_model.Model())
-json_file_importer = importers.JsonFileImporter(controller)
-gs_importer = importers.GsImporter(controller)
-sme_importer = importers.SmeImporter(controller)
         
 def main():
     """Entry point."""
@@ -369,7 +366,7 @@ def main():
     """)
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("fname", help="Name of data base")
+    parser.add_argument("fname", help="Name of database")
     args = parser.parse_args()
     
     controller.set_view_message(text_views.Message())

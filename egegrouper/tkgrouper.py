@@ -47,10 +47,10 @@ class MainWindow:
         self.storage_menu.add_command(label="Create", command=self.create_storage)
         self.storage_menu.add_command(label="Close", command=self.close_storage)
         self.add_data_submenu = Menu(self.storage_menu, tearoff=0)
-        self.add_data_submenu.add_command(label="Add SME sqlite3 DB", command=self.import_sme)
-        self.add_data_submenu.add_command(label="Add exam from JSON", command=self.import_json)
+        self.add_data_submenu.add_command(label="SME sqlite3 DB", command=self.import_sme)
+        self.add_data_submenu.add_command(label="Exam from JSON", command=self.import_json)
         #self.add_data_submenu.add_command(label="TODO: Add Gastroscan sqlite3 DB", command=)
-        self.storage_menu.add_cascade(label="Add data", menu=self.add_data_submenu)
+        self.storage_menu.add_cascade(label="Import", menu=self.add_data_submenu)
         self.storage_menu.add_command(label="Exit", command=self.close_db_and_exit)
         self.main_menu.add_cascade(label="Storage", menu=self.storage_menu)
         self.group_menu = Menu(self.main_menu, tearoff=0)
@@ -70,7 +70,7 @@ class MainWindow:
         self.main_menu.add_cascade(label="Help", menu=self.help_menu)
         self.master.config(menu=self.main_menu)
 
-        self.storage_menu.entryconfig("Add data", state=DISABLED)
+        self.storage_menu.entryconfig("Import", state=DISABLED)
         self.storage_menu.entryconfig("Close", state=DISABLED)
         self.main_menu.entryconfig("Group", state=DISABLED)
         self.main_menu.entryconfig("Exam", state=DISABLED)
@@ -99,7 +99,7 @@ class MainWindow:
         controller.open_storage(file_name)
         self.view_group.clear()
         # menu
-        self.storage_menu.entryconfig("Add data", state=NORMAL)
+        self.storage_menu.entryconfig("Import", state=NORMAL)
         self.storage_menu.entryconfig("Close", state=NORMAL)
         self.main_menu.entryconfig("Group", state=NORMAL)
         self.group_menu.entryconfig("Edit", state=DISABLED)
@@ -119,7 +119,7 @@ class MainWindow:
         controller.create_storage(file_name)
         self.view_group.clear()
         # menu
-        self.storage_menu.entryconfig("Add data", state=NORMAL)
+        self.storage_menu.entryconfig("Import", state=NORMAL)
         self.storage_menu.entryconfig("Close", state=NORMAL)
         self.main_menu.entryconfig("Group", state=NORMAL)
         self.group_menu.entryconfig("Edit", state=DISABLED)
@@ -132,7 +132,7 @@ class MainWindow:
         self.view_group.clear()
         self.view_storage.clear()
         # menu
-        self.storage_menu.entryconfig("Add data", state=DISABLED)
+        self.storage_menu.entryconfig("Import", state=DISABLED)
         self.storage_menu.entryconfig("Close", state=DISABLED)
         self.main_menu.entryconfig("Group", state=DISABLED)
         self.main_menu.entryconfig("Exam", state=DISABLED)
@@ -146,7 +146,7 @@ class MainWindow:
         )
         if not file_name:
             return
-        sme_importer.do_work(file_name)
+        importers.SmeSqliteImporter(controller).do_work(file_name)
         controller.storage_info()
 
     def import_json(self):
@@ -158,7 +158,7 @@ class MainWindow:
         )
         if not file_name:
             return
-        json_file_importer.do_work(file_name)
+        importers.JsonFileImporter(controller).do_work(file_name)
         controller.storage_info()
 
     def group_selected(self, *args):
@@ -416,8 +416,6 @@ class AboutWindow:
 
 controller = controller.Controller(sqlite3_model.Model())
 controller.set_view_message(tk_views.Message())
-json_file_importer = importers.JsonFileImporter(controller)
-sme_importer = importers.SmeImporter(controller)
 
 def main():
     """Entry point."""
