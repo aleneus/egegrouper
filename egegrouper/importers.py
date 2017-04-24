@@ -44,7 +44,7 @@ class BaseImporter(ABC):
         """
         abs_file_name = os.path.expanduser(source)
         es = self._get_exams(abs_file_name)
-        self.controller.add_exams_to_storage(es)
+        self.controller.import_exams(es)
 
     @abstractmethod
     def _get_exams(self, source):

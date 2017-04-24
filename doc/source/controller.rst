@@ -6,7 +6,6 @@ controller
    .. autoclass:: egegrouper.controller.Controller
 
       .. automethod:: __init__(self, model)
-      .. automethod:: add_exams_to_storage(self, exams)
       .. automethod:: close_storage(self)
       .. automethod:: create_storage(self, file_name)
       .. automethod:: create_storage(self, file_name)
@@ -17,6 +16,7 @@ controller
       .. automethod:: group_exam(self, exam_id, group_ids, placed_in)
       .. automethod:: group_info(self, group_id)
       .. automethod:: group_record(self, group_id)
+      .. automethod:: import_exams(self, exams)
       .. automethod:: insert_group(self, name, description)
       .. automethod:: merge_exams(self, exam_id_1, exam_id_2)
       .. automethod:: model_can_grumble(method)

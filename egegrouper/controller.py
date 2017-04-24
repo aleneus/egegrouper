@@ -390,7 +390,7 @@ class Controller:
         return True
 
     @model_can_grumble
-    def add_exams_to_storage(self, exams):
+    def import_exams(self, exams):
         """Add exams to current storage. Return True if success, None if an exception raised.
 
         Parameters

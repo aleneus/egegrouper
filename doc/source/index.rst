@@ -50,6 +50,7 @@ Modules
    :maxdepth: 1
 
    sme
+   sme_mapping
    model
    sqlite3
    controller

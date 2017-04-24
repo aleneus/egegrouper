@@ -6,9 +6,3 @@ sme
 .. automodule:: egegrouper.sme
    :members:
 
-sme_json
-========
-
-.. automodule:: egegrouper.sme_json
-   :members:
-

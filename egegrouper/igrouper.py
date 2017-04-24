@@ -80,7 +80,7 @@ class GrouperShell(cmd.Cmd):
             'df' : self.do_delete_from_group,
             'we' : self.do_where_is,
             
-            'aj' : self.do_add_json,
+            'ij' : self.do_import_json,
             'ej' : self.do_export_json
             }
 
@@ -234,8 +234,8 @@ class GrouperShell(cmd.Cmd):
             return
         controller.where_exam(cargv[0])
 
-    def do_add_sme(self, arg):
-        """ add_sme file_name
+    def do_import_sme(self, arg):
+        """ import_sme file_name
 
         Add records from SME data base.
         """
@@ -258,8 +258,8 @@ class GrouperShell(cmd.Cmd):
         file_name = cargv[0]
         gs_importer.do_work(file_name)
 
-    def do_add_json(self, arg):
-        """ add_json file_name
+    def do_import_json(self, arg):
+        """ import_json file_name
 
         Add examination from JSON file.
 

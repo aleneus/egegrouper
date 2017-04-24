@@ -47,8 +47,8 @@ class MainWindow:
         self.storage_menu.add_command(label="Create", command=self.create_storage)
         self.storage_menu.add_command(label="Close", command=self.close_storage)
         self.add_data_submenu = Menu(self.storage_menu, tearoff=0)
-        self.add_data_submenu.add_command(label="Add SME sqlite3 DB", command=self.add_sme)
-        self.add_data_submenu.add_command(label="Add exam from JSON", command=self.add_json)
+        self.add_data_submenu.add_command(label="Add SME sqlite3 DB", command=self.import_sme)
+        self.add_data_submenu.add_command(label="Add exam from JSON", command=self.import_json)
         #self.add_data_submenu.add_command(label="TODO: Add Gastroscan sqlite3 DB", command=)
         self.storage_menu.add_cascade(label="Add data", menu=self.add_data_submenu)
         self.storage_menu.add_command(label="Exit", command=self.close_db_and_exit)
@@ -137,7 +137,7 @@ class MainWindow:
         self.main_menu.entryconfig("Group", state=DISABLED)
         self.main_menu.entryconfig("Exam", state=DISABLED)
 
-    def add_sme(self):
+    def import_sme(self):
         "Add records from sqlite3 data base in SME format."
         file_name = filedialog.askopenfilename(
             title='Open storage',
@@ -149,7 +149,7 @@ class MainWindow:
         sme_importer.do_work(file_name)
         controller.storage_info()
 
-    def add_json(self):
+    def import_json(self):
         """Add examination from JSON file."""
         file_name = filedialog.askopenfilename(
             parent = self.master,
