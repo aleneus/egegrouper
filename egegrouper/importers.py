@@ -68,15 +68,12 @@ class BaseImporter(ABC):
 
 class JsonFileImporter(BaseImporter):
     """Importer from JSON file."""
-    
     def _get_exams(self, source):
         exam = sme_json.get_exam(source)
         return [exam, ]
 
 class SmeImporter(BaseImporter):
-    """TODO doc it
-    
-    """
+    """Importer from SME sqlite3 database."""
     def _get_exams(self, source):
         abs_file_name = os.path.expanduser(source)
         conn = sqlite3.connect(abs_file_name)
@@ -120,4 +117,7 @@ class GsImporter(BaseImporter):
             e.ms = [m]
             exams.append(e)
         conn.close()
-        return exams
+        # try to join examinations
+        joined_exams = exams
+        # TODO
+        return joined_exams

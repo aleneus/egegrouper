@@ -22,17 +22,30 @@ class BaseExporter:
     """Base class for exporters."""
 
     def export_exam(self, exam, dest_name):
-        """
-        TODO: doc it
+        """ Export examination to destination with dest_name.
+
+        Parameters
+        ----------
+        exam : sme.Examination
+            Examination instance.
+        dest_name : str
+            Destination name.
 
         """
         pass
 
 class JsonFileExporter(BaseExporter):
-    """TODO: doc it"""
+    """Exporter to JSON file."""
 
     def export_exam(self, exam, dest_name):
-        """TODO: doc it
+        """ Export examination to JSON file with dest_name.
+
+        Parameters
+        ----------
+        exam : sme.Examination
+            Examination instance.
+        dest_name : str
+            JSON file name.
 
         """
         abs_file_name = os.path.expanduser(dest_name)
