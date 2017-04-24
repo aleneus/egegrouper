@@ -15,14 +15,26 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# TODO: add to doc
+"""Mapping examinations to and from sqlite3 SME database."""
 
 import sqlite3
 from . import sme
 import numpy as np
 
 def get_exam(conn, exam_id):
-    """TODO
+    """Get examination object from database.
+
+    Parameters
+    ----------
+    conn : sqlite3.Connection
+        Opened connection to sqlite3 database.
+    exam_id : str
+        Examination ID.
+    
+    Return
+    ------
+    : sme.Examination
+        Examination instance.
 
     """
     e = sme.Examination()
@@ -55,8 +67,15 @@ def get_exam(conn, exam_id):
     return e
 
 def put_exam(conn, exam):
-    """TODO
+    """Put examination to database.
 
+    Parameters
+    ----------
+    conn : sqlite3.Connection
+        Opened connection with database.
+    exam : sme.Examination
+        Examination instance.
+    
     """
     cursor = conn.cursor()
     cursor.execute("""
