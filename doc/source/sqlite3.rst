@@ -6,8 +6,6 @@ sqlite3_model
    .. autoclass:: egegrouper.sqlite3_model.Model
    
       .. automethod:: __init__(self)
-      .. automethod:: add_data_from_another_storage(self, name)
-      .. automethod:: add_gs_db(self, file_name)
       .. automethod:: close_storage(self)
       .. automethod:: create_storage(self, file_name)
       .. automethod:: delete_exam(self, exam_id)

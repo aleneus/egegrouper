@@ -147,7 +147,6 @@ class MainWindow:
         if not file_name:
             return
         sme_importer.do_work(file_name)
-        #controller.add_sme_db(file_name)
         controller.storage_info()
 
     def add_json(self):

@@ -308,34 +308,6 @@ class Controller:
         return True
 
     @model_can_grumble
-    def add_sme_db(self, file_name):
-        """Add SME sqlite3 data base to current storage. Return True if success, None if an exception raised.
-
-        Parameters
-        ----------
-        file_name : str
-            File name.
-
-        """
-        self._model.add_data_from_another_storage(file_name)
-        self.show_message('Done.')
-        return True
-
-    # @model_can_grumble
-    # def add_gs_db(self, file_name):
-    #     """Add GS sqlite3 data base to current storage. Return True if success, None if an exception raised.
-
-    #     Parameters
-    #     ----------
-    #     file_name : str
-    #         File name. Example: example.gs.sqlite.
-
-    #     """
-    #     self._model.add_gs_db(file_name)
-    #     self.show_message('Done.')
-    #     return True
-
-    @model_can_grumble
     def export_exam_to_json_file(self, exam_id, file_name):
         """Export examination to JSON file. Return True if success, None if an exception raised.
 

@@ -243,7 +243,8 @@ class GrouperShell(cmd.Cmd):
         if len(cargv) == 0:
             print('Few arguments')
             return
-        controller.add_sme_db(cargv[0])
+        file_name = cargv[0]
+        sme_importer.do_work(file_name)
 
     def do_add_gs(self, arg):
         """ add_gs file_name
@@ -256,7 +257,6 @@ class GrouperShell(cmd.Cmd):
             return
         file_name = cargv[0]
         gs_importer.do_work(file_name)
-        #controller.add_gs_db(cargv[0])
 
     def do_add_json(self, arg):
         """ add_json file_name
@@ -355,6 +355,7 @@ class GrouperShell(cmd.Cmd):
 controller = controller.Controller(sqlite3_model.Model())
 json_file_importer = importers.JsonFileImporter(controller)
 gs_importer = importers.GsImporter(controller)
+sme_importer = importers.SmeImporter(controller)
         
 def main():
     """Entry point."""

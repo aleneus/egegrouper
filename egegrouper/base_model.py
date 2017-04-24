@@ -292,15 +292,3 @@ class BaseModel(ABC):
 
         """
         pass
-
-    @abstractmethod
-    def add_data_from_another_storage(self, name):
-        """Add data from storage of the same type to current storage.
-
-        Parameters
-        ----------
-        name : str
-            Name of storage to be added.
-
-        """
-        pass

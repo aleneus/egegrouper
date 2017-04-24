@@ -7,7 +7,6 @@ controller
 
       .. automethod:: __init__(self, model)
       .. automethod:: add_exams_to_storage(self, exams)
-      .. automethod:: add_sme_db(self, file_name)
       .. automethod:: close_storage(self)
       .. automethod:: create_storage(self, file_name)
       .. automethod:: create_storage(self, file_name)
