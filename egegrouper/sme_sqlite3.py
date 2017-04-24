@@ -21,11 +21,12 @@ import sqlite3
 from . import sme
 import numpy as np
 
-def get_exam(cursor, exam_id):
+def get_exam(conn, exam_id):
     """TODO
 
     """
     e = sme.Examination()
+    cursor = conn.cursor()
     cursor.execute("""
     SELECT E.name, E.diagnosis, E.age, E.gender FROM examination AS E
     WHERE exam_id = ? """, [exam_id, ])
@@ -53,10 +54,11 @@ def get_exam(cursor, exam_id):
         e.ms.append(m)
     return e
 
-def put_exam(cursor, exam):
+def put_exam(conn, exam):
     """TODO
 
     """
+    cursor = conn.cursor()
     cursor.execute("""
     SELECT max(exam_id)
     FROM examination """)
@@ -86,3 +88,5 @@ def put_exam(cursor, exam):
             cursor.execute("""
             INSERT INTO signal (data, dt, meas_id)
             VALUES (?,?,?) """, (s.x.tobytes(), s.dt, meas_id) )
+
+    conn.commit()

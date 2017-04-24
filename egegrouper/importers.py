@@ -83,7 +83,7 @@ class SmeImporter(BaseImporter):
         exams = []
         for r in c.fetchall():
             exam_id = r[0]
-            exam = sme_sqlite3.get_exam(c, exam_id)
+            exam = sme_sqlite3.get_exam(conn, exam_id)
             exams.append(exam)
         conn.close()
         return exams

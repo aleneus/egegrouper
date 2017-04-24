@@ -114,7 +114,7 @@ class Model(BaseModel):
             Examination object.
 
         """
-        return sme_sqlite3.get_exam(self.c, exam_id)
+        return sme_sqlite3.get_exam(self.conn, exam_id)
 
     @BaseModel.do_if_storage_opened
     def insert_exam(self, exam):
@@ -126,8 +126,7 @@ class Model(BaseModel):
             Examination object
 
         """
-        sme_sqlite3.put_exam(self.c, exam)
-        self.conn.commit()
+        sme_sqlite3.put_exam(self.conn, exam)
 
     @BaseModel.do_if_storage_opened
     def exams(self, group_id):
