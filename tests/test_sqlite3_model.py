@@ -239,5 +239,42 @@ class TestSqliteModel(unittest.TestCase):
         m.close_storage()
         self.assertEqual(es, None)
 
+    # extract_exams
+
+    def test_extract_exams_intersection(self):
+        m = Model()
+        m.open_storage('./test.sme.sqlite')
+        es = m.extract_exams(['1','2'], 'intersect')
+        m.close_storage()
+        self.assertEqual(len(es), 1)
+
+    def test_extract_exams_union(self):
+        m = Model()
+        m.open_storage('./test.sme.sqlite')
+        es = m.extract_exams(['1','2'], 'union')
+        m.close_storage()
+        self.assertEqual(len(es), 3)
+
+    def test_extract_exams_single_id_default_union(self):
+        m = Model()
+        m.open_storage('./test.sme.sqlite')
+        es = m.extract_exams(['1'])
+        m.close_storage()
+        self.assertEqual(len(es), 2)
+
+    def test_extract_exams_union_ungrouped_and_other(self):
+        m = Model()
+        m.open_storage('./test.sme.sqlite')
+        es = m.extract_exams(['1', '0'])
+        m.close_storage()
+        self.assertEqual(len(es), 3)
+        
+    def test_extract_exams_multiple_ids(self):
+        m = Model()
+        m.open_storage('./test.sme.sqlite')
+        es = m.extract_exams(['1', '0', '0', '1', '0'])
+        m.close_storage()
+        self.assertEqual(len(es), 3)
+        
 if __name__ == '__main__':
     unittest.main()

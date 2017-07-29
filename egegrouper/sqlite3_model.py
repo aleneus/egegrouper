@@ -172,9 +172,9 @@ class Model(BaseModel):
 
         # get list of exam_ids using SQL
         if operation == 'union':
-            word = " UNION "
-        elif operation == 'intersection':
-            word = " INTERSECTION "
+            word = "UNION"
+        elif operation == 'intersect':
+            word = "INTERSECT"
         else:
             return None
             
