@@ -17,14 +17,11 @@ Contacts:
 * aleneus@gmail.com
 * `DSPLab at NArFU <http://dsplab.narfu.ru>`_ (In Russ.)
 
-What's new in 0.4.0
--------------------
+What's new in 0.5
+-----------------
 
-* Import and export parts became more extensible.
-* Importers and exporters modules added. All exports and imports removed from model.
-* Importers for JSON file, Gastroscan database (converted to sqlite3), SME sqlite3 database implemented.
-* Exporter to JSON file implemented.
-
+* Method extract_exams added to base model and implemented in sqlite3 model. It is useful for extraction examinations data from several groups. For example, it can be used to get intersections of groups for ANOVA.
+  
 Requires
 --------
 
@@ -75,4 +72,3 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-

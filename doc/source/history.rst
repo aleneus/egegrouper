@@ -1,3 +1,11 @@
+0.4
+===
+
+* Import and export parts became more extensible.
+* Importers and exporters modules added. All exports and imports removed from model.
+* Importers for JSON file, Gastroscan database (converted to sqlite3), SME sqlite3 database implemented.
+* Exporter to JSON file implemented.
+
 0.3
 ===
 
