@@ -171,22 +171,42 @@ class Model(BaseModel):
         """
 
         # get list of exam_ids using SQL
-        """
-        working example for intersection:
+        if operation == 'union':
+            word = " UNION "
+        elif operation == 'intersection':
+            word = " INTERSECTION "
+        else:
+            return None
+            
+        def build_select_part(group_id):
+            if group_id == '0':
+                select_part = """
+                SELECT exam_id
+                FROM examination
+                WHERE exam_id NOT IN (SELECT exam_id FROM group_element)
+                """
+            else:
+                select_part = """
+                SELECT E.exam_id from examination as E JOIN group_element as GE ON E.exam_id = GE.exam_id 
+                WHERE GE.group_id = ?
+                """
+            return select_part
 
-        SELECT E.exam_id from examination as E JOIN group_element as GE ON E.exam_id = GE.exam_id 
-        WHERE GE.group_id = 3
-        
-        INTERSECT
-        
-        SELECT E.exam_id from examination as E JOIN group_element as GE ON E.exam_id = GE.exam_id
-        WHERE GE.group_id = 2;
-        """
-        for gid in group_ids:
-            select_part = """
-            SELECT E.exam_id from examination as E JOIN group_element as GE ON E.exam_id = GE.exam_id 
-            WHERE GE.group_id = {}
-            """.format(gid)
+        full_query = ""
+        for group_id in group_ids[:-1]:
+            full_query += build_select_part(group_id) + word
+        full_query += build_select_part(group_ids[-1]) + ';'
+
+        non_zero_group_ids = []
+        for group_id in group_ids:
+            if group_id != '0':
+                non_zero_group_ids.append(group_id)
+                
+        self.c.execute(full_query, non_zero_group_ids)
+
+        exam_ids = []
+        for row in self.c.fetchall():
+            exam_ids.append(row[0])
         
         # get list of exams using mapping module
         if len(exam_ids) == 0:
