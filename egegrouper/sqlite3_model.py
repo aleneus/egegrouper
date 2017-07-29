@@ -154,6 +154,50 @@ class Model(BaseModel):
         ]
 
     @BaseModel.do_if_storage_opened
+    def extract_exams(self, group_ids, operation = 'union'):
+        """
+        Return examinations of selected groups.
+
+        Parameters
+        ----------
+        group_id : str
+           Group ID.
+
+        Returns
+        -------
+        : list of sme.Examination
+            Examination objects.
+        
+        """
+
+        # get list of exam_ids using SQL
+        """
+        working example for intersection:
+
+        SELECT E.exam_id from examination as E JOIN group_element as GE ON E.exam_id = GE.exam_id 
+        WHERE GE.group_id = 3
+        
+        INTERSECT
+        
+        SELECT E.exam_id from examination as E JOIN group_element as GE ON E.exam_id = GE.exam_id
+        WHERE GE.group_id = 2;
+        """
+        for gid in group_ids:
+            select_part = """
+            SELECT E.exam_id from examination as E JOIN group_element as GE ON E.exam_id = GE.exam_id 
+            WHERE GE.group_id = {}
+            """.format(gid)
+        
+        # get list of exams using mapping module
+        if len(exam_ids) == 0:
+            return None
+        return [
+            self.exam(exam_id)
+            for exam_id
+            in exam_ids
+        ]
+
+    @BaseModel.do_if_storage_opened
     def delete_exam(self, exam_id):
         """Remove examination from database.
 
