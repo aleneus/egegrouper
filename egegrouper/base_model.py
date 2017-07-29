@@ -198,6 +198,26 @@ class BaseModel(ABC):
         
         """
         pass
+
+    @abstractmethod
+    def extract_exams(self, group_ids, operation = 'union'):
+        """
+        Return examinations of selected groups.
+
+        Parameters
+        ----------
+        group_ids : list of str
+           Group IDs. Group id equals to '0' means ungrouped examinations.
+        operation : str
+           Operation under selected sets (groups) of examinations. Must be 'union' or 'intersect'. Default is 'union'.
+
+        Returns
+        -------
+        : list of sme.Examination
+            Examination objects.
+        
+        """
+        pass
     
     @abstractmethod
     def insert_group(self, name, description):

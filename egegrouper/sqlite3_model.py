@@ -160,8 +160,10 @@ class Model(BaseModel):
 
         Parameters
         ----------
-        group_id : str
-           Group ID.
+        group_ids : list of str
+           Group IDs. Group id equals to '0' means ungrouped examinations.
+        operation : str
+           Operation under selected sets (groups) of examinations. Must be 'union' or 'intersect'. Default is 'union'.
 
         Returns
         -------
