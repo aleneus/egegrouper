@@ -1,6 +1,6 @@
 # EGEGrouper - Software for grouping electrogastroenterography examinations.
 
-# Copyright (C) 2017 Aleksandr Popov
+# Copyright (C) 2017-2018 Aleksandr Popov
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -406,7 +406,7 @@ class AboutWindow:
         self.master = Toplevel(parent)
         self.master.title("About EGEGrouper")
         label = Label(self.master, text="""
-        EGEGrouper Copyright (C) 2017 Aleksandr Popov
+        EGEGrouper Copyright (C) 2017-2018 Aleksandr Popov
 
         This program comes with ABSOLUTELY NO WARRANTY.
         This is free software, and you are welcome to redistribute it
