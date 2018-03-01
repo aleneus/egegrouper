@@ -27,6 +27,8 @@ from . import tk_views
 from . import plot_views
 from . import importers
 
+from .glob import *
+
 from collections import OrderedDict
 
 class MainWindow:
@@ -38,7 +40,7 @@ class MainWindow:
         Create main window.
         """
         self.master = Tk()
-        self.master.title("EGEGrouper 0.5.0")
+        self.master.title("EGEGrouper {}".format(VERSION))
 
         # menu
         self.main_menu = Menu(self.master)

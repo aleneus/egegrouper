@@ -1,13 +1,14 @@
 * Bug
 * Task
-** Support localization of tkgrouper
-** Support the windows building in setup.py
-** Replace docs to readthedocs
+** TODO Update copyrights date
+** TODO Support localization of tkgrouper
+** TODO Support the windows building in setup.py
+** TODO Replace docs to readthedocs
 * Enhancement
-** Add a descriptive statistics stuff with couple of actions (sex and gender balance)
-** Find way to translate the names of columns
-** Add the configuration control stuff
+** TODO Add a descriptive statistics stuff with couple of actions (sex and gender balance)
+** TODO Find way to translate the names of columns
+** TODO Add the configuration control stuff
 * Proposal
 ** Show the quality of signals in plots
-** Show spectrums of detrended signals in plots
+** TODO Show spectrums of detrended signals in plots
 ** Think about independant of concreete model tests, more universal
