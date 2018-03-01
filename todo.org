@@ -4,6 +4,7 @@
 ** TODO Support localization of tkgrouper
 ** TODO Support the windows building in setup.py
 ** TODO Replace docs to readthedocs
+** TODO Add manual tests for UI
 * Enhancement
 ** TODO Add a descriptive statistics stuff with couple of actions (sex and gender balance)
 ** TODO Find way to translate the names of columns

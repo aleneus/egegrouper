@@ -25,6 +25,8 @@ from . import text_views
 from . import plot_views
 from . import controller
 from . import importers
+from .stats_model import StatsModel
+from .stats_controller import StatsController
 
 from .glob import *
 
@@ -143,6 +145,20 @@ class GrouperShell(cmd.Cmd):
             print('Few arguments')
             return
         controller.group_info(cargv[0])
+
+    def do_stats(self, arg):
+        """ stats group_id
+
+        Print some statistic of group.
+        """
+        # TODO: just start version, probe
+        cargv = arg.split()
+        if len(cargv) == 0:
+            print('Few arguments')
+            return
+        group_id = cargv[0]
+        stats_controller.gender_balance(group_id)
+        stats_controller.aver_age(group_id)
 
     def do_exam_info(self, arg):
         """ exam_info id
@@ -354,8 +370,14 @@ class GrouperShell(cmd.Cmd):
         GNU General Public License for more details.
         """)    
 
-controller = controller.Controller(sqlite3_model.Model())
-        
+# TODO: next is bad in global space, refactor
+model = sqlite3_model.Model()
+controller = controller.Controller(model)
+stats_model = StatsModel()
+stats_model.set_data_provider(model)
+stats_controller = StatsController()
+stats_controller.set_model(stats_model)
+
 def main():
     """Entry point."""
     
@@ -377,10 +399,12 @@ def main():
     controller.set_view_exam(text_views.Exam())
     controller.set_view_where_exam(text_views.WhereExam())
     controller.set_view_exam_plot(plot_views.Exam())
-    
+
     if not controller.open_or_create_storage(args.fname):
         print("Can't open storage\nExit...\n")
         return
+
+    stats_controller.set_view(text_views.Message()) # TODO: use common view with controller
 
     gshell = GrouperShell()
     gshell.cmdloop()
