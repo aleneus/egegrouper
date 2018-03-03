@@ -29,6 +29,17 @@ class StatsController:
         # TODO: it is stub
         self.view = view
 
+    def stats(self, group_id):
+        # TODO: use special views
+        self.view.show_data("Calculating stats...")
+        data = self.model.stats(group_id)
+        if len(data) == 0:
+            self.view.show_data("Result is empty")
+            return
+        for key in data:
+            self.view.show_data("\n")
+            self.view.show_data(data[key])
+
     def gender_balance(self, group_id):
         data = self.model.gender_balance(group_id)
         self.view.show_data(data)

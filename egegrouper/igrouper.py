@@ -151,14 +151,14 @@ class GrouperShell(cmd.Cmd):
 
         Print some statistic of group.
         """
-        # TODO: just start version, probe
         cargv = arg.split()
         if len(cargv) == 0:
             print('Few arguments')
             return
         group_id = cargv[0]
-        stats_controller.gender_balance(group_id)
-        stats_controller.aver_age(group_id)
+        stats_controller.stats(group_id)
+        # TODO: Error if input wrong id
+        # TODO: One command or several?
 
     def do_exam_info(self, arg):
         """ exam_info id

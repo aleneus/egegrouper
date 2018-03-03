@@ -1,5 +1,6 @@
 * Bug
 * Task
+** TODO Use dictionary with attributes in SME
 ** TODO Update the names of modules because of stats appeared
 ** TODO Support statistics in tkgrouper
 ** TODO Support localization of tkgrouper
@@ -8,11 +9,13 @@
 ** TODO Add manual tests for UI
 ** DONE Update copyrights date
 * Enhancement
+** Can't get stats of all storage
 ** TODO Enhance and refactor statistics stuff
 ** TODO Find way to translate the names of columns
 ** TODO Add the configuration control stuff
 ** DONE Add a descriptive statistics stuff with couple of actions (sex and gender balance)
 * Proposal
+** Think about "light" version of getting exams from db to accelerate stats functions
 ** Show the quality of signals in plots
 ** TODO Show spectrums of detrended signals in plots
 ** Think about independant of concreete model tests, more universal

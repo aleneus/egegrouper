@@ -19,6 +19,7 @@
 statistics. """
 
 import numpy as np
+from collections import OrderedDict
 
 class StatsModel:
     """ The model class providing some descriptive statistics of
@@ -27,19 +28,20 @@ class StatsModel:
         """ Initialization. """
         # TODO: doc details
         self.set_data_provider(data_provider)
+        self.age_bounds = []
     
     def set_data_provider(self, data_provider):
         """ Set the model providing the access to data. """
         # TODO: doc details
         self.data_provider = data_provider
-        
-    def gender_balance(self, group_id):
+
+    def gender_stats(self, group_id=None, exams=None):
         """ Return the dictionary with number of examinations for
         males and females. """
-        # TODO: doc details
-        es = self.data_provider.exams(group_id)
-        res = {}
-        for e in es:
+        if exams is None:
+            exams = self.data_provider.exams(group_id)
+        res = OrderedDict()
+        for e in exams:
             key = e.gender
             if key not in res:
                 res[key] = 1
@@ -47,10 +49,53 @@ class StatsModel:
                 res[key] += 1
         return res
 
-    def aver_age(self, group_id):
-        """ Return the average age of patients in the group. """
-        # TODO: doc details
-        es = self.data_provider.exams(group_id)
-        ages = [e.age for e in es]
-        res = np.average(ages)
+    def diagnosis_stats(self, group_id=None, exams=None):
+        """ Return the number of examinations grouped by
+        diagnosis. """
+        if exams is None:
+            exams = self.data_provider.exams(group_id)
+        res = OrderedDict()
+        for e in exams:
+            key = e.diagnosis
+            if key not in res:
+                res[key] = 1
+            else:
+                res[key] += 1
         return res
+
+    def set_age_groups(self, bounds: list):
+        """ Set bounds of age groups. """
+        self.age_bounds = bounds
+
+    def age_stats(self, group_id=None, exams=None):
+        """ Return the average age of patients in the group. """
+        if exams is None:
+            exams = self.data_provider.exams(group_id)
+
+        def get_key(b):
+            return '{}-{}'.format(b[0], b[1])
+        
+        ages = [e.age for e in exams]
+        res = OrderedDict()
+        for b in self.age_bounds:
+            res[get_key(b)] = 0
+        for age in ages:
+            for b in self.age_bounds:
+                if b[0] <= age <= b[1]:
+                    res[get_key(b)] += 1
+        return res
+    
+    def stats(self, group_id):
+        """ Return statistics for group by gender, age group and diagnosis. """
+        res = OrderedDict()
+        try:
+            es = self.data_provider.exams(group_id)
+            res['gender'] = self.gender_stats(exams=es)
+            self.set_age_groups([(0,19), (20,29), (30,39), (40,49),
+                                 (50,59), (60,69), (70,79), (80,100)])
+            res['age'] = self.age_stats(exams=es)
+            res['diagnosis'] = self.diagnosis_stats(exams=es)
+        except Exception:
+            pass
+        finally:
+            return res
