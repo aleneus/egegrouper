@@ -148,14 +148,27 @@ class Model(BaseModel):
             Examination objects.
         
         """
-        exam_records, headers = self.group_info(group_id)
-        if exam_records == None:
-            return None
-        return [
-            self.exam(exam_record[0], only_meta)
-            for exam_record
-            in exam_records
-        ]
+        exam_ids = self.__exam_ids(group_id)
+        res = [self.exam(exam_id, only_meta) for exam_id in exam_ids]
+        return res
+
+    @BaseModel.do_if_storage_opened
+    def __exam_ids(self, group_id):
+        if group_id == '0':
+            self.c.execute("""
+            SELECT exam_id FROM examination
+            WHERE exam_id NOT IN (SELECT exam_id FROM group_element) 
+            """)
+        else:
+            self.c.execute("""
+            SELECT E.exam_id FROM examination AS E, group_element AS GE
+            WHERE GE.exam_id = E.exam_id AND GE.group_id = ?
+            """, [group_id, ])
+        ans = self.c.fetchall()
+        if len(ans) == 0:
+            return []
+        res = [row[0] for row in ans]
+        return res
 
     @BaseModel.do_if_storage_opened
     def extract_exams(self, group_ids, operation = 'union'):
