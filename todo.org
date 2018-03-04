@@ -1,10 +1,11 @@
 * Bug
 * Task
-** TODO Use dictionary with attributes in SME
+** TODO ! Refactor exams and group_info stuff in base_model and sqlite3_model
+** DONE Use dictionary with attributes in SME
 ** TODO Update the names of modules because of stats appeared
 ** TODO Support statistics in tkgrouper
 ** TODO Support localization of tkgrouper
-** TODO Support the windows building in setup.py
+** TODO Support the Windows building in setup.py
 ** TODO Replace docs to readthedocs
 ** TODO Add manual tests for UI
 ** DONE Update copyrights date
@@ -15,7 +16,7 @@
 ** TODO Add the configuration control stuff
 ** DONE Add a descriptive statistics stuff with couple of actions (sex and gender balance)
 * Proposal
-** Think about "light" version of getting exams from db to accelerate stats functions
+** DONE Think about "light" version of getting exams from db to accelerate stats functions
 ** Show the quality of signals in plots
 ** TODO Show spectrums of detrended signals in plots
 ** Think about independant of concreete model tests, more universal

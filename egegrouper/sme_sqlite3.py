@@ -31,7 +31,7 @@ def get_exam(conn, exam_id, only_meta=False):
     exam_id : str
         Examination ID.
     only_meta : bool
-        Get only meta data if True.
+        Get only meta data of examination if True.
     
     Return
     ------
@@ -48,6 +48,10 @@ def get_exam(conn, exam_id, only_meta=False):
     if not result:
         return None
     e.name, e.diagnosis, e.age, e.gender = result
+    
+    if only_meta:
+        return e
+    
     e.ms = []
     cursor.execute("""
     SELECT M.meas_id, M.time FROM measurement AS M
@@ -57,18 +61,6 @@ def get_exam(conn, exam_id, only_meta=False):
         m = sme.Measurement()
         m_id, m.time = m_sql
         m.ss = []
-        if only_meta:
-            print("D>")
-            cursor.execute("""
-            SELECT dt FROM signal
-            WHERE meas_id = ? """, [m_id, ])
-            for s_sql in cursor.fetchall():
-                s = sme.Signal()
-                s._meta['dt'] = s_sql[0]
-                m.ss.append(s)
-            e.ms.append(m)
-            continue
-            
         cursor.execute("""
         SELECT S.dt, S.data FROM signal AS S
         WHERE meas_id = ? """, [m_id, ])
