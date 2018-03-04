@@ -21,7 +21,7 @@ import sqlite3
 from . import sme
 import numpy as np
 
-def get_exam(conn, exam_id):
+def get_exam(conn, exam_id, only_meta=False):
     """Get examination object from database.
 
     Parameters
@@ -30,6 +30,8 @@ def get_exam(conn, exam_id):
         Opened connection to sqlite3 database.
     exam_id : str
         Examination ID.
+    only_meta : bool
+        Get only meta data if True.
     
     Return
     ------
@@ -55,6 +57,18 @@ def get_exam(conn, exam_id):
         m = sme.Measurement()
         m_id, m.time = m_sql
         m.ss = []
+        if only_meta:
+            print("D>")
+            cursor.execute("""
+            SELECT dt FROM signal
+            WHERE meas_id = ? """, [m_id, ])
+            for s_sql in cursor.fetchall():
+                s = sme.Signal()
+                s._meta['dt'] = s_sql[0]
+                m.ss.append(s)
+            e.ms.append(m)
+            continue
+            
         cursor.execute("""
         SELECT S.dt, S.data FROM signal AS S
         WHERE meas_id = ? """, [m_id, ])

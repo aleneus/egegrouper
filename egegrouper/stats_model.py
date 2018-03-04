@@ -27,14 +27,9 @@ class StatsModel:
     def __init__(self, data_provider=None):
         """ Initialization. """
         # TODO: doc details
-        self.set_data_provider(data_provider)
+        self.data_provider = data_provider
         self.age_bounds = []
     
-    def set_data_provider(self, data_provider):
-        """ Set the model providing the access to data. """
-        # TODO: doc details
-        self.data_provider = data_provider
-
     def number_by_meta(self, key, exams=None):
         """ Group examinations by the meta data key and return the
         number of examinations in each group. """
@@ -75,7 +70,7 @@ class StatsModel:
         """ Return statistics for group by gender, age group and diagnosis. """
         res = OrderedDict()
         try:
-            es = self.data_provider.exams(group_id)
+            es = self.data_provider.exams(group_id, only_meta=True)
             res['gender'] = self.number_by_meta('gender', exams=es)
             res['diagnosis'] = self.number_by_meta('diagnosis', exams=es)
             self.set_age_groups([(0,19), (20,29), (30,39), (40,49),

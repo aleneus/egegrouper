@@ -40,10 +40,10 @@ class BaseModel(ABC):
     @staticmethod
     def do_if_storage_opened(method):
         """Decorator. If storage is not opened AttributeError raised."""
-        def wrapped(self, *args):
+        def wrapped(self, *args, **kwargs):
             if not self.state()['storage_opened']:
                 raise AttributeError('Storage is not opened.')
-            return method(self, *args)
+            return method(self, *args, **kwargs)
         wrapped.__doc__ = method.__doc__
         return wrapped
 

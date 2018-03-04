@@ -21,24 +21,22 @@ class StatsController:
     def __init__(self):
         self.model = None
         self.view = None
+        self.status_view = None
+        self.table_view = None
+        self.message_view = None
     
-    def set_model(self, model):
-        self.model = model
-
-    def set_view(self, view):
-        # TODO: it is stub
-        self.view = view
-
     def stats(self, group_id):
-        # TODO: use special views
-        self.view.show_data("Calculating stats...")
+        # TODO: check if some view is None
+        self.status_view.show_data("Calculating stats...")
         data = self.model.stats(group_id)
         if len(data) == 0:
-            self.view.show_data("Result is empty")
+            self.message_view.show_data("Result is empty")
             return
-        for key in data:
-            self.view.show_data("\n")
-            self.view.show_data(data[key])
+        for meta_key in data:
+            sub_data = data[meta_key]
+            table_data = [[key, sub_data[key]] for key in sub_data]
+            self.table_view.show_data(table_data,
+                                        title="Numbers by {}".format(meta_key))
 
     def gender_balance(self, group_id):
         data = self.model.gender_balance(group_id)

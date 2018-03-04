@@ -374,9 +374,9 @@ class GrouperShell(cmd.Cmd):
 model = sqlite3_model.Model()
 controller = controller.Controller(model)
 stats_model = StatsModel()
-stats_model.set_data_provider(model)
+stats_model.data_provider = model
 stats_controller = StatsController()
-stats_controller.set_model(stats_model)
+stats_controller.model = stats_model
 
 def main():
     """Entry point."""
@@ -404,7 +404,10 @@ def main():
         print("Can't open storage\nExit...\n")
         return
 
-    stats_controller.set_view(text_views.Message()) # TODO: use common view with controller
+    # TODO: use common view with controller
+    stats_controller.message_view = text_views.Message()
+    stats_controller.status_view = text_views.Message()
+    stats_controller.table_view = text_views.Table()
 
     gshell = GrouperShell()
     gshell.cmdloop()

@@ -100,13 +100,15 @@ class Model(BaseModel):
         return os.path.isfile(abs_file_name)
 
     @BaseModel.do_if_storage_opened
-    def exam(self, exam_id):
+    def exam(self, exam_id, only_meta=False):
         """Return examination from database.
 
         Parameters
         ----------
         exam_id : str
             Examination ID.
+        only_meta : bool
+            Get only meta data if True.
 
         Returns
         -------
@@ -114,7 +116,7 @@ class Model(BaseModel):
             Examination object.
 
         """
-        return sme_sqlite3.get_exam(self.conn, exam_id)
+        return sme_sqlite3.get_exam(self.conn, exam_id, only_meta)
 
     @BaseModel.do_if_storage_opened
     def insert_exam(self, exam):
@@ -129,7 +131,7 @@ class Model(BaseModel):
         sme_sqlite3.put_exam(self.conn, exam)
 
     @BaseModel.do_if_storage_opened
-    def exams(self, group_id):
+    def exams(self, group_id, only_meta=False):
         """
         Return examinations of selected group.
 
@@ -137,6 +139,8 @@ class Model(BaseModel):
         ----------
         group_id : str
            Group ID.
+        only_meta : bool
+            Get only meta data if True.
 
         Returns
         -------
@@ -148,7 +152,7 @@ class Model(BaseModel):
         if exam_records == None:
             return None
         return [
-            self.exam(exam_record[0])
+            self.exam(exam_record[0], only_meta)
             for exam_record
             in exam_records
         ]

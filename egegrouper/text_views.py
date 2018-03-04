@@ -33,7 +33,7 @@ class Message:
 
 class Table:
     """Text table view."""
-    def show_data(self, data, headers):
+    def show_data(self, data, headers=None, title=None):
         """Show table with headers.
 
         Parameters
@@ -42,6 +42,8 @@ class Table:
             Tabular data.
         headers: tuple
             Headers.
+        title: str.
+            Title.
  
         """
         t = []
@@ -50,6 +52,8 @@ class Table:
             for record in row:
                 t_row.append(str(record)[:40])
             t.append(t_row)
+        if title is not None:
+            print('=== {} ==='.format(title))
         if headers:
             print('\n' + tabulate(t, headers=headers, tablefmt="orgtbl") + '\n')
         else:
