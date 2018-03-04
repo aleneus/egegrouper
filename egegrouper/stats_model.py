@@ -35,32 +35,18 @@ class StatsModel:
         # TODO: doc details
         self.data_provider = data_provider
 
-    def gender_stats(self, group_id=None, exams=None):
-        """ Return the dictionary with number of examinations for
-        males and females. """
+    def number_by_meta(self, key, exams=None):
+        """ Group examinations by the meta data key and return the
+        number of examinations in each group. """
         if exams is None:
             exams = self.data_provider.exams(group_id)
         res = OrderedDict()
         for e in exams:
-            key = e.gender
-            if key not in res:
-                res[key] = 1
+            value = e._meta[key]
+            if value not in res:
+                res[value] = 1
             else:
-                res[key] += 1
-        return res
-
-    def diagnosis_stats(self, group_id=None, exams=None):
-        """ Return the number of examinations grouped by
-        diagnosis. """
-        if exams is None:
-            exams = self.data_provider.exams(group_id)
-        res = OrderedDict()
-        for e in exams:
-            key = e.diagnosis
-            if key not in res:
-                res[key] = 1
-            else:
-                res[key] += 1
+                res[value] += 1
         return res
 
     def set_age_groups(self, bounds: list):
@@ -90,11 +76,11 @@ class StatsModel:
         res = OrderedDict()
         try:
             es = self.data_provider.exams(group_id)
-            res['gender'] = self.gender_stats(exams=es)
+            res['gender'] = self.number_by_meta('gender', exams=es)
+            res['diagnosis'] = self.number_by_meta('diagnosis', exams=es)
             self.set_age_groups([(0,19), (20,29), (30,39), (40,49),
                                  (50,59), (60,69), (70,79), (80,100)])
             res['age'] = self.age_stats(exams=es)
-            res['diagnosis'] = self.diagnosis_stats(exams=es)
         except Exception:
             pass
         finally:

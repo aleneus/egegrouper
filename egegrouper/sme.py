@@ -15,49 +15,62 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-"""Very simple implementation of SME model."""
+""" Simple implementation of SME model. """
 
 class Signal:
     """Signal."""
+
+    def __init__(self):
+        self._meta = {}
+        self.x = []
     
-    dt = None
-    """Sample step."""
-    x = []
-    """Samples values."""
+    def set_dt(self, dt):
+        self._meta['dt'] = dt
+    def get_dt(self):
+        return self._meta['dt']
+    dt = property(get_dt, set_dt)    
     
 class Measurement:
-    """Measurement.
+    """ Measurement which contains one or more signals. """
+    def __init__(self):
+        self._meta = {}
+        self.ss = []
 
-    Measurement contains one or more signals. 
-    
-    """
-
-    time = None
-    """Measurement start time."""
-    ss = []
-    """Signals."""
+    def set_time(self, time):
+        self._meta['time'] = time
+    def get_time(self):
+        return self._meta['time']
+    time = property(get_time, set_time)    
     
 class Examination:
-    """Examination.
+    """ Examination, which contains one or more measurements. """
+    def __init__(self):
+        self._meta = {}
+        self.ms = []
 
-    Examination contains one or more measurements.
+    def set_age(self, age):
+        self._meta['age'] = age
+    def get_age(self):
+        return self._meta['age']
+    age = property(get_age, set_age)
 
-    """
+    def set_name(self, name):
+        self._meta['name'] = name
+    def get_name(self):
+        return self._meta['name']
+    name = property(get_name, set_name)
     
-    name = None
-    """Name of patient."""
+    def set_gender(self, gender):
+        self._meta['gender'] = gender
+    def get_gender(self):
+        return self._meta['gender']
+    gender = property(get_gender, set_gender)
     
-    age = None
-    """Age of patient."""
-    
-    gender = None
-    """Gender of patient."""
-    
-    diagnosis = None
-    """Diagnosis."""
-    
-    ms = []
-    """Measurements."""
+    def set_diagnosis(self, diagnosis):
+        self._meta['diagnosis'] = diagnosis
+    def get_diagnosis(self):
+        return self._meta['diagnosis']
+    diagnosis = property(get_diagnosis, set_diagnosis)
     
 def merge_exams(e1, e2):
     """Merge exams."""
