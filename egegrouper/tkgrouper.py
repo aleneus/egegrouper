@@ -96,6 +96,7 @@ class MainWindow:
         self.view_group.item_selected.connect(self.exam_selected)
         controller.set_view_group(self.view_group)
         controller.set_view_exam_plot(plot_views.Exam())
+        stats_controller.table_view = tk_views.Statistics(self.master)
 
     def open_storage(self):
         """Open storage and show groups in it."""
@@ -302,17 +303,17 @@ class MainWindow:
 
     def stats_gender(self):
         group_id = self.view_storage.selected_item_text()
-        stats_controller.table_view = tk_views.Stats(self.master)
+        # stats_controller.table_view = tk_views.Stats(self.master)
         stats_controller.stats('gender', group_id)
         
     def stats_diagnosis(self):
         group_id = self.view_storage.selected_item_text()
-        stats_controller.table_view = tk_views.Stats(self.master)
+        # stats_controller.table_view = tk_views.Stats(self.master)
         stats_controller.stats('diagnosis', group_id)
         
     def stats_age(self):
         group_id = self.view_storage.selected_item_text()
-        stats_controller.table_view = tk_views.Stats(self.master)
+        # stats_controller.table_view = tk_views.Stats(self.master)
         stats_controller.stats('age', group_id)
 
 class GroupWindow:

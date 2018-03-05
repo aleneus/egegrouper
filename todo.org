@@ -1,5 +1,5 @@
 * Bug
-** TODO tkgrouper: statistics window opens when data is empty
+** DONE tkgrouper: statistics window opens when data is empty
 * Task
 ** DONE Initial support of statistics by key
 ** TODO tkgrouper: refactoring of stats stuff

@@ -284,30 +284,24 @@ class Group(TableWidget):
         """
         self.update_data(data)
 
-class Stats:
+class Statistics:
     def __init__(self, parent):
-        headers = ['Category', 'Number']
         self.parent = parent
-        self.master = Toplevel(parent)
-        self.master.title("Statistics")
-        self.table = TableWidget(self.master, headers)
-        widths = [None, None]
-        anchors = [None, CENTER]
-        self.table.set_columns(widths=widths, anchors=anchors)
-        self.table.pack()
-        self.master.withdraw()
 
     def show_data(self, data, headers):
-        self.master.update()
-        self.master.deiconify()
-        self.table.update_data(data)
-        self.show()
+        table = self._build_window(self.parent)
+        table.update_data(data)
 
-    def show(self):
-        return
-        # self.master.transient(self.parent)
-        # self.master.grab_set()
-        # self.master.wait_window(self.master)
+    def _build_window(self, parent):
+        master = Toplevel(parent)
+        master.title("Statistics")
+        headers = ['Category', 'Number']
+        table = TableWidget(master, headers)
+        widths = [None, None]
+        anchors = [None, CENTER]
+        table.set_columns(widths=widths, anchors=anchors)
+        table.pack()
+        return table
 
 class WhereExam(GroupingTable):
     """Tk view to show groups where examination is."""
