@@ -302,30 +302,18 @@ class MainWindow:
 
     def stats_gender(self):
         group_id = self.view_storage.selected_item_text()
-        window = StatsWindow(self.master)
-        stats_controller.table_view = window.table
+        stats_controller.table_view = tk_views.Stats(self.master)
         stats_controller.stats('gender', group_id)
-        window.master.transient(self.master)
-        window.master.grab_set()
-        window.master.wait_window(window.master)
         
     def stats_diagnosis(self):
         group_id = self.view_storage.selected_item_text()
-        window = StatsWindow(self.master)
-        stats_controller.table_view = window.table
+        stats_controller.table_view = tk_views.Stats(self.master)
         stats_controller.stats('diagnosis', group_id)
-        window.master.transient(self.master)
-        window.master.grab_set()
-        window.master.wait_window(window.master)
         
     def stats_age(self):
         group_id = self.view_storage.selected_item_text()
-        window = StatsWindow(self.master)
-        stats_controller.table_view = window.table
+        stats_controller.table_view = tk_views.Stats(self.master)
         stats_controller.stats('age', group_id)
-        window.master.transient(self.master)
-        window.master.grab_set()
-        window.master.wait_window(window.master)
 
 class GroupWindow:
     """Window for show and select examinations."""

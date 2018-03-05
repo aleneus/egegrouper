@@ -284,19 +284,30 @@ class Group(TableWidget):
         """
         self.update_data(data)
 
-class Stats(TableWidget):
-    """ Table for show statistics. """
+class Stats:
     def __init__(self, parent):
-        """ Initialization. """
-        headers = ["Key", "Number"]
-        super().__init__(parent, headers)
+        headers = ['Category', 'Number']
+        self.parent = parent
+        self.master = Toplevel(parent)
+        self.master.title("Statistics")
+        self.table = TableWidget(self.master, headers)
         widths = [None, None]
         anchors = [None, CENTER]
-        self.set_columns(widths=widths, anchors=anchors)
+        self.table.set_columns(widths=widths, anchors=anchors)
+        self.table.pack()
+        self.master.withdraw()
 
     def show_data(self, data, headers):
-        """ Fill table with data. """
-        self.update_data(data)
+        self.master.update()
+        self.master.deiconify()
+        self.table.update_data(data)
+        self.show()
+
+    def show(self):
+        return
+        # self.master.transient(self.parent)
+        # self.master.grab_set()
+        # self.master.wait_window(self.master)
 
 class WhereExam(GroupingTable):
     """Tk view to show groups where examination is."""
