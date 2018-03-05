@@ -11,8 +11,8 @@
 ** DONE base_model.py: doc exams
 ** DONE All: rename only_meta -> meta_only
 ** DONE Docs: Add stats_model and stats_controller to docs
-** TODO Docs: update lists of documented methods
-** TODO BaseModel: Rearrange methods 
+** DONE Docs: update lists of documented methods
+** DONE BaseModel: Rearrange methods 
 ** DONE BaseModel: Update docs of exams
 ** TODO igrouper: Write full docs for stats.
 ** TODO Support statistics in tkgrouper

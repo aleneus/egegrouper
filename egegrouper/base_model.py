@@ -108,47 +108,6 @@ class BaseModel(ABC):
         pass
 
     @abstractmethod
-    def exam(self, exam_id):
-        """Return examination object.
-
-        Parameters
-        ----------
-        exam_id : str
-            Examination ID.
-
-        Returns
-        -------
-        sme.Examination
-            Examination object.
-
-        """
-        pass
-
-    @abstractmethod
-    def insert_exam(self, exam):
-        """Add examination into current storage.
-
-        Parameters
-        ----------
-        exam : sme.Examination
-            Examination object
-
-        """
-        pass
-
-    @abstractmethod
-    def delete_exam(self, exam_id):
-        """Delete examination from current storage.
-
-        Parameters
-        ----------
-        exam_id : str
-            Examination ID.
-
-        """
-        pass
-    
-    @abstractmethod
     def storage_info(self):
         """Return common information about current storage.
 
@@ -182,21 +141,25 @@ class BaseModel(ABC):
         pass
 
     @abstractmethod
-    def exams(self, group_id, meta_only=False):
-        """ Return exams from selected group or groups. 
+    def insert_exam(self, exam):
+        """Add examination into current storage.
 
         Parameters
         ----------
-        group_id : str or list of str
-            Group ID. If list, the union of sets of examinations from
-            groups returned.
-        meta_only: bool
-            If True, only meta data returned.
+        exam : sme.Examination
+            Examination object
 
-        Returns
-        -------
-        exams: list of sme.Examination
-            Examinations list.
+        """
+        pass
+
+    @abstractmethod
+    def delete_exam(self, exam_id):
+        """Delete examination from current storage.
+
+        Parameters
+        ----------
+        exam_id : str
+            Examination ID.
 
         """
         pass
@@ -291,6 +254,43 @@ class BaseModel(ABC):
             Group ID.
         attr : OrderedDict
             Attributes names and values.
+
+        """
+        pass
+    
+    @abstractmethod
+    def exam(self, exam_id):
+        """Return examination object.
+
+        Parameters
+        ----------
+        exam_id : str
+            Examination ID.
+
+        Returns
+        -------
+        sme.Examination
+            Examination object.
+
+        """
+        pass
+
+    @abstractmethod
+    def exams(self, group_id, meta_only=False):
+        """ Return exams from selected group or groups. 
+
+        Parameters
+        ----------
+        group_id : str or list of str
+            Group ID. If list, the union of sets of examinations from
+            groups returned.
+        meta_only: bool
+            If True, only meta data returned.
+
+        Returns
+        -------
+        exams: list of sme.Examination
+            Examinations list.
 
         """
         pass
