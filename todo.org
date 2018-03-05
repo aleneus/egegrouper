@@ -10,11 +10,10 @@
 ** DONE sqlite3_model: Test exams() with several groups
 ** DONE base_model.py: doc exams
 ** DONE All: rename only_meta -> meta_only
-** TODO Docs: Add stats_model and stats_controller to docs
+** DONE Docs: Add stats_model and stats_controller to docs
 ** TODO Docs: update lists of documented methods
 ** TODO BaseModel: Rearrange methods 
-** TODO Use docstring from parent classes if possible
-** TODO BaseModel: Update docs of exams
+** DONE BaseModel: Update docs of exams
 ** TODO igrouper: Write full docs for stats.
 ** TODO Support statistics in tkgrouper
 ** TODO Support localization of tkgrouper
