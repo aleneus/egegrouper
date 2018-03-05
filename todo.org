@@ -3,7 +3,7 @@
 ** TODO sqlite3_model and base_model: Refactor exams method. 
 ** TODO sqlite3_model: Test exams() with several groups
 ** TODO base_model.py: doc exams
-** TODO All: rename only_meta -> meta_only
+** DONE All: rename only_meta -> meta_only
 ** TODO Docs: Show parent classes
 ** TODO BaseModel: Rearrange methods 
 ** TODO Use docstring from parent classes if possible

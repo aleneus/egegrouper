@@ -70,7 +70,7 @@ class StatsModel:
         """ Return statistics for group by gender, age group and diagnosis. """
         res = OrderedDict()
         try:
-            es = self.data_provider.exams(group_id, only_meta=True)
+            es = self.data_provider.exams(group_id, meta_only=True)
             res['gender'] = self.number_by_meta('gender', exams=es)
             res['diagnosis'] = self.number_by_meta('diagnosis', exams=es)
             self.set_age_groups([(0,19), (20,29), (30,39), (40,49),

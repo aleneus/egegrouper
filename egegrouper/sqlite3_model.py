@@ -353,14 +353,14 @@ class Model(BaseModel):
         self.conn.commit()
 
     @BaseModel.do_if_storage_opened
-    def exam(self, exam_id, only_meta=False):
+    def exam(self, exam_id, meta_only=False):
         """Return examination from database.
 
         Parameters
         ----------
         exam_id : str
             Examination ID.
-        only_meta : bool
+        meta_only : bool
             Get only meta data if True.
 
         Returns
@@ -369,7 +369,7 @@ class Model(BaseModel):
             Examination object.
 
         """
-        return sme_sqlite3.get_exam(self.conn, exam_id, only_meta)
+        return sme_sqlite3.get_exam(self.conn, exam_id, meta_only)
 
     @BaseModel.do_if_storage_opened
     def __exam_ids(self, group_id):
@@ -393,14 +393,14 @@ class Model(BaseModel):
         return res
 
     @BaseModel.do_if_storage_opened
-    def __exams_of_group(self, group_id, only_meta=False):
+    def __exams_of_group(self, group_id, meta_only=False):
         """ Return examination in group. """
         exam_ids = self.__exam_ids(group_id)
-        res = [self.exam(exam_id, only_meta) for exam_id in exam_ids]
+        res = [self.exam(exam_id, meta_only) for exam_id in exam_ids]
         return res
 
     @BaseModel.do_if_storage_opened
-    def __exams_of_groups(self, group_ids, operation = 'union', only_meta=False):
+    def __exams_of_groups(self, group_ids, operation = 'union', meta_only=False):
         """ Return examinations in several groups. """
         ids_lists = [self.__exam_ids(g_id) for g_id in group_ids]
 
@@ -417,12 +417,12 @@ class Model(BaseModel):
         return es
     
     @BaseModel.do_if_storage_opened
-    def exams(self, group_ids, only_meta=False, operation='union'):
+    def exams(self, group_ids, meta_only=False, operation='union'):
         # TODO: refactor
         if type(group_ids) == type("1"):
-            es = self.__exams_of_group(group_ids, only_meta)
+            es = self.__exams_of_group(group_ids, meta_only)
             return es
-        es = self.__exams_of_groups(group_ids, operation, only_meta)
+        es = self.__exams_of_groups(group_ids, operation, meta_only)
         return es
 
 create_sme_db_script = """
