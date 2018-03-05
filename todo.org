@@ -5,6 +5,8 @@
 ** TODO base_model.py: doc exams
 ** DONE All: rename only_meta -> meta_only
 ** TODO Docs: Show parent classes
+** TODO Docs: Add stats_model and stats_controller to docs
+** TODO Docs: update lists of documented methods
 ** TODO BaseModel: Rearrange methods 
 ** TODO Use docstring from parent classes if possible
 ** TODO BaseModel: Update docs of exams

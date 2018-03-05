@@ -36,4 +36,4 @@ controller
       .. automethod:: storage_info(self)
       .. automethod:: update_group_record(self, group_id, attr)
       .. automethod:: where_exam(self, exam_id)
-		      
+   

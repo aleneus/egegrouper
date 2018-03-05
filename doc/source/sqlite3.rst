@@ -2,7 +2,7 @@ sqlite3_model
 =============
 
 .. automodule:: egegrouper.sqlite3_model
-		
+      
    .. autoclass:: egegrouper.sqlite3_model.Model
    
       .. automethod:: __init__(self)
