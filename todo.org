@@ -1,6 +1,6 @@
 * Bug
 * Task
-** TODO sqlite3_model and base_model: Refactor exams method. 
+** DONE sqlite3_model and base_model: Refactor exams method.
 ** TODO sqlite3_model: Test exams() with several groups
 ** TODO base_model.py: doc exams
 ** DONE All: rename only_meta -> meta_only

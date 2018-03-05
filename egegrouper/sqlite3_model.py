@@ -371,7 +371,6 @@ class Model(BaseModel):
         """
         return sme_sqlite3.get_exam(self.conn, exam_id, meta_only)
 
-    @BaseModel.do_if_storage_opened
     def __exam_ids(self, group_id):
         """ Return examination ids in group. """
         if group_id == '*':
@@ -392,37 +391,30 @@ class Model(BaseModel):
         res = [row[0] for row in ans]
         return res
 
-    @BaseModel.do_if_storage_opened
     def __exams_of_group(self, group_id, meta_only=False):
         """ Return examination in group. """
         exam_ids = self.__exam_ids(group_id)
         res = [self.exam(exam_id, meta_only) for exam_id in exam_ids]
         return res
 
-    @BaseModel.do_if_storage_opened
-    def __exams_of_groups(self, group_ids, operation = 'union', meta_only=False):
+    def __exams_of_groups(self, group_ids, meta_only=False):
         """ Return examinations in several groups. """
         ids_lists = [self.__exam_ids(g_id) for g_id in group_ids]
 
         exam_ids_set = set(ids_lists[0])
-        if operation == 'union':
-            for ids_list in ids_lists[1:]:
-                exam_ids_set = exam_ids_set | set(ids_list)
-        if operation == 'intersect':
-            for ids_list in ids_lists[1:]:
-                exam_ids_set = exam_ids_set & set(ids_list)
+        for ids_list in ids_lists[1:]:
+            exam_ids_set = exam_ids_set | set(ids_list)
         exam_ids = list(exam_ids_set)
 
         es = [self.exam(exam_id) for exam_id in exam_ids]
         return es
     
     @BaseModel.do_if_storage_opened
-    def exams(self, group_ids, meta_only=False, operation='union'):
-        # TODO: refactor
-        if type(group_ids) == type("1"):
-            es = self.__exams_of_group(group_ids, meta_only)
+    def exams(self, group_id, meta_only=False):
+        if type(group_id) == type("1"):
+            es = self.__exams_of_group(group_id, meta_only)
             return es
-        es = self.__exams_of_groups(group_ids, operation, meta_only)
+        es = self.__exams_of_groups(group_id, meta_only)
         return es
 
 create_sme_db_script = """
