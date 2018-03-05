@@ -65,18 +65,17 @@ class StatsModel:
                 if b[0] <= age <= b[1]:
                     res[get_key(b)] += 1
         return res
-    
-    def stats(self, group_id):
-        """ Return statistics for group by gender, age group and diagnosis. """
+
+    def stats(self, key, group_id):
+        """ Return statistics for group by gender, diagnosis or age group. """
+        es = self.data_provider.exams(group_id, meta_only=True)
+
         res = OrderedDict()
-        try:
-            es = self.data_provider.exams(group_id, meta_only=True)
-            res['gender'] = self.number_by_meta('gender', exams=es)
-            res['diagnosis'] = self.number_by_meta('diagnosis', exams=es)
+        if key in ['gender', 'diagnosis']:
+            res = self.number_by_meta(key, exams=es)
+        elif key == 'age':
             self.set_age_groups([(0,19), (20,29), (30,39), (40,49),
                                  (50,59), (60,69), (70,79), (80,100)])
-            res['age'] = self.age_stats(exams=es)
-        except Exception:
-            pass
-        finally:
-            return res
+            res = self.age_stats(exams=es)
+            
+        return res

@@ -1,6 +1,7 @@
 * Bug
 * Task
-** TODO docs: include source code near every methods
+** DONE Initial support of statistics by key
+** TODO docs: include source code near every method
 ** TODO Add docstrings to stats_controller
 ** TODO Release 0.6
 *** TODO Add what's new and update history

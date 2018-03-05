@@ -152,11 +152,11 @@ class GrouperShell(cmd.Cmd):
         Print some statistic of group.
         """
         cargv = arg.split()
-        if len(cargv) == 0:
+        if len(cargv) < 2:
             print('Few arguments')
             return
-        group_id = cargv[0]
-        stats_controller.stats(group_id)
+        key, group_id = cargv[:2]
+        stats_controller.stats(key, group_id)
         # TODO: Error if input wrong id
         # TODO: One command or several?
 

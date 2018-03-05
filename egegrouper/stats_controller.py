@@ -24,20 +24,17 @@ class StatsController:
         self.status_view = None
         self.table_view = None
         self.message_view = None
-    
-    def stats(self, group_id):
+
+    def stats(self, key, group_id):
         # TODO: check if some view is None
         self.status_view.show_data("Calculating stats...")
-        data = self.model.stats(group_id)
+        data = self.model.stats(key, group_id)
         if len(data) == 0:
             self.message_view.show_data("Result is empty")
             return
-        for meta_key in data:
-            sub_data = data[meta_key]
-            table_data = [[key, sub_data[key]] for key in sub_data]
-            self.table_view.show_data(table_data,
-                                        title="Numbers by {}".format(meta_key))
-
+        table_data = [[key, data[key]] for key in data]
+        self.table_view.show_data(table_data)
+    
     def gender_balance(self, group_id):
         data = self.model.gender_balance(group_id)
         self.view.show_data(data)
