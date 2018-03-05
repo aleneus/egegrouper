@@ -411,6 +411,22 @@ class Model(BaseModel):
     
     @BaseModel.do_if_storage_opened
     def exams(self, group_id, meta_only=False):
+        """ Return exams from selected group or groups. 
+
+        Parameters
+        ----------
+        group_id : str or list of str
+            Group ID. If list, the union of sets of examinations from
+            groups returned.
+        meta_only: bool
+            If True, only meta data returned.
+
+        Returns
+        -------
+        exams: list of sme.Examination
+            Examinations list.
+
+        """
         if type(group_id) == type("1"):
             es = self.__exams_of_group(group_id, meta_only)
             return es

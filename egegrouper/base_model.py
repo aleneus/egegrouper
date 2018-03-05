@@ -182,20 +182,22 @@ class BaseModel(ABC):
         pass
 
     @abstractmethod
-    def exams(self, group_id, meta_only=False, operation='union'):
-        """
-        Return examinations of selected group.
+    def exams(self, group_id, meta_only=False):
+        """ Return exams from selected group or groups. 
 
         Parameters
         ----------
-        group_id : str
-           Group ID.
+        group_id : str or list of str
+            Group ID. If list, the union of sets of examinations from
+            groups returned.
+        meta_only: bool
+            If True, only meta data returned.
 
         Returns
         -------
-        : list of sme.Examination
-            Examination objects.
-        
+        exams: list of sme.Examination
+            Examinations list.
+
         """
         pass
     
