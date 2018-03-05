@@ -283,7 +283,21 @@ class Group(TableWidget):
 
         """
         self.update_data(data)
-        
+
+class Stats(TableWidget):
+    """ Table for show statistics. """
+    def __init__(self, parent):
+        """ Initialization. """
+        headers = ["Key", "Number"]
+        super().__init__(parent, headers)
+        widths = [None, None]
+        anchors = [None, CENTER]
+        self.set_columns(widths=widths, anchors=anchors)
+
+    def show_data(self, data, headers):
+        """ Fill table with data. """
+        self.update_data(data)
+
 class WhereExam(GroupingTable):
     """Tk view to show groups where examination is."""
     

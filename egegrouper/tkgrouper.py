@@ -23,9 +23,11 @@ from tkinter import messagebox
 
 from . import controller
 from . import sqlite3_model
-from . import tk_views
+from . import tk_views, text_views
 from . import plot_views
 from . import importers
+from .stats_model import StatsModel
+from .stats_controller import StatsController
 
 from .glob import *
 
@@ -59,6 +61,11 @@ class MainWindow:
         self.group_menu.add_command(label="Add", command=self.add_group)
         self.group_menu.add_command(label="Edit", command=self.edit_group)
         self.group_menu.add_command(label="Delete", command=self.delete_group)
+        self.stats_menu = Menu(self.group_menu, tearoff=0)
+        self.stats_menu.add_command(label="Gender", command=self.stats_gender)
+        self.stats_menu.add_command(label="Diagnosis", command=self.stats_diagnosis)
+        self.stats_menu.add_command(label="Age", command=self.stats_age)
+        self.group_menu.add_cascade(label="Statistics", menu=self.stats_menu)
         self.main_menu.add_cascade(label="Group", menu=self.group_menu)
         self.exam_menu = Menu(self.main_menu, tearoff=0)
         self.exam_menu.add_command(label="Plot", command=self.plot_exam)
@@ -76,6 +83,7 @@ class MainWindow:
         self.storage_menu.entryconfig("Close", state=DISABLED)
         self.main_menu.entryconfig("Group", state=DISABLED)
         self.main_menu.entryconfig("Exam", state=DISABLED)
+        self.group_menu.entryconfig("Statistics", state=DISABLED)
 
         self.view_storage = tk_views.Storage(self.master)
         self.view_storage.pack(side=LEFT, fill=BOTH, expand=True)
@@ -106,6 +114,7 @@ class MainWindow:
         self.main_menu.entryconfig("Group", state=NORMAL)
         self.group_menu.entryconfig("Edit", state=DISABLED)
         self.group_menu.entryconfig("Delete", state=DISABLED)
+        self.group_menu.entryconfig("Statistics", state=DISABLED)
         self.main_menu.entryconfig("Exam", state=DISABLED)
         
     def create_storage(self):
@@ -126,6 +135,7 @@ class MainWindow:
         self.main_menu.entryconfig("Group", state=NORMAL)
         self.group_menu.entryconfig("Edit", state=DISABLED)
         self.group_menu.entryconfig("Delete", state=DISABLED)
+        self.group_menu.entryconfig("Statistics", state=DISABLED)
         self.main_menu.entryconfig("Exam", state=DISABLED)
 
     def close_storage(self):
@@ -168,6 +178,7 @@ class MainWindow:
         # menu
         self.group_menu.entryconfig("Edit", state=NORMAL)
         self.group_menu.entryconfig("Delete", state=NORMAL)
+        self.group_menu.entryconfig("Statistics", state=NORMAL)
 
     def exam_selected(self, *args):
         """Exam selected slot. Enable some menu items."""
@@ -288,6 +299,33 @@ class MainWindow:
         about_window.master.transient(self.master)
         about_window.master.grab_set()
         about_window.master.wait_window(about_window.master)
+
+    def stats_gender(self):
+        group_id = self.view_storage.selected_item_text()
+        window = StatsWindow(self.master)
+        stats_controller.table_view = window.table
+        stats_controller.stats('gender', group_id)
+        window.master.transient(self.master)
+        window.master.grab_set()
+        window.master.wait_window(window.master)
+        
+    def stats_diagnosis(self):
+        group_id = self.view_storage.selected_item_text()
+        window = StatsWindow(self.master)
+        stats_controller.table_view = window.table
+        stats_controller.stats('diagnosis', group_id)
+        window.master.transient(self.master)
+        window.master.grab_set()
+        window.master.wait_window(window.master)
+        
+    def stats_age(self):
+        group_id = self.view_storage.selected_item_text()
+        window = StatsWindow(self.master)
+        stats_controller.table_view = window.table
+        stats_controller.stats('age', group_id)
+        window.master.transient(self.master)
+        window.master.grab_set()
+        window.master.wait_window(window.master)
 
 class GroupWindow:
     """Window for show and select examinations."""
@@ -416,8 +454,23 @@ class AboutWindow:
         self.close_button = Button(self.master, text="Close", width=15, command=self.master.destroy)
         self.close_button.pack(side=TOP)
 
-controller = controller.Controller(sqlite3_model.Model())
+class StatsWindow:
+    """Window for show statistics. """
+    def __init__(self, parent):
+        self.master = Toplevel(parent)
+        self.master.title("Statistics")
+        self.table = tk_views.Stats(self.master)
+        self.table.pack()
+
+model = sqlite3_model.Model()
+controller = controller.Controller(model)
 controller.set_view_message(tk_views.Message())
+stats_model = StatsModel()
+stats_model.data_provider = model
+stats_controller = StatsController()
+stats_controller.model = stats_model
+stats_controller.message_view = tk_views.Message()
+stats_controller.status_view = text_views.Message()
 
 def main():
     """Entry point."""

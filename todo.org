@@ -16,7 +16,7 @@
 ** DONE BaseModel: Rearrange methods 
 ** DONE BaseModel: Update docs of exams
 ** TODO igrouper: Write full docs for stats.
-** TODO Support statistics in tkgrouper
+** DONE Initial support statistics in tkgrouper
 ** TODO Support localization of tkgrouper
 ** TODO Support the Windows building in setup.py
 ** TODO Replace docs to readthedocs
@@ -25,14 +25,20 @@
 ** DONE Use dictionary with attributes in SME
 ** DONE Update copyrights date
 * Enhancement
-** Can't get stats of all storage
-** TODO Enhance and refactor statistics stuff
+** TODO tkgrouper: make status bar
+** TODO Bring order to imports
+** TODO Remove init actions from global space
+** TODO Dont use the word 'constructor' in docstrings of init
+** TODO tkgrouper: set shortcuts to main actions
+** TODO tkgrouper: remember last folder to open file
+** DONE Can't get stats of all storage
 ** TODO Find way to translate the names of columns
 ** TODO Add the configuration control stuff
 ** DONE Add a descriptive statistics stuff with couple of actions (sex and gender balance)
+** TODO Use state machine for enabling and disabling of items
 * Proposal
-** ? Update the names of modules because of stats appeared
+** TODO ? Update the names of modules because of stats appeared
 ** DONE Think about "light" version of getting exams from db to accelerate stats functions
-** Show the quality of signals in plots
+** TODO Show the quality of signals in plots
 ** TODO Show spectrums of detrended signals in plots
-** Think about independant of concreete model tests, more universal
+** TODO Think about independant of concreete model tests, more universal
