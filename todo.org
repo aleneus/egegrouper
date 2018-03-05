@@ -1,11 +1,15 @@
 * Bug
 * Task
+** TODO docs: include source code near every methods
+** TODO Add docstrings to stats_controller
+** TODO Release 0.6
+*** TODO Add what's new and update history
+*** TODO Update version in glob.py
 ** TODO ? sqlite3_model: refactoring of create_sme_db_script. Make function
 ** DONE sqlite3_model and base_model: Refactor exams method.
 ** DONE sqlite3_model: Test exams() with several groups
 ** DONE base_model.py: doc exams
 ** DONE All: rename only_meta -> meta_only
-** TODO Docs: Show parent classes
 ** TODO Docs: Add stats_model and stats_controller to docs
 ** TODO Docs: update lists of documented methods
 ** TODO BaseModel: Rearrange methods 
