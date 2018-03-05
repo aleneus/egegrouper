@@ -39,6 +39,7 @@ def get_exam(conn, exam_id, only_meta=False):
         Examination instance.
 
     """
+    # TODO: rename only_meta to meta_only
     e = sme.Examination()
     cursor = conn.cursor()
     cursor.execute("""

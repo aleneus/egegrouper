@@ -154,7 +154,9 @@ class Model(BaseModel):
 
     @BaseModel.do_if_storage_opened
     def __exam_ids(self, group_id):
-        if group_id == '0':
+        if group_id == '*':
+            self.c.execute("SELECT exam_id FROM examination")
+        elif group_id == '0':
             self.c.execute("""
             SELECT exam_id FROM examination
             WHERE exam_id NOT IN (SELECT exam_id FROM group_element) 
@@ -188,7 +190,8 @@ class Model(BaseModel):
             Examination objects.
         
         """
-
+        # TODO: rename this method
+        # TODO: check this function
         # get list of exam_ids using SQL
         if operation == 'union':
             word = "UNION"
