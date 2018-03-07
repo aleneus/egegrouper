@@ -1,7 +1,9 @@
 * Bug
 ** DONE tkgrouper: statistics window opens when data is empty
 * Task
+
 ** DONE Initial support of statistics by key
+** DONE Refactoring of setup.py
 ** TODO tkgrouper: refactoring of stats stuff
 ** TODO docs: include source code near every method
 ** TODO Add docstrings to stats_controller
