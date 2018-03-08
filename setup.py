@@ -79,9 +79,9 @@ def linux_setup():
         classifiers=classifiers,
     )
 
-def windows_setup():
+def windows_build():
     pass
 
 linux_setup()
 #from cx_Freeze import setup, Executable
-#windows_setup()
+#windows_build()
