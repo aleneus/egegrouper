@@ -284,7 +284,7 @@ class Group(TableWidget):
         """
         self.update_data(data)
 
-class Statistics:
+class StatsTableWindow:
     def __init__(self, parent):
         self.parent = parent
 
@@ -295,12 +295,14 @@ class Statistics:
     def _build_window(self, parent):
         master = Toplevel(parent)
         master.title("Statistics")
-        headers = ['Category', 'Number']
-        table = TableWidget(master, headers)
-        widths = [None, None]
-        anchors = [None, CENTER]
-        table.set_columns(widths=widths, anchors=anchors)
+        table = TableWidget(master) 
+        table.set_columns(
+            headers=['Category', 'Number'],
+            widths=[None, None],
+            anchors=[None, CENTER],
+        )
         table.pack()
+        master.transient(parent)
         return table
 
 class WhereExam(GroupingTable):

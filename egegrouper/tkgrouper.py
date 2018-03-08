@@ -96,8 +96,15 @@ class MainWindow:
         self.view_group.item_selected.connect(self.exam_selected)
         controller.set_view_group(self.view_group)
         controller.set_view_exam_plot(plot_views.Exam())
-        stats_controller.table_view = tk_views.Statistics(self.master)
 
+        stats_model = StatsModel()
+        stats_model.data_provider = model
+        self.stats_controller = StatsController()
+        self.stats_controller.model = stats_model
+        self.stats_controller.message_view = tk_views.Message()
+        self.stats_controller.status_view = text_views.Message()
+        self.stats_controller.table_view = tk_views.StatsTableWindow(self.master)
+        
     def open_storage(self):
         """Open storage and show groups in it."""
         file_name = filedialog.askopenfilename(
@@ -302,19 +309,19 @@ class MainWindow:
         about_window.master.wait_window(about_window.master)
 
     def stats_gender(self):
+        """ Calculate and show statistics by gender. """
         group_id = self.view_storage.selected_item_text()
-        # stats_controller.table_view = tk_views.Stats(self.master)
-        stats_controller.stats('gender', group_id)
+        self.stats_controller.stats('gender', group_id)
         
     def stats_diagnosis(self):
+        """ Calculate and show statistics by diagnosis. """
         group_id = self.view_storage.selected_item_text()
-        # stats_controller.table_view = tk_views.Stats(self.master)
-        stats_controller.stats('diagnosis', group_id)
+        self.stats_controller.stats('diagnosis', group_id)
         
     def stats_age(self):
+        """ Calculate and show statistics by age. """
         group_id = self.view_storage.selected_item_text()
-        # stats_controller.table_view = tk_views.Stats(self.master)
-        stats_controller.stats('age', group_id)
+        self.stats_controller.stats('age', group_id)
 
 class GroupWindow:
     """Window for show and select examinations."""
@@ -454,12 +461,6 @@ class StatsWindow:
 model = sqlite3_model.Model()
 controller = controller.Controller(model)
 controller.set_view_message(tk_views.Message())
-stats_model = StatsModel()
-stats_model.data_provider = model
-stats_controller = StatsController()
-stats_controller.model = stats_model
-stats_controller.message_view = tk_views.Message()
-stats_controller.status_view = text_views.Message()
 
 def main():
     """Entry point."""
