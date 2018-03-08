@@ -1,6 +1,6 @@
 # EGEGrouper - Software for grouping electrogastroenterography examinations.
 
-# Copyright (C) 2017 Aleksandr Popov
+# Copyright (C) 2017-2018 Aleksandr Popov
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -40,10 +40,10 @@ class BaseModel(ABC):
     @staticmethod
     def do_if_storage_opened(method):
         """Decorator. If storage is not opened AttributeError raised."""
-        def wrapped(self, *args):
+        def wrapped(self, *args, **kwargs):
             if not self.state()['storage_opened']:
                 raise AttributeError('Storage is not opened.')
-            return method(self, *args)
+            return method(self, *args, **kwargs)
         wrapped.__doc__ = method.__doc__
         return wrapped
 
@@ -108,47 +108,6 @@ class BaseModel(ABC):
         pass
 
     @abstractmethod
-    def exam(self, exam_id):
-        """Return examination object.
-
-        Parameters
-        ----------
-        exam_id : str
-            Examination ID.
-
-        Returns
-        -------
-        sme.Examination
-            Examination object.
-
-        """
-        pass
-
-    @abstractmethod
-    def insert_exam(self, exam):
-        """Add examination into current storage.
-
-        Parameters
-        ----------
-        exam : sme.Examination
-            Examination object
-
-        """
-        pass
-
-    @abstractmethod
-    def delete_exam(self, exam_id):
-        """Delete examination from current storage.
-
-        Parameters
-        ----------
-        exam_id : str
-            Examination ID.
-
-        """
-        pass
-    
-    @abstractmethod
     def storage_info(self):
         """Return common information about current storage.
 
@@ -182,40 +141,26 @@ class BaseModel(ABC):
         pass
 
     @abstractmethod
-    def exams(self, group_id):
-        """
-        Return examinations of selected group.
+    def insert_exam(self, exam):
+        """Add examination into current storage.
 
         Parameters
         ----------
-        group_id : str
-           Group ID.
+        exam : sme.Examination
+            Examination object
 
-        Returns
-        -------
-        : list of sme.Examination
-            Examination objects.
-        
         """
         pass
 
     @abstractmethod
-    def extract_exams(self, group_ids, operation = 'union'):
-        """
-        Return examinations of selected groups.
+    def delete_exam(self, exam_id):
+        """Delete examination from current storage.
 
         Parameters
         ----------
-        group_ids : list of str
-           Group IDs. Group id equals to '0' means ungrouped examinations.
-        operation : str
-           Operation under selected sets (groups) of examinations. Must be 'union' or 'intersect'. Default is 'union'.
+        exam_id : str
+            Examination ID.
 
-        Returns
-        -------
-        : list of sme.Examination
-            Examination objects.
-        
         """
         pass
     
@@ -309,6 +254,43 @@ class BaseModel(ABC):
             Group ID.
         attr : OrderedDict
             Attributes names and values.
+
+        """
+        pass
+    
+    @abstractmethod
+    def exam(self, exam_id):
+        """Return examination object.
+
+        Parameters
+        ----------
+        exam_id : str
+            Examination ID.
+
+        Returns
+        -------
+        sme.Examination
+            Examination object.
+
+        """
+        pass
+
+    @abstractmethod
+    def exams(self, group_id, meta_only=False):
+        """ Return exams from selected group or groups. 
+
+        Parameters
+        ----------
+        group_id : str or list of str
+            Group ID. If list, the union of sets of examinations from
+            groups returned.
+        meta_only: bool
+            If True, only meta data returned.
+
+        Returns
+        -------
+        exams: list of sme.Examination
+            Examinations list.
 
         """
         pass

@@ -1,6 +1,6 @@
 # EGEGrouper - Software for grouping electrogastroenterography examinations.
 
-# Copyright (C) 2017 Aleksandr Popov
+# Copyright (C) 2017-2018 Aleksandr Popov
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -25,6 +25,10 @@ from . import text_views
 from . import plot_views
 from . import controller
 from . import importers
+from .stats_model import StatsModel
+from .stats_controller import StatsController
+
+from .glob import *
 
 class DialogText:
     """Text dialog for input fields values. 
@@ -141,6 +145,20 @@ class GrouperShell(cmd.Cmd):
             print('Few arguments')
             return
         controller.group_info(cargv[0])
+
+    def do_stats(self, arg):
+        """ stats group_id
+
+        Print some statistic of group.
+        """
+        cargv = arg.split()
+        if len(cargv) < 2:
+            print('Few arguments')
+            return
+        key, group_id = cargv[:2]
+        stats_controller.stats(key, group_id)
+        # TODO: Error if input wrong id
+        # TODO: One command or several?
 
     def do_exam_info(self, arg):
         """ exam_info id
@@ -352,18 +370,24 @@ class GrouperShell(cmd.Cmd):
         GNU General Public License for more details.
         """)    
 
-controller = controller.Controller(sqlite3_model.Model())
-        
+# TODO: next is bad in global space, refactor
+model = sqlite3_model.Model()
+controller = controller.Controller(model)
+stats_model = StatsModel()
+stats_model.data_provider = model
+stats_controller = StatsController()
+stats_controller.model = stats_model
+
 def main():
     """Entry point."""
     
     print("""
-    EGEGrouper 0.5.0 Copyright (C) 2017 Aleksandr Popov
+    EGEGrouper {} Copyright (C) 2017-2018 Aleksandr Popov
 
     This program comes with ABSOLUTELY NO WARRANTY; for details type `w'.
     This is free software, and you are welcome to redistribute it
     under certain conditions; type `c' for details.
-    """)
+    """.format(VERSION))
 
     parser = argparse.ArgumentParser()
     parser.add_argument("fname", help="Name of database")
@@ -375,10 +399,15 @@ def main():
     controller.set_view_exam(text_views.Exam())
     controller.set_view_where_exam(text_views.WhereExam())
     controller.set_view_exam_plot(plot_views.Exam())
-    
+
     if not controller.open_or_create_storage(args.fname):
         print("Can't open storage\nExit...\n")
         return
+
+    # TODO: use common view with controller
+    stats_controller.message_view = text_views.Message()
+    stats_controller.status_view = text_views.Message()
+    stats_controller.table_view = text_views.Table()
 
     gshell = GrouperShell()
     gshell.cmdloop()

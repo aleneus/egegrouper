@@ -1,6 +1,6 @@
 # EGEGrouper - Software for grouping electrogastroenterography examinations.
 
-# Copyright (C) 2017 Aleksandr Popov
+# Copyright (C) 2017-2018 Aleksandr Popov
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@ import sqlite3
 from . import sme
 import numpy as np
 
-def get_exam(conn, exam_id):
+def get_exam(conn, exam_id, only_meta=False):
     """Get examination object from database.
 
     Parameters
@@ -30,6 +30,8 @@ def get_exam(conn, exam_id):
         Opened connection to sqlite3 database.
     exam_id : str
         Examination ID.
+    only_meta : bool
+        Get only meta data of examination if True.
     
     Return
     ------
@@ -37,6 +39,7 @@ def get_exam(conn, exam_id):
         Examination instance.
 
     """
+    # TODO: rename only_meta to meta_only
     e = sme.Examination()
     cursor = conn.cursor()
     cursor.execute("""
@@ -46,6 +49,10 @@ def get_exam(conn, exam_id):
     if not result:
         return None
     e.name, e.diagnosis, e.age, e.gender = result
+    
+    if only_meta:
+        return e
+    
     e.ms = []
     cursor.execute("""
     SELECT M.meas_id, M.time FROM measurement AS M

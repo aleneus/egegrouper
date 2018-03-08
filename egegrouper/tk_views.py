@@ -1,6 +1,6 @@
 # EGEGrouper - Software for grouping electrogastroenterography examinations.
 
-# Copyright (C) 2017 Aleksandr Popov
+# Copyright (C) 2017-2018 Aleksandr Popov
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -283,7 +283,28 @@ class Group(TableWidget):
 
         """
         self.update_data(data)
-        
+
+class StatsTableWindow:
+    def __init__(self, parent):
+        self.parent = parent
+
+    def show_data(self, data, headers):
+        table = self._build_window(self.parent)
+        table.update_data(data)
+
+    def _build_window(self, parent):
+        master = Toplevel(parent)
+        master.title("Statistics")
+        table = TableWidget(master) 
+        table.set_columns(
+            headers=['Category', 'Number'],
+            widths=[None, None],
+            anchors=[None, CENTER],
+        )
+        table.pack()
+        master.transient(parent)
+        return table
+
 class WhereExam(GroupingTable):
     """Tk view to show groups where examination is."""
     

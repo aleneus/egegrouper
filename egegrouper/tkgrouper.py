@@ -1,6 +1,6 @@
 # EGEGrouper - Software for grouping electrogastroenterography examinations.
 
-# Copyright (C) 2017 Aleksandr Popov
+# Copyright (C) 2017-2018 Aleksandr Popov
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,9 +23,13 @@ from tkinter import messagebox
 
 from . import controller
 from . import sqlite3_model
-from . import tk_views
+from . import tk_views, text_views
 from . import plot_views
 from . import importers
+from .stats_model import StatsModel
+from .stats_controller import StatsController
+
+from .glob import *
 
 from collections import OrderedDict
 
@@ -33,14 +37,38 @@ class MainWindow:
     """Main window. Shows groups and main menu."""
     
     def __init__(self):
-        """Constructor.
-
-        Create main window.
-        """
+        """ Initialization. """
         self.master = Tk()
-        self.master.title("EGEGrouper 0.5.0")
+        self.master.title("EGEGrouper {}".format(VERSION))
 
-        # menu
+        self._make_main_menu()
+        self.storage_menu.entryconfig("Import", state=DISABLED)
+        self.storage_menu.entryconfig("Close", state=DISABLED)
+        self.main_menu.entryconfig("Group", state=DISABLED)
+        self.main_menu.entryconfig("Exam", state=DISABLED)
+        self.group_menu.entryconfig("Statistics", state=DISABLED)
+
+        self.view_storage = tk_views.Storage(self.master)
+        self.view_storage.pack(side=LEFT, fill=BOTH, expand=True)
+        self.view_storage.item_opened.connect(self.group_info)
+        self.view_storage.item_selected.connect(self.group_selected)
+        controller.set_view_storage(self.view_storage)
+        self.group_window = GroupWindow(self.master)
+        self.view_group = self.group_window.view_group
+        self.view_group.item_opened.connect(self.plot_exam)
+        self.view_group.item_selected.connect(self.exam_selected)
+        controller.set_view_group(self.view_group)
+        controller.set_view_exam_plot(plot_views.Exam())
+
+        stats_model = StatsModel()
+        stats_model.data_provider = model
+        self.stats_controller = StatsController()
+        self.stats_controller.model = stats_model
+        self.stats_controller.message_view = tk_views.Message()
+        self.stats_controller.status_view = text_views.Message()
+        self.stats_controller.table_view = tk_views.StatsTableWindow(self.master)
+
+    def _make_main_menu(self):
         self.main_menu = Menu(self.master)
         self.storage_menu = Menu(self.main_menu, tearoff=0)
         self.storage_menu.add_command(label="Open", command=self.open_storage)
@@ -57,6 +85,11 @@ class MainWindow:
         self.group_menu.add_command(label="Add", command=self.add_group)
         self.group_menu.add_command(label="Edit", command=self.edit_group)
         self.group_menu.add_command(label="Delete", command=self.delete_group)
+        self.stats_menu = Menu(self.group_menu, tearoff=0)
+        self.stats_menu.add_command(label="Gender", command=self.stats_gender)
+        self.stats_menu.add_command(label="Diagnosis", command=self.stats_diagnosis)
+        self.stats_menu.add_command(label="Age", command=self.stats_age)
+        self.group_menu.add_cascade(label="Statistics", menu=self.stats_menu)
         self.main_menu.add_cascade(label="Group", menu=self.group_menu)
         self.exam_menu = Menu(self.main_menu, tearoff=0)
         self.exam_menu.add_command(label="Plot", command=self.plot_exam)
@@ -69,23 +102,6 @@ class MainWindow:
         self.help_menu.add_command(label="About", command=self.about)
         self.main_menu.add_cascade(label="Help", menu=self.help_menu)
         self.master.config(menu=self.main_menu)
-
-        self.storage_menu.entryconfig("Import", state=DISABLED)
-        self.storage_menu.entryconfig("Close", state=DISABLED)
-        self.main_menu.entryconfig("Group", state=DISABLED)
-        self.main_menu.entryconfig("Exam", state=DISABLED)
-
-        self.view_storage = tk_views.Storage(self.master)
-        self.view_storage.pack(side=LEFT, fill=BOTH, expand=True)
-        self.view_storage.item_opened.connect(self.group_info)
-        self.view_storage.item_selected.connect(self.group_selected)
-        controller.set_view_storage(self.view_storage)
-        self.group_window = GroupWindow(self.master)
-        self.view_group = self.group_window.view_group
-        self.view_group.item_opened.connect(self.plot_exam)
-        self.view_group.item_selected.connect(self.exam_selected)
-        controller.set_view_group(self.view_group)
-        controller.set_view_exam_plot(plot_views.Exam())
 
     def open_storage(self):
         """Open storage and show groups in it."""
@@ -104,6 +120,7 @@ class MainWindow:
         self.main_menu.entryconfig("Group", state=NORMAL)
         self.group_menu.entryconfig("Edit", state=DISABLED)
         self.group_menu.entryconfig("Delete", state=DISABLED)
+        self.group_menu.entryconfig("Statistics", state=DISABLED)
         self.main_menu.entryconfig("Exam", state=DISABLED)
         
     def create_storage(self):
@@ -124,6 +141,7 @@ class MainWindow:
         self.main_menu.entryconfig("Group", state=NORMAL)
         self.group_menu.entryconfig("Edit", state=DISABLED)
         self.group_menu.entryconfig("Delete", state=DISABLED)
+        self.group_menu.entryconfig("Statistics", state=DISABLED)
         self.main_menu.entryconfig("Exam", state=DISABLED)
 
     def close_storage(self):
@@ -166,6 +184,7 @@ class MainWindow:
         # menu
         self.group_menu.entryconfig("Edit", state=NORMAL)
         self.group_menu.entryconfig("Delete", state=NORMAL)
+        self.group_menu.entryconfig("Statistics", state=NORMAL)
 
     def exam_selected(self, *args):
         """Exam selected slot. Enable some menu items."""
@@ -287,6 +306,21 @@ class MainWindow:
         about_window.master.grab_set()
         about_window.master.wait_window(about_window.master)
 
+    def stats_gender(self):
+        """ Calculate and show statistics by gender. """
+        group_id = self.view_storage.selected_item_text()
+        self.stats_controller.stats('gender', group_id)
+        
+    def stats_diagnosis(self):
+        """ Calculate and show statistics by diagnosis. """
+        group_id = self.view_storage.selected_item_text()
+        self.stats_controller.stats('diagnosis', group_id)
+        
+    def stats_age(self):
+        """ Calculate and show statistics by age. """
+        group_id = self.view_storage.selected_item_text()
+        self.stats_controller.stats('age', group_id)
+
 class GroupWindow:
     """Window for show and select examinations."""
     
@@ -404,7 +438,7 @@ class AboutWindow:
         self.master = Toplevel(parent)
         self.master.title("About EGEGrouper")
         label = Label(self.master, text="""
-        EGEGrouper Copyright (C) 2017 Aleksandr Popov
+        EGEGrouper Copyright (C) 2017-2018 Aleksandr Popov
 
         This program comes with ABSOLUTELY NO WARRANTY.
         This is free software, and you are welcome to redistribute it
@@ -414,7 +448,16 @@ class AboutWindow:
         self.close_button = Button(self.master, text="Close", width=15, command=self.master.destroy)
         self.close_button.pack(side=TOP)
 
-controller = controller.Controller(sqlite3_model.Model())
+class StatsWindow:
+    """Window for show statistics. """
+    def __init__(self, parent):
+        self.master = Toplevel(parent)
+        self.master.title("Statistics")
+        self.table = tk_views.Stats(self.master)
+        self.table.pack()
+
+model = sqlite3_model.Model()
+controller = controller.Controller(model)
 controller.set_view_message(tk_views.Message())
 
 def main():

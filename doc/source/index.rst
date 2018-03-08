@@ -57,6 +57,7 @@ Modules
    tkgrouper
    importers
    exporters
+   stats
    
 History
 -------   

@@ -1,13 +1,53 @@
 * Bug
+** DONE tkgrouper: statistics window opens when data is empty
 * Task
-** Support localization of tkgrouper
-** Support the windows building in setup.py
-** Replace docs to readthedocs
+
+** DONE Initial support of statistics by key
+** DONE Refactoring of setup.py
+** DONE tkgrouper: split __init__ of main window
+** TODO tk_views.TableWidget: set_columns --> setup_columns
+** TODO tk_views.TableWidget: make separate methods for setup columns
+** TODO tk_views.TableWidget: Use explicit argumets, not **kwargs
+** TODO tk_views.StatsTable: Add docstrings 
+** DONE tkgrouper: refactoring of stats stuff
+** TODO docs: include source code near every method
+** TODO Add docstrings to stats_controller
+** TODO Release 0.6
+*** TODO Add what's new and update history
+*** TODO Update version in glob.py
+** TODO ? sqlite3_model: refactoring of create_sme_db_script. Make function
+** DONE sqlite3_model and base_model: Refactor exams method.
+** DONE sqlite3_model: Test exams() with several groups
+** DONE base_model.py: doc exams
+** DONE All: rename only_meta -> meta_only
+** DONE Docs: Add stats_model and stats_controller to docs
+** DONE Docs: update lists of documented methods
+** DONE BaseModel: Rearrange methods 
+** DONE BaseModel: Update docs of exams
+** TODO igrouper: Write full docs for stats.
+** DONE Initial support statistics in tkgrouper
+** TODO Support localization of tkgrouper
+** TODO Support the Windows building in setup.py
+** TODO Replace docs to readthedocs
+** TODO Add manual tests for UI
+** DONE ! Refactor exams and group_info stuff in base_model and sqlite3_model
+** DONE Use dictionary with attributes in SME
+** DONE Update copyrights date
 * Enhancement
-** Add a descriptive statistics stuff with couple of actions (sex and gender balance)
-** Find way to translate the names of columns
-** Add the configuration control stuff
+** TODO tkgrouper: make status bar
+** TODO Bring order to imports
+** TODO Remove init actions from global space
+** TODO Dont use the word 'constructor' in docstrings of init
+** TODO tkgrouper: set shortcuts to main actions
+** TODO tkgrouper: remember last folder to open file
+** DONE Can't get stats of all storage
+** TODO Find way to translate the names of columns
+** TODO Add the configuration control stuff
+** DONE Add a descriptive statistics stuff with couple of actions (sex and gender balance)
+** TODO Use state machine for enabling and disabling of items
 * Proposal
-** Show the quality of signals in plots
-** Show spectrums of detrended signals in plots
-** Think about independant of concreete model tests, more universal
+** TODO ? Update the names of modules because of stats appeared
+** DONE Think about "light" version of getting exams from db to accelerate stats functions
+** TODO Show the quality of signals in plots
+** TODO Show spectrums of detrended signals in plots
+** TODO Think about independant of concreete model tests, more universal

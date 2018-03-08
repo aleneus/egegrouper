@@ -1,6 +1,6 @@
 # EGEGrouper - Software for grouping electrogastroenterography examinations.
 
-# Copyright (C) 2017 Aleksandr Popov
+# Copyright (C) 2017-2018 Aleksandr Popov
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -100,140 +100,6 @@ class Model(BaseModel):
         return os.path.isfile(abs_file_name)
 
     @BaseModel.do_if_storage_opened
-    def exam(self, exam_id):
-        """Return examination from database.
-
-        Parameters
-        ----------
-        exam_id : str
-            Examination ID.
-
-        Returns
-        -------
-        sme.Examination
-            Examination object.
-
-        """
-        return sme_sqlite3.get_exam(self.conn, exam_id)
-
-    @BaseModel.do_if_storage_opened
-    def insert_exam(self, exam):
-        """Insert examination into current database.
-
-        Parameters
-        ----------
-        exam : sme.Examination
-            Examination object
-
-        """
-        sme_sqlite3.put_exam(self.conn, exam)
-
-    @BaseModel.do_if_storage_opened
-    def exams(self, group_id):
-        """
-        Return examinations of selected group.
-
-        Parameters
-        ----------
-        group_id : str
-           Group ID.
-
-        Returns
-        -------
-        : list of sme.Examination
-            Examination objects.
-        
-        """
-        exam_records, headers = self.group_info(group_id)
-        if exam_records == None:
-            return None
-        return [
-            self.exam(exam_record[0])
-            for exam_record
-            in exam_records
-        ]
-
-    @BaseModel.do_if_storage_opened
-    def extract_exams(self, group_ids, operation = 'union'):
-        """
-        Return examinations of selected groups.
-
-        Parameters
-        ----------
-        group_ids : list of str
-           Group IDs. Group id equals to '0' means ungrouped examinations.
-        operation : str
-           Operation under selected sets (groups) of examinations. Must be 'union' or 'intersect'. Default is 'union'.
-
-        Returns
-        -------
-        : list of sme.Examination
-            Examination objects.
-        
-        """
-
-        # get list of exam_ids using SQL
-        if operation == 'union':
-            word = "UNION"
-        elif operation == 'intersect':
-            word = "INTERSECT"
-        else:
-            return None
-            
-        def build_select_part(group_id):
-            if group_id == '0':
-                select_part = """
-                SELECT exam_id
-                FROM examination
-                WHERE exam_id NOT IN (SELECT exam_id FROM group_element)
-                """
-            else:
-                select_part = """
-                SELECT E.exam_id from examination as E JOIN group_element as GE ON E.exam_id = GE.exam_id 
-                WHERE GE.group_id = ?
-                """
-            return select_part
-
-        full_query = ""
-        for group_id in group_ids[:-1]:
-            full_query += build_select_part(group_id) + word
-        full_query += build_select_part(group_ids[-1]) + ';'
-
-        non_zero_group_ids = []
-        for group_id in group_ids:
-            if group_id != '0':
-                non_zero_group_ids.append(group_id)
-                
-        self.c.execute(full_query, non_zero_group_ids)
-
-        exam_ids = []
-        for row in self.c.fetchall():
-            exam_ids.append(row[0])
-        
-        # get list of exams using mapping module
-        if len(exam_ids) == 0:
-            return None
-        return [
-            self.exam(exam_id)
-            for exam_id
-            in exam_ids
-        ]
-
-    @BaseModel.do_if_storage_opened
-    def delete_exam(self, exam_id):
-        """Remove examination from database.
-
-        Parameters
-        ----------
-        exam_id : str
-            Examination ID.
-
-        """
-        self.c.execute("""
-        DELETE FROM Examination
-        WHERE exam_id = ?
-        """,(exam_id, ))
-        self.conn.commit()
 
     @BaseModel.do_if_storage_opened
     def storage_info(self):
@@ -317,6 +183,34 @@ class Model(BaseModel):
         data = self.c.fetchall()
         headers = tuple(map(lambda x: x[0], self.c.description))
         return data, headers
+
+    @BaseModel.do_if_storage_opened
+    def insert_exam(self, exam):
+        """Insert examination into current database.
+
+        Parameters
+        ----------
+        exam : sme.Examination
+            Examination object
+
+        """
+        sme_sqlite3.put_exam(self.conn, exam)
+
+    @BaseModel.do_if_storage_opened
+    def delete_exam(self, exam_id):
+        """Remove examination from database.
+
+        Parameters
+        ----------
+        exam_id : str
+            Examination ID.
+
+        """
+        self.c.execute("""
+        DELETE FROM Examination
+        WHERE exam_id = ?
+        """,(exam_id, ))
+        self.conn.commit()
 
     @BaseModel.do_if_storage_opened
     def insert_group(self, name, description):
@@ -457,6 +351,87 @@ class Model(BaseModel):
         WHERE group_id = ?
         """, (attr['name'], attr['description'], group_id, ))
         self.conn.commit()
+
+    @BaseModel.do_if_storage_opened
+    def exam(self, exam_id, meta_only=False):
+        """Return examination from database.
+
+        Parameters
+        ----------
+        exam_id : str
+            Examination ID.
+        meta_only : bool
+            Get only meta data if True.
+
+        Returns
+        -------
+        sme.Examination
+            Examination object.
+
+        """
+        return sme_sqlite3.get_exam(self.conn, exam_id, meta_only)
+
+    def __exam_ids(self, group_id):
+        """ Return examination ids in group. """
+        if group_id == '*':
+            self.c.execute("SELECT exam_id FROM examination")
+        elif group_id == '0':
+            self.c.execute("""
+            SELECT exam_id FROM examination
+            WHERE exam_id NOT IN (SELECT exam_id FROM group_element) 
+            """)
+        else:
+            self.c.execute("""
+            SELECT E.exam_id FROM examination AS E, group_element AS GE
+            WHERE GE.exam_id = E.exam_id AND GE.group_id = ?
+            """, [group_id, ])
+        ans = self.c.fetchall()
+        if len(ans) == 0:
+            return []
+        res = [row[0] for row in ans]
+        return res
+
+    def __exams_of_group(self, group_id, meta_only=False):
+        """ Return examination in group. """
+        exam_ids = self.__exam_ids(group_id)
+        res = [self.exam(exam_id, meta_only) for exam_id in exam_ids]
+        return res
+
+    def __exams_of_groups(self, group_ids, meta_only=False):
+        """ Return examinations in several groups. """
+        ids_lists = [self.__exam_ids(g_id) for g_id in group_ids]
+
+        exam_ids_set = set(ids_lists[0])
+        for ids_list in ids_lists[1:]:
+            exam_ids_set = exam_ids_set | set(ids_list)
+        exam_ids = list(exam_ids_set)
+
+        es = [self.exam(exam_id) for exam_id in exam_ids]
+        return es
+    
+    @BaseModel.do_if_storage_opened
+    def exams(self, group_id, meta_only=False):
+        """ Return exams from selected group or groups. 
+
+        Parameters
+        ----------
+        group_id : str or list of str
+            Group ID. If list, the union of sets of examinations from
+            groups returned.
+        meta_only: bool
+            If True, only meta data returned.
+
+        Returns
+        -------
+        exams: list of sme.Examination
+            Examinations list.
+
+        """
+        if type(group_id) == type("1"):
+            es = self.__exams_of_group(group_id, meta_only)
+            return es
+        es = self.__exams_of_groups(group_id, meta_only)
+        return es
 
 create_sme_db_script = """
 pragma foreign_keys=1;
