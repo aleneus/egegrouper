@@ -4,7 +4,7 @@
 
 ** DONE Initial support of statistics by key
 ** DONE Refactoring of setup.py
-** TODO tkgrouper: split __init__ of main window
+** DONE tkgrouper: split __init__ of main window
 ** TODO tk_views.TableWidget: set_columns --> setup_columns
 ** TODO tk_views.TableWidget: make separate methods for setup columns
 ** TODO tk_views.TableWidget: Use explicit argumets, not **kwargs

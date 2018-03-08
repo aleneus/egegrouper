@@ -37,14 +37,38 @@ class MainWindow:
     """Main window. Shows groups and main menu."""
     
     def __init__(self):
-        """Constructor.
-
-        Create main window.
-        """
+        """ Initialization. """
         self.master = Tk()
         self.master.title("EGEGrouper {}".format(VERSION))
 
-        # menu
+        self._make_main_menu()
+        self.storage_menu.entryconfig("Import", state=DISABLED)
+        self.storage_menu.entryconfig("Close", state=DISABLED)
+        self.main_menu.entryconfig("Group", state=DISABLED)
+        self.main_menu.entryconfig("Exam", state=DISABLED)
+        self.group_menu.entryconfig("Statistics", state=DISABLED)
+
+        self.view_storage = tk_views.Storage(self.master)
+        self.view_storage.pack(side=LEFT, fill=BOTH, expand=True)
+        self.view_storage.item_opened.connect(self.group_info)
+        self.view_storage.item_selected.connect(self.group_selected)
+        controller.set_view_storage(self.view_storage)
+        self.group_window = GroupWindow(self.master)
+        self.view_group = self.group_window.view_group
+        self.view_group.item_opened.connect(self.plot_exam)
+        self.view_group.item_selected.connect(self.exam_selected)
+        controller.set_view_group(self.view_group)
+        controller.set_view_exam_plot(plot_views.Exam())
+
+        stats_model = StatsModel()
+        stats_model.data_provider = model
+        self.stats_controller = StatsController()
+        self.stats_controller.model = stats_model
+        self.stats_controller.message_view = tk_views.Message()
+        self.stats_controller.status_view = text_views.Message()
+        self.stats_controller.table_view = tk_views.StatsTableWindow(self.master)
+
+    def _make_main_menu(self):
         self.main_menu = Menu(self.master)
         self.storage_menu = Menu(self.main_menu, tearoff=0)
         self.storage_menu.add_command(label="Open", command=self.open_storage)
@@ -79,32 +103,6 @@ class MainWindow:
         self.main_menu.add_cascade(label="Help", menu=self.help_menu)
         self.master.config(menu=self.main_menu)
 
-        self.storage_menu.entryconfig("Import", state=DISABLED)
-        self.storage_menu.entryconfig("Close", state=DISABLED)
-        self.main_menu.entryconfig("Group", state=DISABLED)
-        self.main_menu.entryconfig("Exam", state=DISABLED)
-        self.group_menu.entryconfig("Statistics", state=DISABLED)
-
-        self.view_storage = tk_views.Storage(self.master)
-        self.view_storage.pack(side=LEFT, fill=BOTH, expand=True)
-        self.view_storage.item_opened.connect(self.group_info)
-        self.view_storage.item_selected.connect(self.group_selected)
-        controller.set_view_storage(self.view_storage)
-        self.group_window = GroupWindow(self.master)
-        self.view_group = self.group_window.view_group
-        self.view_group.item_opened.connect(self.plot_exam)
-        self.view_group.item_selected.connect(self.exam_selected)
-        controller.set_view_group(self.view_group)
-        controller.set_view_exam_plot(plot_views.Exam())
-
-        stats_model = StatsModel()
-        stats_model.data_provider = model
-        self.stats_controller = StatsController()
-        self.stats_controller.model = stats_model
-        self.stats_controller.message_view = tk_views.Message()
-        self.stats_controller.status_view = text_views.Message()
-        self.stats_controller.table_view = tk_views.StatsTableWindow(self.master)
-        
     def open_storage(self):
         """Open storage and show groups in it."""
         file_name = filedialog.askopenfilename(
