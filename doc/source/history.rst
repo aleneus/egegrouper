@@ -1,3 +1,7 @@
+0.5
+===
+* Method extract_exams added to base model and implemented in sqlite3 model. It is useful for extraction examinations data from several groups. For example, it can be used to get intersections of groups for ANOVA.
+
 0.4
 ===
 

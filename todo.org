@@ -12,9 +12,8 @@
 ** DONE tkgrouper: refactoring of stats stuff
 ** TODO docs: include source code near every method
 ** TODO Add docstrings to stats_controller
-** TODO Release 0.6
-*** TODO Add what's new and update history
-*** TODO Update version in glob.py
+** DONE Add what's new and update history
+** DONE Update version in glob.py
 ** TODO ? sqlite3_model: refactoring of create_sme_db_script. Make function
 ** DONE sqlite3_model and base_model: Refactor exams method.
 ** DONE sqlite3_model: Test exams() with several groups
