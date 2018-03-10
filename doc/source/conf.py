@@ -23,6 +23,16 @@ sys.path.insert(0, os.path.abspath('../../'))
 
 from egegrouper.glob import *
 
+import mock
+
+MOCK_MODULES = [
+    'numpy',
+    'matplotlib',
+    'matplotlib.pyplot',
+]
+for mod_name in MOCK_MODULES:
+    sys.modules[mod_name] = mock.Mock()
+
 # -- General configuration ------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
