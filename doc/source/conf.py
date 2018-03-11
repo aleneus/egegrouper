@@ -24,8 +24,14 @@ sys.path.insert(0, os.path.abspath('../..'))
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 
 from egegrouper.glob import *
+#import mock
 
-import mock
+from unittest.mock import MagicMock
+
+class Mock(MagicMock):
+    @classmethod
+    def __getattr__(cls, name):
+        return MagicMock()
 
 MOCK_MODULES = [
     'numpy',
@@ -36,8 +42,10 @@ MOCK_MODULES = [
     'readline',
     'abc',
 ]
-for mod_name in MOCK_MODULES:
-    sys.modules[mod_name] = mock.Mock()
+
+sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
+#for mod_name in MOCK_MODULES:
+#    sys.modules[mod_name] = mock.Mock()
 
 # -- General configuration ------------------------------------------------
 
