@@ -5,7 +5,7 @@
 ** DONE Initial support of statistics by key
 ** DONE Refactoring of setup.py
 ** DONE tkgrouper: split __init__ of main window
-** TODO tk_views.TableWidget: set_columns --> setup_columns
+** TODO docs: add link to docs on PyPi
 ** TODO tk_views.TableWidget: make separate methods for setup columns
 ** TODO tk_views.TableWidget: Use explicit argumets, not **kwargs
 ** TODO tk_views.StatsTable: Add docstrings 
@@ -28,7 +28,6 @@
 ** TODO Support localization of tkgrouper
 ** TODO Support the Windows building in setup.py
 ** DONE Replace docs to readthedocs
-** TODO Add manual tests for UI
 ** DONE ! Refactor exams and group_info stuff in base_model and sqlite3_model
 ** DONE Use dictionary with attributes in SME
 ** DONE Update copyrights date
