@@ -44,7 +44,7 @@ class StatsModel:
                 res[value] += 1
         return res
 
-    def set_age_groups(self, bounds: list):
+    def set_age_groups(self, bounds):
         """ Set bounds of age groups. """
         self.age_bounds = bounds
 

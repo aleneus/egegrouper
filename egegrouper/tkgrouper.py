@@ -17,9 +17,8 @@
 
 """Tk interface to egegrouper."""
 
-from tkinter import *
-from tkinter import filedialog
-from tkinter import messagebox
+import tkinter as tk
+from tkinter import messagebox, filedialog
 
 from . import controller
 from . import sqlite3_model
@@ -38,18 +37,18 @@ class MainWindow:
     
     def __init__(self):
         """ Initialization. """
-        self.master = Tk()
+        self.master = tk.Tk()
         self.master.title("EGEGrouper {}".format(VERSION))
 
         self._make_main_menu()
-        self.storage_menu.entryconfig("Import", state=DISABLED)
-        self.storage_menu.entryconfig("Close", state=DISABLED)
-        self.main_menu.entryconfig("Group", state=DISABLED)
-        self.main_menu.entryconfig("Exam", state=DISABLED)
-        self.group_menu.entryconfig("Statistics", state=DISABLED)
+        self.storage_menu.entryconfig("Import", state=tk.DISABLED)
+        self.storage_menu.entryconfig("Close", state=tk.DISABLED)
+        self.main_menu.entryconfig("Group", state=tk.DISABLED)
+        self.main_menu.entryconfig("Exam", state=tk.DISABLED)
+        self.group_menu.entryconfig("Statistics", state=tk.DISABLED)
 
         self.view_storage = tk_views.Storage(self.master)
-        self.view_storage.pack(side=LEFT, fill=BOTH, expand=True)
+        self.view_storage.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         self.view_storage.item_opened.connect(self.group_info)
         self.view_storage.item_selected.connect(self.group_selected)
         controller.set_view_storage(self.view_storage)
@@ -69,36 +68,36 @@ class MainWindow:
         self.stats_controller.table_view = tk_views.StatsTableWindow(self.master)
 
     def _make_main_menu(self):
-        self.main_menu = Menu(self.master)
-        self.storage_menu = Menu(self.main_menu, tearoff=0)
+        self.main_menu = tk.Menu(self.master)
+        self.storage_menu = tk.Menu(self.main_menu, tearoff=0)
         self.storage_menu.add_command(label="Open", command=self.open_storage)
         self.storage_menu.add_command(label="Create", command=self.create_storage)
         self.storage_menu.add_command(label="Close", command=self.close_storage)
-        self.add_data_submenu = Menu(self.storage_menu, tearoff=0)
+        self.add_data_submenu = tk.Menu(self.storage_menu, tearoff=0)
         self.add_data_submenu.add_command(label="SME sqlite3 DB", command=self.import_sme)
         self.add_data_submenu.add_command(label="Exam from JSON", command=self.import_json)
         #self.add_data_submenu.add_command(label="TODO: Add Gastroscan sqlite3 DB", command=)
         self.storage_menu.add_cascade(label="Import", menu=self.add_data_submenu)
         self.storage_menu.add_command(label="Exit", command=self.close_db_and_exit)
         self.main_menu.add_cascade(label="Storage", menu=self.storage_menu)
-        self.group_menu = Menu(self.main_menu, tearoff=0)
+        self.group_menu = tk.Menu(self.main_menu, tearoff=0)
         self.group_menu.add_command(label="Add", command=self.add_group)
         self.group_menu.add_command(label="Edit", command=self.edit_group)
         self.group_menu.add_command(label="Delete", command=self.delete_group)
-        self.stats_menu = Menu(self.group_menu, tearoff=0)
+        self.stats_menu = tk.Menu(self.group_menu, tearoff=0)
         self.stats_menu.add_command(label="Gender", command=self.stats_gender)
         self.stats_menu.add_command(label="Diagnosis", command=self.stats_diagnosis)
         self.stats_menu.add_command(label="Age", command=self.stats_age)
         self.group_menu.add_cascade(label="Statistics", menu=self.stats_menu)
         self.main_menu.add_cascade(label="Group", menu=self.group_menu)
-        self.exam_menu = Menu(self.main_menu, tearoff=0)
+        self.exam_menu = tk.Menu(self.main_menu, tearoff=0)
         self.exam_menu.add_command(label="Plot", command=self.plot_exam)
         self.exam_menu.add_command(label="Grouping", command=self.grouping)
         self.exam_menu.add_command(label="Delete forever", command=self.delete_exam)
         #self.exam_menu.add_command(label="TODO?:Merge with", command=None)
         self.exam_menu.add_command(label="Export to JSON", command=self.export_json)
         self.main_menu.add_cascade(label="Exam", menu=self.exam_menu)
-        self.help_menu = Menu(self.main_menu, tearoff=0)
+        self.help_menu = tk.Menu(self.main_menu, tearoff=0)
         self.help_menu.add_command(label="About", command=self.about)
         self.main_menu.add_cascade(label="Help", menu=self.help_menu)
         self.master.config(menu=self.main_menu)
@@ -115,13 +114,13 @@ class MainWindow:
         controller.open_storage(file_name)
         self.view_group.clear()
         # menu
-        self.storage_menu.entryconfig("Import", state=NORMAL)
-        self.storage_menu.entryconfig("Close", state=NORMAL)
-        self.main_menu.entryconfig("Group", state=NORMAL)
-        self.group_menu.entryconfig("Edit", state=DISABLED)
-        self.group_menu.entryconfig("Delete", state=DISABLED)
-        self.group_menu.entryconfig("Statistics", state=DISABLED)
-        self.main_menu.entryconfig("Exam", state=DISABLED)
+        self.storage_menu.entryconfig("Import", state=tk.NORMAL)
+        self.storage_menu.entryconfig("Close", state=tk.NORMAL)
+        self.main_menu.entryconfig("Group", state=tk.NORMAL)
+        self.group_menu.entryconfig("Edit", state=tk.DISABLED)
+        self.group_menu.entryconfig("Delete", state=tk.DISABLED)
+        self.group_menu.entryconfig("Statistics", state=tk.DISABLED)
+        self.main_menu.entryconfig("Exam", state=tk.DISABLED)
         
     def create_storage(self):
         """Create storage."""
@@ -136,13 +135,13 @@ class MainWindow:
         controller.create_storage(file_name)
         self.view_group.clear()
         # menu
-        self.storage_menu.entryconfig("Import", state=NORMAL)
-        self.storage_menu.entryconfig("Close", state=NORMAL)
-        self.main_menu.entryconfig("Group", state=NORMAL)
-        self.group_menu.entryconfig("Edit", state=DISABLED)
-        self.group_menu.entryconfig("Delete", state=DISABLED)
-        self.group_menu.entryconfig("Statistics", state=DISABLED)
-        self.main_menu.entryconfig("Exam", state=DISABLED)
+        self.storage_menu.entryconfig("Import", state=tk.NORMAL)
+        self.storage_menu.entryconfig("Close", state=tk.NORMAL)
+        self.main_menu.entryconfig("Group", state=tk.NORMAL)
+        self.group_menu.entryconfig("Edit", state=tk.DISABLED)
+        self.group_menu.entryconfig("Delete", state=tk.DISABLED)
+        self.group_menu.entryconfig("Statistics", state=tk.DISABLED)
+        self.main_menu.entryconfig("Exam", state=tk.DISABLED)
 
     def close_storage(self):
         """Close storage and clear widgets."""
@@ -150,10 +149,10 @@ class MainWindow:
         self.view_group.clear()
         self.view_storage.clear()
         # menu
-        self.storage_menu.entryconfig("Import", state=DISABLED)
-        self.storage_menu.entryconfig("Close", state=DISABLED)
-        self.main_menu.entryconfig("Group", state=DISABLED)
-        self.main_menu.entryconfig("Exam", state=DISABLED)
+        self.storage_menu.entryconfig("Import", state=tk.DISABLED)
+        self.storage_menu.entryconfig("Close", state=tk.DISABLED)
+        self.main_menu.entryconfig("Group", state=tk.DISABLED)
+        self.main_menu.entryconfig("Exam", state=tk.DISABLED)
 
     def import_sme(self):
         "Add records from sqlite3 data base in SME format."
@@ -182,14 +181,14 @@ class MainWindow:
     def group_selected(self, *args):
         """Group selected slot. Enable some menu items."""
         # menu
-        self.group_menu.entryconfig("Edit", state=NORMAL)
-        self.group_menu.entryconfig("Delete", state=NORMAL)
-        self.group_menu.entryconfig("Statistics", state=NORMAL)
+        self.group_menu.entryconfig("Edit", state=tk.NORMAL)
+        self.group_menu.entryconfig("Delete", state=tk.NORMAL)
+        self.group_menu.entryconfig("Statistics", state=tk.NORMAL)
 
     def exam_selected(self, *args):
         """Exam selected slot. Enable some menu items."""
         # menu
-        self.main_menu.entryconfig("Exam", state=NORMAL)
+        self.main_menu.entryconfig("Exam", state=tk.NORMAL)
 
     def group_info(self, *args):
         """Get and show information about examination in selected group."""
@@ -200,7 +199,7 @@ class MainWindow:
             controller.group_info(group_id)
             self.view_storage.last_group_id = group_id
         # menu
-        self.main_menu.entryconfig("Exam", state=DISABLED)
+        self.main_menu.entryconfig("Exam", state=tk.DISABLED)
 
     def grouping(self):
         """Open grouping dialog stub."""
@@ -335,11 +334,11 @@ class GroupWindow:
             Master for window.
 
         """
-        self.master = Toplevel(parent)
+        self.master = tk.Toplevel(parent)
         self.master.title("Examinations")
         self.master.protocol('WM_DELETE_WINDOW', self.on_destroy)
         self.view_group = tk_views.Group(self.master)
-        self.view_group.pack(side=LEFT, fill=BOTH, expand=True)
+        self.view_group.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
     def on_destroy(self):
         """Do not destroy, but withdraw."""
@@ -360,7 +359,7 @@ class GroupingDialog:
 
         """
         self.exam_id = exam_id
-        self.master = Toplevel(parent)
+        self.master = tk.Toplevel(parent)
         self.master.title("Grouping")
         self.grouping_widget = tk_views.WhereExam(self.master)
         self.save_button = Button(self.master, text="Save", width=15, command=self.on_save_button)
@@ -395,7 +394,7 @@ class GroupRecordDialog:
         """
         self.group_id = group_id
         self.group_record = group_record
-        self.master = Toplevel(parent)
+        self.master = tk.Toplevel(parent)
         self.master.title("Edit group")
         self.labels = []
         self.entries = []
@@ -403,7 +402,7 @@ class GroupRecordDialog:
             label = Label(self.master, width = 10, text=key)
             label.pack(side=TOP)
             entry = Entry(self.master, width = 30)
-            entry.delete(0, END)
+            entry.delete(0, tk.END)
             if group_record[key]:
                 entry.insert(0, group_record[key])
             else:
@@ -435,7 +434,7 @@ class AboutWindow:
         Create window with info about the program.
 
         """
-        self.master = Toplevel(parent)
+        self.master = tk.Toplevel(parent)
         self.master.title("About EGEGrouper")
         label = Label(self.master, text="""
         EGEGrouper Copyright (C) 2017-2018 Aleksandr Popov
@@ -451,7 +450,7 @@ class AboutWindow:
 class StatsWindow:
     """Window for show statistics. """
     def __init__(self, parent):
-        self.master = Toplevel(parent)
+        self.master = tk.Toplevel(parent)
         self.master.title("Statistics")
         self.table = tk_views.Stats(self.master)
         self.table.pack()

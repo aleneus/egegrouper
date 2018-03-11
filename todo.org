@@ -10,7 +10,7 @@
 ** TODO tk_views.TableWidget: Use explicit argumets, not **kwargs
 ** TODO tk_views.StatsTable: Add docstrings 
 ** DONE tkgrouper: refactoring of stats stuff
-** TODO docs: include source code near every method
+** DONE docs: include source code near every method
 ** TODO Add docstrings to stats_controller
 ** DONE Add what's new and update history
 ** DONE Update version in glob.py
@@ -27,7 +27,7 @@
 ** DONE Initial support statistics in tkgrouper
 ** TODO Support localization of tkgrouper
 ** TODO Support the Windows building in setup.py
-** TODO Replace docs to readthedocs
+** DONE Replace docs to readthedocs
 ** TODO Add manual tests for UI
 ** DONE ! Refactor exams and group_info stuff in base_model and sqlite3_model
 ** DONE Use dictionary with attributes in SME
