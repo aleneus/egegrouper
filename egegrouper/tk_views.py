@@ -15,9 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from tkinter import *
-from tkinter import ttk
-from tkinter import messagebox
+import tkinter as tk
+from tkinter import ttk, messagebox
 
 class SimpleSignal:
     """Provides simple signals and slots mechanism."""
@@ -65,7 +64,7 @@ class SimpleSignal:
                 self.slots[i] = None
 
 
-class TableWidget(Frame):
+class TableWidget(tk.Frame):
     """Table widget."""
     def __init__(self, parent, headers = []):
         """Constructor.
@@ -78,12 +77,12 @@ class TableWidget(Frame):
             Headers for table.
 
         """
-        Frame.__init__(self, parent)
-        self.scrollbar = Scrollbar(self, orient=VERTICAL)
+        tk.Frame.__init__(self, parent)
+        self.scrollbar = tk.Scrollbar(self, orient=tk.VERTICAL)
         self.tree = ttk.Treeview(self, yscrollcommand=self.scrollbar.set)
         self.scrollbar.config(command=self.tree.yview)
-        self.scrollbar.pack(side=RIGHT, fill=Y)
-        self.tree.pack(side=LEFT, fill=BOTH, expand=True)
+        self.scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        self.tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         self.set_columns(headers=headers)
         # signals
         self.item_opened = SimpleSignal()
@@ -136,7 +135,7 @@ class TableWidget(Frame):
             widths = kwargs['widths']
             for (cid, w) in zip(self.column_ids, widths):
                 self.tree.column(cid, width=w)
-        self.tree.pack(side=LEFT, fill=BOTH, expand=True)
+        self.tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
     def update_data(self, data):
         """Fill table with data.
@@ -149,7 +148,7 @@ class TableWidget(Frame):
         """
         self.clear()
         for (i, row) in zip(range(len(data)), data):
-            self.tree.insert("", END, iid = str(i), text=str(row[0]), values=row[1:])
+            self.tree.insert("", tk.END, iid = str(i), text=str(row[0]), values=row[1:])
         
     def clear(self):
         """Clear all items."""
@@ -175,10 +174,10 @@ class GroupingTable(TableWidget):
         parent
             Master for widget.
         """
-        Frame.__init__(self, parent)
+        tk.Frame.__init__(self, parent)
         headers = ["ID", "Name", "In"]
         widths = [50, None, 100]
-        anchors=[None, None, CENTER]
+        anchors=[None, None, tk.CENTER]
         super().__init__(parent, headers)
         self.set_columns(widths=widths, anchors=anchors)
         self.tree.bind("<Double-1>", self.toggle_item)
@@ -237,7 +236,7 @@ class Storage(TableWidget):
         headers = ["ID", "Name", "Description", "Num"]
         super().__init__(parent, headers)
         widths = [50, None, None, 50]
-        anchors = [CENTER, None, None, CENTER]
+        anchors = [tk.CENTER, None, None, tk.CENTER]
         self.set_columns(widths=widths, anchors=anchors)
         self.last_group_id = None
         
@@ -268,7 +267,7 @@ class Group(TableWidget):
         headers = ["ID", "Name", "Diagnosis", "Age", "Gender"]
         super().__init__(parent, headers)
         widths = [50, None, None, None, None]
-        anchors = [None, None, None, CENTER, CENTER]
+        anchors = [None, None, None, tk.CENTER, tk.CENTER]
         self.set_columns(widths=widths, anchors=anchors)
         
     def show_data(self, data, headers):
@@ -293,13 +292,13 @@ class StatsTableWindow:
         table.update_data(data)
 
     def _build_window(self, parent):
-        master = Toplevel(parent)
+        master = tk.Toplevel(parent)
         master.title("Statistics")
         table = TableWidget(master) 
         table.set_columns(
             headers=['Category', 'Number'],
             widths=[None, None],
-            anchors=[None, CENTER],
+            anchors=[None, tk.CENTER],
         )
         table.pack()
         master.transient(parent)
