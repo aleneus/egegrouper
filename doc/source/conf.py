@@ -32,6 +32,8 @@ MOCK_MODULES = [
     'matplotlib',
     'matplotlib.pyplot',
     'tabulate',
+    'tkinter',
+    'readline',
 ]
 for mod_name in MOCK_MODULES:
     sys.modules[mod_name] = mock.Mock()
