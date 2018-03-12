@@ -10,7 +10,7 @@
 ** DONE tk_views.StatsTable: Add docstrings 
 ** DONE tkgrouper: refactoring of stats stuff
 ** DONE docs: include source code near every method
-** TODO Add docstrings to stats_controller
+** DONE Add docstrings to stats_controller
 ** DONE Add what's new and update history
 ** DONE Update version in glob.py
 ** TODO ? sqlite3_model: refactoring of create_sme_db_script. Make function
@@ -31,9 +31,10 @@
 ** DONE Use dictionary with attributes in SME
 ** DONE Update copyrights date
 * Enhancement
-** TODO egegrouper/tk_views: replace the SimpleSignal class to seperate unit
-** TODO egegrouper/tk_views.py: replace TableWidget and GroupingTable to seperate unit
-** TODO egegrouper/tk_views.py: Make Storage, Group and WhereExam a views, not widgets
+** TODO tk_views: replace the SimpleSignal class to seperate unit
+** TODO tk_views: replace TableWidget and GroupingTable to seperate unit
+** TODO tk_views: Make Storage, Group and WhereExam a views, not widgets
+** TODO stats_controller: check if some views are None
 ** TODO tkgrouper: make status bar
 ** TODO Bring order to imports
 ** TODO Remove init actions from global space

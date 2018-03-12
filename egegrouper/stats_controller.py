@@ -19,6 +19,7 @@
 
 class StatsController:
     def __init__(self):
+        """ Initialization. """
         self.model = None
         self.view = None
         self.status_view = None
@@ -26,7 +27,16 @@ class StatsController:
         self.message_view = None
 
     def stats(self, key, group_id):
-        # TODO: check if some view is None
+        """ Calculate and show number of examinations grouped by key in group with group_id. 
+
+        Parameters
+        ----------
+        key: str
+            Keyword, name of field.
+        group_id: str
+            Group ID.
+
+        """
         self.status_view.show_data("Calculating stats...")
         data = self.model.stats(key, group_id)
         if len(data) == 0:
@@ -36,9 +46,13 @@ class StatsController:
         self.table_view.show_data(table_data, ["Category", "Number"])
     
     def gender_balance(self, group_id):
+        """ Calculate and show the gender balance of group. 
+
+        Parameters
+        ----------
+        group_id: str
+            Group ID.
+
+        """
         data = self.model.gender_balance(group_id)
         self.view.show_data(data)
-
-    def aver_age(self, group_id):
-        value = self.model.aver_age(group_id)
-        self.view.show_data(value)
