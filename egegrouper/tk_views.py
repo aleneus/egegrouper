@@ -108,8 +108,8 @@ class TableWidget(tk.Frame):
         finally:
             return item_text
 
-    def set_columns(self, **kwargs):
-        """Different settings for columns.
+    def set_columns(self, headers=[], anchors=[], widths=[]):
+        """ Setup columns.
 
         Parameters
         ----------
@@ -121,18 +121,15 @@ class TableWidget(tk.Frame):
             Widths of columns.
 
         """
-        if 'headers' in kwargs:
-            headers = kwargs['headers']
+        if len(headers) > 0:
             self.column_ids = ["#0",] + headers[1:]
             self.tree["columns"] = headers[1:]
             for (cid, h) in zip(self.column_ids, headers):
                 self.tree.heading(cid, text=h)
-        if 'anchors' in kwargs:
-            anchors = kwargs['anchors']
+        if len(anchors) > 0:
             for (cid, a) in zip(self.column_ids, anchors):
                 self.tree.column(cid, anchor=a)
-        if 'widths' in kwargs:
-            widths = kwargs['widths']
+        if len(widths) > 0:
             for (cid, w) in zip(self.column_ids, widths):
                 self.tree.column(cid, width=w)
         self.tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)

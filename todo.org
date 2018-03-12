@@ -6,8 +6,7 @@
 ** DONE Refactoring of setup.py
 ** DONE tkgrouper: split __init__ of main window
 ** DONE docs: add link to docs in README
-** TODO tk_views.TableWidget: make separate methods for setup columns
-** TODO tk_views.TableWidget: Use explicit argumets, not **kwargs
+** DONE tk_views.TableWidget: Use explicit argumets, not **kwargs
 ** TODO tk_views.StatsTable: Add docstrings 
 ** DONE tkgrouper: refactoring of stats stuff
 ** DONE docs: include source code near every method
@@ -32,6 +31,9 @@
 ** DONE Use dictionary with attributes in SME
 ** DONE Update copyrights date
 * Enhancement
+** TODO egegrouper/tk_views: replace the SimpleSignal class to seperate unit
+** TODO egegrouper/tk_views.py: replace TableWidget and GroupingTable to seperate unit
+** TODO egegrouper/tk_views.py: Make Storage, Group and WhereExam a views, not widgets
 ** TODO tkgrouper: make status bar
 ** TODO Bring order to imports
 ** TODO Remove init actions from global space
