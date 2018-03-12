@@ -22,6 +22,7 @@
 ** DONE Docs: update lists of documented methods
 ** DONE BaseModel: Rearrange methods 
 ** DONE BaseModel: Update docs of exams
+** TODO Add the informative titles for Tk stats views
 ** DONE igrouper: Write full docs for stats.
 ** DONE Initial support statistics in tkgrouper
 ** TODO Support localization of tkgrouper
