@@ -1,3 +1,5 @@
 Electrogastrography (EGG) and electrogastroenterography (EGEG) are electrophysiological methods for diagnostics of stomach and gastrointestinal tract motility.
 
 This package provides the abilities of forming the sets of EGG and EGEG examinations data for follow statistical processing.
+
+Docs: http://egegrouper.readthedocs.io/en/latest/

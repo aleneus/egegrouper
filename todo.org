@@ -5,7 +5,7 @@
 ** DONE Initial support of statistics by key
 ** DONE Refactoring of setup.py
 ** DONE tkgrouper: split __init__ of main window
-** TODO docs: add link to docs on PyPi
+** DONE docs: add link to docs in README
 ** TODO tk_views.TableWidget: make separate methods for setup columns
 ** TODO tk_views.TableWidget: Use explicit argumets, not **kwargs
 ** TODO tk_views.StatsTable: Add docstrings 
