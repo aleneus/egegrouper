@@ -282,13 +282,25 @@ class Group(TableWidget):
 
 class StatsTableWindow:
     def __init__(self, parent):
+        """ Initialization. """
         self.parent = parent
 
     def show_data(self, data, headers):
+        """ Show data. 
+
+        Parameters
+        ----------
+
+        data: list of lists
+            Table content.
+        headers: list of str
+            Headers.
+        """
         table = self._build_window(self.parent)
         table.update_data(data)
 
     def _build_window(self, parent):
+        """ Build and show window with table inside. """
         master = tk.Toplevel(parent)
         master.title("Statistics")
         table = TableWidget(master) 

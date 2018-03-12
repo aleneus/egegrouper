@@ -7,7 +7,7 @@
 ** DONE tkgrouper: split __init__ of main window
 ** DONE docs: add link to docs in README
 ** DONE tk_views.TableWidget: Use explicit argumets, not **kwargs
-** TODO tk_views.StatsTable: Add docstrings 
+** DONE tk_views.StatsTable: Add docstrings 
 ** DONE tkgrouper: refactoring of stats stuff
 ** DONE docs: include source code near every method
 ** TODO Add docstrings to stats_controller
