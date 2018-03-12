@@ -13,7 +13,7 @@
 ** DONE Add docstrings to stats_controller
 ** DONE Add what's new and update history
 ** DONE Update version in glob.py
-** TODO ? sqlite3_model: refactoring of create_sme_db_script. Make function
+** TODO sqlite3_model: refactoring of create_sme_db_script. Make function
 ** DONE sqlite3_model and base_model: Refactor exams method.
 ** DONE sqlite3_model: Test exams() with several groups
 ** DONE base_model.py: doc exams
