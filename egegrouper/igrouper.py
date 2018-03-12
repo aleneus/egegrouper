@@ -147,9 +147,20 @@ class GrouperShell(cmd.Cmd):
         controller.group_info(cargv[0])
 
     def do_stats(self, arg):
-        """ stats group_id
+        """ stats [age|gender|diagnosis] group_id
 
         Print some statistic of group.
+
+        Special values for group_id:
+
+            0 - Ungrouped exams.
+            * - All exams.
+
+        Examples:
+
+            stats gender 1
+            stats diagnosis 0
+            stats age *
         """
         cargv = arg.split()
         if len(cargv) < 2:
