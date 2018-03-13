@@ -18,11 +18,15 @@
 """ This module implements the base classes for views. """
 
 class View:
+    """ Base class for all views. """
     def show_data(self, data):
+        """ Show data. """
         raise NotImplementedError
 
-class StatsView:
+class StatsView(View):
+    """ Base class for stats views. """
     def __init__(self):
+        """ Initialization. """
         self.title = None
 
     def show_data(self, data, headers):

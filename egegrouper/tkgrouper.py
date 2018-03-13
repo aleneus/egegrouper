@@ -32,6 +32,9 @@ from .glob import *
 
 from collections import OrderedDict
 
+model = sqlite3_model.Model()
+controller = controller.Controller(model)
+
 class MainWindow:
     """Main window. Shows groups and main menu."""
     
@@ -47,25 +50,28 @@ class MainWindow:
         self.main_menu.entryconfig("Exam", state=tk.DISABLED)
         self.group_menu.entryconfig("Statistics", state=tk.DISABLED)
 
-        self.view_storage = tk_views.Storage(self.master)
-        self.view_storage.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
-        self.view_storage.item_opened.connect(self.group_info)
-        self.view_storage.item_selected.connect(self.group_selected)
-        controller.set_view_storage(self.view_storage)
+        self.storage_table = tk_views.TableWidget(self.master)
+        self.storage_table.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        self.storage_table.item_opened.connect(self.group_info)
+        self.storage_table.item_selected.connect(self.group_selected)
+        storage_view = tk_views.StorageTkView()
+        storage_view.widget = self.storage_table
+        controller.set_view_storage(storage_view)
         self.group_window = GroupWindow(self.master)
-        self.view_group = self.group_window.view_group
-        self.view_group.item_opened.connect(self.plot_exam)
-        self.view_group.item_selected.connect(self.exam_selected)
-        controller.set_view_group(self.view_group)
-        controller.set_view_exam_plot(plot_views.Exam())
+        group_view = tk_views.GroupTkView()
+        group_view.widget = self.group_window.group_table
+        self.group_window.group_table.item_opened.connect(self.plot_exam)
+        self.group_window.group_table.item_selected.connect(self.exam_selected)
+        controller.set_view_group(group_view)
+        controller.set_view_exam_plot(plot_views.ExamPlotView())
 
         stats_model = StatsModel()
         stats_model.data_provider = model
         self.stats_controller = StatsController()
         self.stats_controller.model = stats_model
-        self.stats_controller.message_view = tk_views.Message()
-        self.stats_controller.status_view = text_views.Message()
-        self.stats_controller.table_view = tk_views.StatsTableWindow(self.master)
+        self.stats_controller.message_view = tk_views.MessageTkView()
+        self.stats_controller.status_view = text_views.MessageTextView()
+        self.stats_controller.table_view = tk_views.StatsTkView(self.master)
 
     def _make_main_menu(self):
         self.main_menu = tk.Menu(self.master)
@@ -112,7 +118,7 @@ class MainWindow:
         if not file_name:
             return
         controller.open_storage(file_name)
-        self.view_group.clear()
+        self.group_window.group_table.clear()
         # menu
         self.storage_menu.entryconfig("Import", state=tk.NORMAL)
         self.storage_menu.entryconfig("Close", state=tk.NORMAL)
@@ -133,7 +139,7 @@ class MainWindow:
         if not file_name:
             return
         controller.create_storage(file_name)
-        self.view_group.clear()
+        self.group_window.group_table.clear()
         # menu
         self.storage_menu.entryconfig("Import", state=tk.NORMAL)
         self.storage_menu.entryconfig("Close", state=tk.NORMAL)
@@ -146,8 +152,8 @@ class MainWindow:
     def close_storage(self):
         """Close storage and clear widgets."""
         controller.close_storage()
-        self.view_group.clear()
-        self.view_storage.clear()
+        self.group_window.group_table.clear()
+        self.storage_table.clear()
         # menu
         self.storage_menu.entryconfig("Import", state=tk.DISABLED)
         self.storage_menu.entryconfig("Close", state=tk.DISABLED)
@@ -194,48 +200,48 @@ class MainWindow:
         """Get and show information about examination in selected group."""
         if self.group_window.master.state() == "withdrawn":
             self.group_window.master.deiconify()
-        group_id = self.view_storage.selected_item_text()
+        group_id = self.storage_table.selected_item_text()
         if group_id:
             controller.group_info(group_id)
-            self.view_storage.last_group_id = group_id
+            self.storage_table.last_group_id = group_id
         # menu
         self.main_menu.entryconfig("Exam", state=tk.DISABLED)
 
     def grouping(self):
         """Open grouping dialog stub."""
-        exam_id = self.view_group.selected_item_text()
+        exam_id = self.group_window.group_table.selected_item_text()
         if not exam_id:
             return
 
-        self.view_storage.remember_selection()
-        self.view_group.remember_selection()
+        self.storage_table.remember_selection()
+        self.group_window.group_table.remember_selection()
         grouping_dialog = GroupingDialog(self.master, exam_id)
         grouping_dialog.master.transient(self.master)
         grouping_dialog.master.grab_set()
         grouping_dialog.master.wait_window(grouping_dialog.master)
         controller.storage_info()
-        controller.group_info(self.view_storage.last_group_id)
-        self.view_storage.restore_selection()
-        self.view_group.restore_selection()
+        controller.group_info(self.storage_table.last_group_id)
+        self.storage_table.restore_selection()
+        self.group_window.group_table.restore_selection()
         
     def delete_exam(self):
         """Delete exam from storage."""
-        exam_id = self.view_group.selected_item_text()
+        exam_id = self.group_window.group_table.selected_item_text()
         if not exam_id:
             return
         if messagebox.askquestion("Delete examination", "Are You shure?", icon='warning') == 'no':
             return
         controller.delete_exam(exam_id)
-        self.view_storage.remember_selection()
-        self.view_group.remember_selection()
+        self.storage_table.remember_selection()
+        self.group_window.group_table.remember_selection()
         controller.storage_info()
-        controller.group_info(self.view_storage.last_group_id)
-        self.view_storage.restore_selection()
-        self.view_group.restore_selection()
+        controller.group_info(self.storage_table.last_group_id)
+        self.storage_table.restore_selection()
+        self.group_window.group_table.restore_selection()
 
     def export_json(self):
         """Export selected examination to JSON file."""
-        exam_id = self.view_group.selected_item_text()
+        exam_id = self.group_window.group_table.selected_item_text()
         if not exam_id:
             return
         file_name = filedialog.asksaveasfilename(
@@ -260,36 +266,36 @@ class MainWindow:
 
     def edit_group(self):
         """Edit group."""
-        group_id = self.view_storage.selected_item_text()
+        group_id = self.storage_table.selected_item_text()
         if not group_id:
             return
         if group_id=='0':
             return
-        self.view_storage.remember_selection()
+        self.storage_table.remember_selection()
         data = controller.group_record(group_id)
         group_record_dialog = GroupRecordDialog(self.master, data, group_id)
         group_record_dialog.master.transient(self.master)
         group_record_dialog.master.grab_set()
         group_record_dialog.master.wait_window(group_record_dialog.master)
-        self.view_storage.restore_selection()
+        self.storage_table.restore_selection()
 
     def delete_group(self):
         """Delete selected group."""
-        group_id = self.view_storage.selected_item_text()
+        group_id = self.storage_table.selected_item_text()
         if not group_id:
             return
         if group_id=='0':
             return
         if messagebox.askquestion("Delete", "Are You shure?", icon='warning') == 'no':
             return
-        self.view_storage.remember_selection()
+        self.storage_table.remember_selection()
         controller.delete_group(group_id)
         controller.storage_info()
-        self.view_storage.restore_selection()
+        self.storage_table.restore_selection()
 
     def plot_exam(self, *args):
         """Plot examination in separate matplotlib window."""
-        exam_id = self.view_group.selected_item_text()
+        exam_id = self.group_window.group_table.selected_item_text()
         if exam_id:
             controller.plot_exam(exam_id)
                 
@@ -307,17 +313,17 @@ class MainWindow:
 
     def stats_gender(self):
         """ Calculate and show statistics by gender. """
-        group_id = self.view_storage.selected_item_text()
+        group_id = self.storage_table.selected_item_text()
         self.stats_controller.stats('gender', group_id)
         
     def stats_diagnosis(self):
         """ Calculate and show statistics by diagnosis. """
-        group_id = self.view_storage.selected_item_text()
+        group_id = self.storage_table.selected_item_text()
         self.stats_controller.stats('diagnosis', group_id)
         
     def stats_age(self):
         """ Calculate and show statistics by age. """
-        group_id = self.view_storage.selected_item_text()
+        group_id = self.storage_table.selected_item_text()
         self.stats_controller.stats('age', group_id)
 
 class GroupWindow:
@@ -337,8 +343,8 @@ class GroupWindow:
         self.master = tk.Toplevel(parent)
         self.master.title("Examinations")
         self.master.protocol('WM_DELETE_WINDOW', self.on_destroy)
-        self.view_group = tk_views.Group(self.master)
-        self.view_group.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        self.group_table = tk_views.TableWidget(self.master)
+        self.group_table.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
     def on_destroy(self):
         """Do not destroy, but withdraw."""
@@ -361,13 +367,17 @@ class GroupingDialog:
         self.exam_id = exam_id
         self.master = tk.Toplevel(parent)
         self.master.title("Grouping")
-        self.grouping_widget = tk_views.WhereExam(self.master)
-        self.save_button = tk.Button(self.master, text="Save", width=15, command=self.on_save_button)
-        self.cancel_button = tk.Button(self.master, text="Cancel", width=15, command=self.master.destroy)
+        self.grouping_widget = tk_views.GroupingTable(self.master)
+        self.save_button = tk.Button(self.master, text="Save",
+                                     width=15, command=self.on_save_button)
+        self.cancel_button = tk.Button(self.master, text="Cancel",
+                                       width=15, command=self.master.destroy)
         self.grouping_widget.pack()
         self.cancel_button.pack(side=tk.RIGHT)
         self.save_button.pack(side=tk.RIGHT)
-        controller.set_view_where_exam(self.grouping_widget)
+        where_exam_view = tk_views.WhereExamTkView()
+        where_exam_view.widget = self.grouping_widget
+        controller.set_view_where_exam(where_exam_view)
         controller.where_exam(exam_id)
 
     def on_save_button(self):
@@ -410,8 +420,10 @@ class GroupRecordDialog:
             entry.pack(side=tk.TOP)
             self.labels.append(label)
             self.entries.append(entry)
-        self.save_button = tk.Button(self.master, text="Save", width=15, command=self.on_save_button)
-        self.cancel_button = tk.Button(self.master, text="Cancel", width=15, command=self.master.destroy)
+        self.save_button = tk.Button(self.master, text="Save",
+                                     width=15, command=self.on_save_button)
+        self.cancel_button = tk.Button(self.master, text="Cancel",
+                                       width=15, command=self.master.destroy)
         self.cancel_button.pack(side=tk.RIGHT)
         self.save_button.pack(side=tk.RIGHT)
 
@@ -444,22 +456,13 @@ class AboutWindow:
         under certain conditions.
         """)
         label.pack(side=tk.TOP)
-        self.close_button = tk.Button(self.master, text="Close", width=15, command=self.master.destroy)
+        self.close_button = tk.Button(self.master, text="Close", width=15,
+                                      command=self.master.destroy)
         self.close_button.pack(side=tk.TOP)
-
-# class StatsWindow:
-#     """Window for show statistics. """
-#     def __init__(self, parent):
-#         self.master = tk.Toplevel(parent)
-#         self.master.title("Statistics")
-#         self.table = tk_views.Stats(self.master)
-#         self.table.pack()
-
-model = sqlite3_model.Model()
-controller = controller.Controller(model)
-controller.set_view_message(tk_views.Message())
 
 def main():
     """Entry point."""
+    controller.set_view_message(tk_views.MessageTkView())
+    
     main_window = MainWindow()
     main_window.master.mainloop()

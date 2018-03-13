@@ -25,6 +25,8 @@
 ** DONE BaseModel: Update docs of exams
 ** DONE Views: create unit for views base classes
 ** DONE BaseViews: add to doc
+** TODO Tk views: Replace widgets to separate unit
+** TODO Plot views: refactoring
 ** TODO BaseViews: fill all docstrings
 ** TODO Views: Inherit all views from base classes, total redesign of view part
 ** TODO Add the informative titles for Tk stats views
@@ -53,6 +55,7 @@
 ** DONE Add a descriptive statistics stuff with couple of actions (sex and gender balance)
 ** TODO Use state machine for enabling and disabling of items
 * Proposal
+** TODO Tk views: is the GroupingTable view?
 ** TODO ? Update the names of modules because of stats appeared
 ** DONE Think about "light" version of getting exams from db to accelerate stats functions
 ** TODO Show the quality of signals in plots

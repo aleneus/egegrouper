@@ -18,7 +18,7 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
 
-from .base_views import StatsView
+from .base_views import View, StatsView
 
 class SimpleSignal:
     """Provides simple signals and slots mechanism."""
@@ -208,7 +208,7 @@ class GroupingTable(TableWidget):
             placed_in.append(self.tree.item(item, 'values')[1] == 'X')
         return group_ids, placed_in
         
-class Message:
+class MessageTkView(View):
     """Text message view."""
     def show_data(self, text):
         """ Show message box.
@@ -221,68 +221,43 @@ class Message:
         """
         messagebox.showinfo("Message", text)
 
-class Storage(TableWidget):
-    """Table widget for stoarge info."""
-    def __init__(self, parent):
-        """Constructor.
+class StorageTkView(View):
+    """ View for showing information about storage. """
+    def __init__(self):
+        self._widget = None
 
-        Parameters
-        ----------
-        parent
-            Master for widget.
-
-        """
+    def get_widget(self):
+        return self._widget
+    def set_widget(self, widget):
         headers = ["ID", "Name", "Description", "Num"]
-        super().__init__(parent, headers)
         widths = [50, None, None, 50]
         anchors = [tk.CENTER, None, None, tk.CENTER]
-        self.set_columns(widths=widths, anchors=anchors)
-        self.last_group_id = None
-        
+        widget.set_columns(headers=headers, widths=widths, anchors=anchors)
+        self._widget = widget
+    widget = property(get_widget, set_widget, doc="Table widget")
+
     def show_data(self, data, headers):
-        """Fill table with data.
+        self.widget.update_data(data)
 
-        Parameters
-        ----------
-        data: list of tuples
-            Tabular data.
-        headers: tuple
-            Headers.
+class GroupTkView(View):
+    """ View for showing information about group. """
+    def __init__(self):
+        self._widget = None
 
-        """
-        self.update_data(data)
-
-class Group(TableWidget):
-    """Table widget for stoarge info."""
-    def __init__(self, parent):
-        """Constructor.
-        
-        Parameters
-        ----------
-        parent
-            Master for widget.
-
-        """
+    def get_widget(self):
+        return self._widget
+    def set_widget(self, widget):
         headers = ["ID", "Name", "Diagnosis", "Age", "Gender"]
-        super().__init__(parent, headers)
         widths = [50, None, None, None, None]
         anchors = [None, None, None, tk.CENTER, tk.CENTER]
-        self.set_columns(widths=widths, anchors=anchors)
-        
+        widget.set_columns(headers=headers, widths=widths, anchors=anchors)
+        self._widget = widget
+    widget = property(get_widget, set_widget, doc="Table widget")
+
     def show_data(self, data, headers):
-        """Fill table with data.
+        self.widget.update_data(data)
 
-        Parameters
-        ----------
-        data: list of tuples
-            Tabular data.
-        headers: tuple
-            Headers.
-
-        """
-        self.update_data(data)
-
-class StatsTableWindow(StatsView):
+class StatsTkView(StatsView):
     def __init__(self, parent):
         """ Initialization. """
         super().__init__()
@@ -319,25 +294,21 @@ class StatsTableWindow(StatsView):
         master.transient(parent)
         return table
 
-class WhereExam(GroupingTable):
-    """Tk view to show groups where examination is."""
+class WhereExamTkView(View):
+    """ View showing in which groups the exam is located. """
+    def __init__(self):
+        self._widget = None
+ 
+    def get_widget(self):
+        return self._widget
+    def set_widget(self, widget):
+        self._widget = widget
+    widget = property(get_widget, set_widget, doc="Grouping table widget")
+    
     def show_data(self, group_records, headers, placed_in):
-        """Show data.
-
-        Parameters
-        ----------
-        group_records : list of tuple
-            Attributes of groups.
-        headers : tuple
-            Names of group attributes.
-        placed_in : list of bool
-            Indicators. True if examination placed in appropriate
-            group, False overwise.
-
-        """
         rows = [
             (gr[0], gr[1], 'X' if p else '')
             for p, gr in zip(placed_in, group_records)
         ]
         headers_ext = headers + ('', )
-        self.update_data(rows)
+        self.widget.update_data(rows)

@@ -404,11 +404,11 @@ def main():
     parser.add_argument("fname", help="Name of database")
     args = parser.parse_args()
     
-    controller.set_view_message(text_views.Message())
-    controller.set_view_storage(text_views.Table())
-    controller.set_view_group(text_views.Table())
-    controller.set_view_exam(text_views.Exam())
-    controller.set_view_where_exam(text_views.WhereExam())
+    controller.set_view_message(text_views.MessageTextView())
+    controller.set_view_storage(text_views.StorageTextView())
+    controller.set_view_group(text_views.GroupTextView())
+    controller.set_view_exam(text_views.ExamTextView())
+    controller.set_view_where_exam(text_views.WhereExamTextView())
     controller.set_view_exam_plot(plot_views.Exam())
 
     if not controller.open_or_create_storage(args.fname):
@@ -416,8 +416,8 @@ def main():
         return
 
     # TODO: use common view with controller
-    stats_controller.message_view = text_views.Message()
-    stats_controller.status_view = text_views.Message()
+    stats_controller.message_view = text_views.MessageTextView()
+    stats_controller.status_view = text_views.MessageTextView()
     stats_controller.table_view = text_views.StatsTextView()
 
     gshell = GrouperShell()

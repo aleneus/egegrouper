@@ -19,7 +19,9 @@
 
 import matplotlib.pyplot as plt
 
-class Exam:
+from . import base_views
+
+class ExamPlotView(base_views.View):
     """Plot view to show details of examination."""
     
     def show_data(self, exam):
@@ -45,6 +47,8 @@ class Exam:
                 plt.subplot(n*100 + 10 + i)
                 plt.plot(s.x, 'b', linewidth=1)
                 plt.xlim(0,len(s.x))
+                plt.xlabel("Sample number")
+                plt.ylabel("Amplitude")
                 plt.grid(True)
                 plt.title(t)
 

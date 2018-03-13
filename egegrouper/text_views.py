@@ -17,52 +17,40 @@
 
 from tabulate import tabulate
 
-from .base_views import StatsView
+from .base_views import View, StatsView
 
-class Message:
+def print_table(data, headers=None, title=None):
+    """ Print table. """
+    t = []
+    for row in data:
+        t_row = []
+        for record in row:
+            t_row.append(str(record)[:40])
+        t.append(t_row)
+    if title is not None:
+        print('=== {} ==='.format(title))
+    if headers:
+        print('\n' + tabulate(t, headers=headers, tablefmt="orgtbl") + '\n')
+    else:
+        print('\n' + tabulate(t, tablefmt="orgtbl") + '\n')        
+
+class MessageTextView(View):
     """Text message view."""
     def show_data(self, text):
-        """Print message.
-        
-        Parameters
-        ----------
-        text : str
-            Text for printing.
-
-        """
+        """ Print message. """
         print(text)
-        
 
-class Table:
-    """Text table view."""
+class StorageTextView(View):
+    """ View showing information about storage. """
     def show_data(self, data, headers=None, title=None):
-        """Show table with headers.
+        print_table(data, headers=headers, title=title)
+        
+class GroupTextView(View):
+    """ View showing information about group. """
+    def show_data(self, data, headers=None, title=None):
+        print_table(data, headers=headers, title=title)
 
-        Parameters
-        ----------
-        data: list of tuples
-            Tabular data.
-        headers: tuple
-            Headers.
-        title: str.
-            Title.
- 
-        """
-        t = []
-        for row in data:
-            t_row = []
-            for record in row:
-                t_row.append(str(record)[:40])
-            t.append(t_row)
-        if title is not None:
-            print('=== {} ==='.format(title))
-        if headers:
-            print('\n' + tabulate(t, headers=headers, tablefmt="orgtbl") + '\n')
-        else:
-            print('\n' + tabulate(t, tablefmt="orgtbl") + '\n')
-       
-
-class Exam:
+class ExamTextView(View):
     """Text view to show details of examination."""
     def show_data(self, exam):
         """Print information about examination.
@@ -78,7 +66,7 @@ class Exam:
             s += '    M: {}\n'.format(m.time)
         print(s)
 
-class WhereExam:
+class WhereExamTextView(View):
     """Text view to show groups in which selected examination placed."""
     def show_data(self, group_records, headers, placed_in):
         """Show all groups and indicate where the object is located.
@@ -97,7 +85,6 @@ class WhereExam:
         headers_ext = ('', ) + headers
         print('\n' + tabulate(rows, headers=headers_ext, tablefmt="orgtbl") + '\n')
 
-
 class StatsTextView(StatsView):
     def show_data(self, data, headers):
-        Table().show_data(data, headers, self.title)
+        print_table(data, headers, self.title)
