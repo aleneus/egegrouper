@@ -25,6 +25,7 @@ from . import sqlite3_model
 from . import tk_views, text_views
 from . import plot_views
 from . import importers
+from . import tk_widgets
 from .stats_model import StatsModel
 from .stats_controller import StatsController
 
@@ -50,7 +51,7 @@ class MainWindow:
         self.main_menu.entryconfig("Exam", state=tk.DISABLED)
         self.group_menu.entryconfig("Statistics", state=tk.DISABLED)
 
-        self.storage_table = tk_views.TableWidget(self.master)
+        self.storage_table = tk_widgets.TableWidget(self.master)
         self.storage_table.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         self.storage_table.item_opened.connect(self.group_info)
         self.storage_table.item_selected.connect(self.group_selected)
@@ -343,7 +344,7 @@ class GroupWindow:
         self.master = tk.Toplevel(parent)
         self.master.title("Examinations")
         self.master.protocol('WM_DELETE_WINDOW', self.on_destroy)
-        self.group_table = tk_views.TableWidget(self.master)
+        self.group_table = tk_widgets.TableWidget(self.master)
         self.group_table.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
     def on_destroy(self):
@@ -367,7 +368,7 @@ class GroupingDialog:
         self.exam_id = exam_id
         self.master = tk.Toplevel(parent)
         self.master.title("Grouping")
-        self.grouping_widget = tk_views.GroupingTable(self.master)
+        self.grouping_widget = tk_widgets.GroupingTable(self.master)
         self.save_button = tk.Button(self.master, text="Save",
                                      width=15, command=self.on_save_button)
         self.cancel_button = tk.Button(self.master, text="Cancel",

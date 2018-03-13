@@ -25,13 +25,13 @@
 ** DONE BaseModel: Update docs of exams
 ** DONE Views: create unit for views base classes
 ** DONE BaseViews: add to doc
-** TODO tk_views: replace the SimpleSignal class to seperate unit
-** TODO tk_views: replace TableWidget and GroupingTable to seperate unit
-** TODO docs: update Tk part
+** DONE tk_views: replace the SimpleSignal class to seperate unit
+** DONE tk_views: replace TableWidget and GroupingTable to seperate unit
+** DONE docs: update Tk part
 ** DONE Plot views: refactoring
 ** TODO BaseViews: fill all docstrings
 ** DONE Views: Inherit all views from base classes, total redesign of view part
-** TODO Add the informative titles for Tk stats views
+** DONE Add the informative titles for Tk stats views
 ** DONE igrouper: Write full docs for stats.
 ** DONE Initial support statistics in tkgrouper
 ** TODO Support localization of tkgrouper

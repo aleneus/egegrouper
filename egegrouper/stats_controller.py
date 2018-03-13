@@ -18,6 +18,8 @@
 """ Controller for connection of user, StatsModel and views. """
 
 class StatsController:
+    """ Controller. """
+    
     def __init__(self):
         """ Initialization. """
         self.model = None
