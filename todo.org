@@ -1,4 +1,5 @@
 * Bug
+** DONE Some classes undefined because of imports changed
 ** DONE tkgrouper: statistics window opens when data is empty
 * Task
 

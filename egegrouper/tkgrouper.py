@@ -362,11 +362,11 @@ class GroupingDialog:
         self.master = tk.Toplevel(parent)
         self.master.title("Grouping")
         self.grouping_widget = tk_views.WhereExam(self.master)
-        self.save_button = Button(self.master, text="Save", width=15, command=self.on_save_button)
-        self.cancel_button = Button(self.master, text="Cancel", width=15, command=self.master.destroy)
+        self.save_button = tk.Button(self.master, text="Save", width=15, command=self.on_save_button)
+        self.cancel_button = tk.Button(self.master, text="Cancel", width=15, command=self.master.destroy)
         self.grouping_widget.pack()
-        self.cancel_button.pack(side=RIGHT)
-        self.save_button.pack(side=RIGHT)
+        self.cancel_button.pack(side=tk.RIGHT)
+        self.save_button.pack(side=tk.RIGHT)
         controller.set_view_where_exam(self.grouping_widget)
         controller.where_exam(exam_id)
 
@@ -399,21 +399,21 @@ class GroupRecordDialog:
         self.labels = []
         self.entries = []
         for key in group_record:
-            label = Label(self.master, width = 10, text=key)
-            label.pack(side=TOP)
-            entry = Entry(self.master, width = 30)
+            label = tk.Label(self.master, width = 10, text=key)
+            label.pack(side=tk.TOP)
+            entry = tk.Entry(self.master, width = 30)
             entry.delete(0, tk.END)
             if group_record[key]:
                 entry.insert(0, group_record[key])
             else:
                 entry.insert(0, '')
-            entry.pack(side=TOP)
+            entry.pack(side=tk.TOP)
             self.labels.append(label)
             self.entries.append(entry)
-        self.save_button = Button(self.master, text="Save", width=15, command=self.on_save_button)
-        self.cancel_button = Button(self.master, text="Cancel", width=15, command=self.master.destroy)
-        self.cancel_button.pack(side=RIGHT)
-        self.save_button.pack(side=RIGHT)
+        self.save_button = tk.Button(self.master, text="Save", width=15, command=self.on_save_button)
+        self.cancel_button = tk.Button(self.master, text="Cancel", width=15, command=self.master.destroy)
+        self.cancel_button.pack(side=tk.RIGHT)
+        self.save_button.pack(side=tk.RIGHT)
 
     def on_save_button(self):
         """Save button handler."""
@@ -436,16 +436,16 @@ class AboutWindow:
         """
         self.master = tk.Toplevel(parent)
         self.master.title("About EGEGrouper")
-        label = Label(self.master, text="""
+        label = tk.Label(self.master, text="""
         EGEGrouper Copyright (C) 2017-2018 Aleksandr Popov
 
         This program comes with ABSOLUTELY NO WARRANTY.
         This is free software, and you are welcome to redistribute it
         under certain conditions.
         """)
-        label.pack(side=TOP)
-        self.close_button = Button(self.master, text="Close", width=15, command=self.master.destroy)
-        self.close_button.pack(side=TOP)
+        label.pack(side=tk.TOP)
+        self.close_button = tk.Button(self.master, text="Close", width=15, command=self.master.destroy)
+        self.close_button.pack(side=tk.TOP)
 
 class StatsWindow:
     """Window for show statistics. """
