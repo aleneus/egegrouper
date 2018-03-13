@@ -447,13 +447,13 @@ class AboutWindow:
         self.close_button = tk.Button(self.master, text="Close", width=15, command=self.master.destroy)
         self.close_button.pack(side=tk.TOP)
 
-class StatsWindow:
-    """Window for show statistics. """
-    def __init__(self, parent):
-        self.master = tk.Toplevel(parent)
-        self.master.title("Statistics")
-        self.table = tk_views.Stats(self.master)
-        self.table.pack()
+# class StatsWindow:
+#     """Window for show statistics. """
+#     def __init__(self, parent):
+#         self.master = tk.Toplevel(parent)
+#         self.master.title("Statistics")
+#         self.table = tk_views.Stats(self.master)
+#         self.table.pack()
 
 model = sqlite3_model.Model()
 controller = controller.Controller(model)

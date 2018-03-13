@@ -18,6 +18,8 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
 
+from .base_views import StatsView
+
 class SimpleSignal:
     """Provides simple signals and slots mechanism."""
     def __init__(self):
@@ -280,9 +282,10 @@ class Group(TableWidget):
         """
         self.update_data(data)
 
-class StatsTableWindow:
+class StatsTableWindow(StatsView):
     def __init__(self, parent):
         """ Initialization. """
+        super().__init__()
         self.parent = parent
 
     def show_data(self, data, headers):
@@ -302,7 +305,10 @@ class StatsTableWindow:
     def _build_window(self, parent):
         """ Build and show window with table inside. """
         master = tk.Toplevel(parent)
-        master.title("Statistics")
+        if self.title is not None:
+            master.title(self.title)
+        else:
+            master.title("Statistics")
         table = TableWidget(master) 
         table.set_columns(
             headers=['Category', 'Number'],
@@ -315,7 +321,6 @@ class StatsTableWindow:
 
 class WhereExam(GroupingTable):
     """Tk view to show groups where examination is."""
-    
     def show_data(self, group_records, headers, placed_in):
         """Show data.
 
@@ -326,7 +331,8 @@ class WhereExam(GroupingTable):
         headers : tuple
             Names of group attributes.
         placed_in : list of bool
-            Indicators. True if examination placed in appropriate group, False overwise.
+            Indicators. True if examination placed in appropriate
+            group, False overwise.
 
         """
         rows = [

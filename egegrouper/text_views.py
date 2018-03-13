@@ -17,6 +17,8 @@
 
 from tabulate import tabulate
 
+from .base_views import StatsView
+
 class Message:
     """Text message view."""
     def show_data(self, text):
@@ -94,3 +96,8 @@ class WhereExam:
         rows = [('X' if p else '', gr[0], gr[1]) for p, gr in zip(placed_in, group_records)]
         headers_ext = ('', ) + headers
         print('\n' + tabulate(rows, headers=headers_ext, tablefmt="orgtbl") + '\n')
+
+
+class StatsTextView(StatsView):
+    def show_data(self, data, headers):
+        Table().show_data(data, headers, self.title)

@@ -43,6 +43,7 @@ class StatsController:
             self.message_view.show_data("Result is empty")
             return
         table_data = [[key, data[key]] for key in data]
+        self.table_view.title = "Stats by {}".format(key)
         self.table_view.show_data(table_data, ["Category", "Number"])
     
     def gender_balance(self, group_id):

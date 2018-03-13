@@ -418,7 +418,7 @@ def main():
     # TODO: use common view with controller
     stats_controller.message_view = text_views.Message()
     stats_controller.status_view = text_views.Message()
-    stats_controller.table_view = text_views.Table()
+    stats_controller.table_view = text_views.StatsTextView()
 
     gshell = GrouperShell()
     gshell.cmdloop()
