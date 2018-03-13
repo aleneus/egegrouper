@@ -20,6 +20,8 @@ from tkinter import ttk, messagebox
 
 from .base_views import View, StatsView
 
+from .tk_widgets import TableWidget
+
 class MessageTkView(View):
     """Text message view."""
     def show_data(self, text):
