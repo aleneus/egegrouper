@@ -51,6 +51,7 @@ Modules
    model
    sqlite3
    controller
+   base_views
    text
    tk
    plot

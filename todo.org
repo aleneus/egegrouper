@@ -24,7 +24,7 @@
 ** DONE BaseModel: Rearrange methods 
 ** DONE BaseModel: Update docs of exams
 ** DONE Views: create unit for views base classes
-** TODO BaseViews: add to doc
+** DONE BaseViews: add to doc
 ** TODO BaseViews: fill all docstrings
 ** TODO Views: Inherit all views from base classes, total redesign of view part
 ** TODO Add the informative titles for Tk stats views
