@@ -25,10 +25,12 @@
 ** DONE BaseModel: Update docs of exams
 ** DONE Views: create unit for views base classes
 ** DONE BaseViews: add to doc
-** TODO Tk views: Replace widgets to separate unit
-** TODO Plot views: refactoring
+** TODO tk_views: replace the SimpleSignal class to seperate unit
+** TODO tk_views: replace TableWidget and GroupingTable to seperate unit
+** TODO docs: update Tk part
+** DONE Plot views: refactoring
 ** TODO BaseViews: fill all docstrings
-** TODO Views: Inherit all views from base classes, total redesign of view part
+** DONE Views: Inherit all views from base classes, total redesign of view part
 ** TODO Add the informative titles for Tk stats views
 ** DONE igrouper: Write full docs for stats.
 ** DONE Initial support statistics in tkgrouper
@@ -39,9 +41,7 @@
 ** DONE Use dictionary with attributes in SME
 ** DONE Update copyrights date
 * Enhancement
-** TODO tk_views: replace the SimpleSignal class to seperate unit
-** TODO tk_views: replace TableWidget and GroupingTable to seperate unit
-** TODO tk_views: Make Storage, Group and WhereExam a views, not widgets
+** DONE tk_views: Make Storage, Group and WhereExam a views, not widgets
 ** TODO stats_controller: check if some views are None
 ** TODO tkgrouper: make status bar
 ** TODO Bring order to imports
@@ -54,8 +54,9 @@
 ** TODO Add the configuration control stuff
 ** DONE Add a descriptive statistics stuff with couple of actions (sex and gender balance)
 ** TODO Use state machine for enabling and disabling of items
+** TODO Think about docs structure
 * Proposal
-** TODO Tk views: is the GroupingTable view?
+** DONE Tk views: is the GroupingTable view?
 ** TODO ? Update the names of modules because of stats appeared
 ** DONE Think about "light" version of getting exams from db to accelerate stats functions
 ** TODO Show the quality of signals in plots
