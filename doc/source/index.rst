@@ -17,11 +17,12 @@ Contacts:
 * aleneus@gmail.com
 * `DSPLab at NArFU <http://dsplab.narfu.ru>`_ (In Russ.)
 
-What's new in 0.6
+What's new in 0.7
 -----------------
 
-* The statistics by group (age, gender, diagnosis) functions were added to both igrouper and tkgrouper. 
-* The method 'exams' of model now may be used for one or several groups, 'extract_group' method was removed.
+* Redesigned views.
+* Changes in file structure.
+* Refactoring.
   
 Requires
 --------

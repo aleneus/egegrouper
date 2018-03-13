@@ -1,3 +1,9 @@
+0.6
+===
+
+* The statistics by group (age, gender, diagnosis) functions were added to both igrouper and tkgrouper. 
+* The method 'exams' of model now may be used for one or several groups, 'extract_group' method was removed.
+
 0.5
 ===
 * Method extract_exams added to base model and implemented in sqlite3 model. It is useful for extraction examinations data from several groups. For example, it can be used to get intersections of groups for ANOVA.

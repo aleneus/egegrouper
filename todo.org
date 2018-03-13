@@ -2,7 +2,6 @@
 ** DONE Some classes undefined because of imports changed
 ** DONE tkgrouper: statistics window opens when data is empty
 * Task
-
 ** DONE Initial support of statistics by key
 ** DONE Refactoring of setup.py
 ** DONE tkgrouper: split __init__ of main window
@@ -40,6 +39,7 @@
 ** DONE ! Refactor exams and group_info stuff in base_model and sqlite3_model
 ** DONE Use dictionary with attributes in SME
 ** DONE Update copyrights date
+** TODO Release 0.7.0
 * Enhancement
 ** DONE tk_views: Make Storage, Group and WhereExam a views, not widgets
 ** TODO stats_controller: check if some views are None
