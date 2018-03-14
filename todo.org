@@ -39,7 +39,7 @@
 ** DONE ! Refactor exams and group_info stuff in base_model and sqlite3_model
 ** DONE Use dictionary with attributes in SME
 ** DONE Update copyrights date
-** TODO Release 0.7.0
+** DONE Release 0.7.0
 * Enhancement
 ** DONE tk_views: Make Storage, Group and WhereExam a views, not widgets
 ** TODO stats_controller: check if some views are None
@@ -55,6 +55,7 @@
 ** DONE Add a descriptive statistics stuff with couple of actions (sex and gender balance)
 ** TODO Use state machine for enabling and disabling of items
 ** TODO Think about docs structure
+** DONE Start using icons
 * Proposal
 ** DONE Tk views: is the GroupingTable view?
 ** TODO ? Update the names of modules because of stats appeared
