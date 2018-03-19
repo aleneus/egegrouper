@@ -1,7 +1,12 @@
-* Bug
+* <= 0.7.1
+** DONE Think about "light" version of getting exams from db to accelerate stats functions
+** DONE Tk views: is the GroupingTable view?
+** DONE Start using icons
+** DONE Add a descriptive statistics stuff with couple of actions (sex and gender balance)
+** DONE Can't get stats of all storage
+** DONE tk_views: Make Storage, Group and WhereExam a views, not widgets
 ** DONE Some classes undefined because of imports changed
 ** DONE tkgrouper: statistics window opens when data is empty
-* Task
 ** DONE Initial support of statistics by key
 ** DONE Refactoring of setup.py
 ** DONE tkgrouper: split __init__ of main window
@@ -28,38 +33,32 @@
 ** DONE tk_views: replace TableWidget and GroupingTable to seperate unit
 ** DONE docs: update Tk part
 ** DONE Plot views: refactoring
-** TODO BaseViews: fill all docstrings
 ** DONE Views: Inherit all views from base classes, total redesign of view part
 ** DONE Add the informative titles for Tk stats views
 ** DONE igrouper: Write full docs for stats.
 ** DONE Initial support statistics in tkgrouper
-** TODO Support localization of tkgrouper
-** TODO Support the Windows building in setup.py
 ** DONE Replace docs to readthedocs
 ** DONE ! Refactor exams and group_info stuff in base_model and sqlite3_model
 ** DONE Use dictionary with attributes in SME
 ** DONE Update copyrights date
 ** DONE Release 0.7.0
-* Enhancement
-** DONE tk_views: Make Storage, Group and WhereExam a views, not widgets
-** TODO stats_controller: check if some views are None
-** TODO tkgrouper: make status bar
-** TODO Bring order to imports
-** TODO Remove init actions from global space
-** TODO Dont use the word 'constructor' in docstrings of init
-** TODO tkgrouper: set shortcuts to main actions
-** TODO tkgrouper: remember last folder to open file
-** DONE Can't get stats of all storage
-** TODO Find way to translate the names of columns
-** TODO Add the configuration control stuff
-** DONE Add a descriptive statistics stuff with couple of actions (sex and gender balance)
-** TODO Use state machine for enabling and disabling of items
-** TODO Think about docs structure
-** DONE Start using icons
-* Proposal
-** DONE Tk views: is the GroupingTable view?
-** TODO ? Update the names of modules because of stats appeared
-** DONE Think about "light" version of getting exams from db to accelerate stats functions
-** TODO Show the quality of signals in plots
-** TODO Show spectrums of detrended signals in plots
-** TODO Think about independant of concreete model tests, more universal
+* 0.7.2
+** DONE [t] Restructure todo list
+** TODO [t] BaseViews: fill all docstrings
+** TODO [p] Support localization of tkgrouper
+** TODO [t] Support the Windows building in setup.py
+** TODO [e] stats_controller: check if some views are None
+** TODO [e] tkgrouper: make status bar
+** TODO [e] Bring order to imports
+** TODO [e] Remove init actions from global space
+** TODO [e] Dont use the word 'constructor' in docstrings of init
+** TODO [e] tkgrouper: set shortcuts to main actions
+** TODO [e] tkgrouper: remember last folder to open file
+** TODO [e] Find way to translate the names of columns
+** TODO [e] Add the configuration control stuff
+** TODO [e] Use state machine for enabling and disabling of items
+** TODO [e] Think about docs structure
+** TODO [p] Update the names of modules because of stats appeared
+** TODO [p] Show the quality of signals in plots
+** TODO [p] Show spectrums of detrended signals in plots
+** TODO [p] Think about independant of concreete model tests, more universal
