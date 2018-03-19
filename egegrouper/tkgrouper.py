@@ -77,23 +77,9 @@ class MainWindow:
     def _make_main_menu(self):
         self.main_menu = tk.Menu(self.master)
         self.storage_menu = tk.Menu(self.main_menu, tearoff=0)
-
-        open_icon = tk.PhotoImage(file="egegrouper/icons/open-storage.gif")
-        self.storage_menu.add_command(label="Open",
-                                      command=self.open_storage, image=open_icon, compound="left")
-        self.storage_menu.open_icon = open_icon
-        
-        create_icon = tk.PhotoImage(file="egegrouper/icons/new-storage.gif")
-        self.storage_menu.add_command(label="Create",
-                                      command=self.create_storage, image=create_icon, compound="left")
-        self.storage_menu.create_icon = create_icon
-
-        close_icon = tk.PhotoImage(file="egegrouper/icons/close-storage.gif")
-        self.storage_menu.add_command(label="Close",
-                                      command=self.close_storage, image=close_icon, compound="left")
-        self.storage_menu.close_icon = close_icon
-
-        #self.storage_menu.add_command(label="Close", command=self.close_storage)
+        self.storage_menu.add_command(label="Open", command=self.open_storage)
+        self.storage_menu.add_command(label="Create", command=self.create_storage)
+        self.storage_menu.add_command(label="Close", command=self.close_storage)
         self.add_data_submenu = tk.Menu(self.storage_menu, tearoff=0)
         self.add_data_submenu.add_command(label="SME sqlite3 DB", command=self.import_sme)
         self.add_data_submenu.add_command(label="Exam from JSON", command=self.import_json)

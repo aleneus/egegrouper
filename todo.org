@@ -46,6 +46,9 @@
 ** DONE [t] Restructure todo list
 ** DONE [t] BaseViews: fill all docstrings
 ** TODO [t] Support the Windows building in setup.py
+** TODO [t] Rename tkgrouper.py and igrouper.py to tkgrouper and igrouper (in root folder)
+** TODO [e] Prevent copying PyQt during windows build
+** TODO [e] Use include_files to copy dll's to lib folder in windows
 * 0.7.3
 ** TODO [e] tkgrouper: make status bar
 ** TODO [e] Bring order to imports
