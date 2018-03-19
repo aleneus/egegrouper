@@ -44,7 +44,7 @@
 ** DONE Release 0.7.0
 * 0.7.2
 ** DONE [t] Restructure todo list
-** TODO [t] BaseViews: fill all docstrings
+** DONE [t] BaseViews: fill all docstrings
 ** TODO [p] Support localization of tkgrouper
 ** TODO [t] Support the Windows building in setup.py
 ** TODO [e] stats_controller: check if some views are None
