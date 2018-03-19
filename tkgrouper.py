@@ -18,6 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from egegrouper import tkgrouper
-exit(tkgrouper.main())
+import sys
 
+from egegrouper import tkgrouper
+sys.exit(tkgrouper.main())

@@ -20,7 +20,14 @@
 class View:
     """ Base class for all views. """
     def show_data(self, data):
-        """ Show data. """
+        """ Show data. 
+
+        Parameters
+        ----------
+        data: Object
+            Data to be shown.
+
+        """
         raise NotImplementedError
 
 class StatsView(View):
@@ -30,4 +37,14 @@ class StatsView(View):
         self.title = None
 
     def show_data(self, data, headers):
+        """ Show data. 
+
+        Parameters
+        ----------
+        data : list of tuples
+            Table data.
+        headers : list of str
+            Headers.
+
+        """
         raise NotImplementedError

@@ -18,6 +18,11 @@
 from setuptools import setup
 import os
 
+import os.path
+PYTHON_INSTALL_DIR = os.path.dirname(os.path.dirname(os.__file__))
+os.environ['TCL_LIBRARY'] = os.path.join(PYTHON_INSTALL_DIR, 'tcl', 'tcl8.6')
+os.environ['TK_LIBRARY'] = os.path.join(PYTHON_INSTALL_DIR, 'tcl', 'tk8.6')
+
 from egegrouper.glob import *
 
 def read(fname):
@@ -31,6 +36,12 @@ license = "GPLv3"
 keywords = "electrophysiology electrogastrography electrogastroenterography biosignal storage dataset"
 url = "https://bitbucket.org/aleneus/egegrouper"
 packages=['egegrouper']
+
+package_data={
+    'egegrouper': [
+        'icons/*.gif',
+    ],
+}
 
 install_requires = [
     'numpy',
@@ -74,13 +85,43 @@ def linux_setup():
         url = url,
         long_description=read('README'),
         packages=packages,
+        package_data=package_data,
         install_requires = install_requires,
         entry_points=entry_points,
         classifiers=classifiers,
     )
 
+windows_options = {'build_exe': 
+    {
+        'includes': ['numpy.core._methods', 'numpy.lib.format', 'sqlite3'],
+        'packages': ['pkg_resources._vendor', 'tkinter', 'matplotlib'],
+        'include_files':[
+            (os.path.join(PYTHON_INSTALL_DIR, 'DLLs', 'tk86t.dll'), os.path.join('lib', 'tk86t.dll')),
+            (os.path.join(PYTHON_INSTALL_DIR, 'DLLs', 'tcl86t.dll'), os.path.join('lib', 'tcl86t.dll')),
+            (os.path.join(PYTHON_INSTALL_DIR, 'DLLs', 'sqlite3.dll'), os.path.join('lib', 'sqlite3.dll'))
+        ],
+        'excludes': ['PyQt5'],
+    }
+}
+
 def windows_build():
-    pass
+    setup(
+        name=name,
+        version=VERSION,
+        description=description,
+        author=author,
+        author_email=author_email,
+        keywords = keywords,
+        long_description=read('README'),
+        packages=packages,
+        package_data=package_data,
+        classifiers=classifiers,
+        options = windows_options,
+        executables = [
+            # Executable("tkgrouper", base = "Win32GUI"),
+            Executable("tkgrouper"),
+        ],
+    )
 
 linux_setup()
 #from cx_Freeze import setup, Executable
