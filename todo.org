@@ -45,20 +45,21 @@
 * 0.7.2
 ** DONE [t] Restructure todo list
 ** DONE [t] BaseViews: fill all docstrings
-** TODO [p] Support localization of tkgrouper
 ** TODO [t] Support the Windows building in setup.py
-** TODO [e] stats_controller: check if some views are None
+* 0.7.3
 ** TODO [e] tkgrouper: make status bar
 ** TODO [e] Bring order to imports
-** TODO [e] Remove init actions from global space
 ** TODO [e] Dont use the word 'constructor' in docstrings of init
-** TODO [e] tkgrouper: set shortcuts to main actions
 ** TODO [e] tkgrouper: remember last folder to open file
-** TODO [e] Find way to translate the names of columns
-** TODO [e] Add the configuration control stuff
-** TODO [e] Use state machine for enabling and disabling of items
 ** TODO [e] Think about docs structure
-** TODO [p] Update the names of modules because of stats appeared
+* 0.7.4
+** TODO [p] Support localization of tkgrouper
+** TODO [e] stats_controller: check if some views are None
+** TODO [e] Remove init actions from global space
+** TODO [e] tkgrouper: set shortcuts to main actions
+** TODO [e] Find the way to translate the names of columns
+** TODO [e] Use state machine for enabling and disabling of items
+** TODO [p] Think about independant of concreete model tests, more universal
+* 0.7.5
 ** TODO [p] Show the quality of signals in plots
 ** TODO [p] Show spectrums of detrended signals in plots
-** TODO [p] Think about independant of concreete model tests, more universal
