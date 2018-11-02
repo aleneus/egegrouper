@@ -48,6 +48,8 @@
 * 0.7.2
 ** DONE [b] Fix: igrouper does not start
 * 0.7.3
+** DONE [e] Brush tkgrouper.py with pycodestyle
+** TODO [e] Brush whole project with pycodestyle
 ** TODO [t] Setup build egegrouper on windows
 ** TODO [t] Rename tkgrouper.py and igrouper.py to tkgrouper and igrouper (in root folder)
 * later
