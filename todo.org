@@ -45,19 +45,18 @@
 * 0.7.1
 ** DONE [t] Restructure todo list
 ** DONE [t] BaseViews: fill all docstrings
+* 0.7.2
 ** DONE [b] Fix: igrouper does not start
-* 0.7.2
-** TODO [t] Support the Windows building in setup.py
+* 0.7.3
+** TODO [t] Setup build egegrouper on windows
 ** TODO [t] Rename tkgrouper.py and igrouper.py to tkgrouper and igrouper (in root folder)
-** TODO [e] Prevent copying PyQt during windows build
-** TODO [e] Use include_files to copy dll's to lib folder in windows
-* 0.7.2
+* later
+** TODO Replace verion to __init__.py
 ** TODO [e] tkgrouper: make status bar
 ** TODO [e] Bring order to imports
 ** TODO [e] Dont use the word 'constructor' in docstrings of init
 ** TODO [e] tkgrouper: remember last folder to open file
 ** TODO [e] Think about docs structure
-* 0.7.3
 ** TODO [p] Support localization of tkgrouper
 ** TODO [e] stats_controller: check if some views are None
 ** TODO [e] Remove init actions from global space
@@ -65,6 +64,5 @@
 ** TODO [e] Find the way to translate the names of columns
 ** TODO [e] Use state machine for enabling and disabling of items
 ** TODO [p] Think about independant of concreete model tests, more universal
-* 0.7.4
 ** TODO [p] Show the quality of signals in plots
 ** TODO [p] Show spectrums of detrended signals in plots
