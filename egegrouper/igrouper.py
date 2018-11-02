@@ -30,10 +30,12 @@ from .stats_controller import StatsController
 
 from .glob import *
 
+
 class DialogText:
     """Text dialog for input fields values. 
 
-    This dialog processes data in the dictionary with keys which correspond attributes of group.
+    This dialog processes data in the dictionary with keys which
+    correspond attributes of group.
 
     """
     def __init__(self, data_dict):
@@ -389,6 +391,7 @@ stats_model.data_provider = model
 stats_controller = StatsController()
 stats_controller.model = stats_model
 
+
 def main():
     """Entry point."""
     
@@ -409,7 +412,7 @@ def main():
     controller.set_view_group(text_views.GroupTextView())
     controller.set_view_exam(text_views.ExamTextView())
     controller.set_view_where_exam(text_views.WhereExamTextView())
-    controller.set_view_exam_plot(plot_views.Exam())
+    controller.set_view_exam_plot(plot_views.ExamPlotView())
 
     if not controller.open_or_create_storage(args.fname):
         print("Can't open storage\nExit...\n")

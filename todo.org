@@ -45,6 +45,8 @@
 * 0.7.1
 ** DONE [t] Restructure todo list
 ** DONE [t] BaseViews: fill all docstrings
+** DONE [b] Fix: igrouper does not start
+* 0.7.2
 ** TODO [t] Support the Windows building in setup.py
 ** TODO [t] Rename tkgrouper.py and igrouper.py to tkgrouper and igrouper (in root folder)
 ** TODO [e] Prevent copying PyQt during windows build
